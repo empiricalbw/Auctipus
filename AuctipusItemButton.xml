@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+    <Button name="AuctipusItemButton" virtual="true">
+        <Size>
+            <AbsDimension x="37" y="37"/>
+        </Size>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture file="Interface\Buttons\UI-Slot-Background">
+                    <Size x="39" y="39"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="-1" y="1"/>
+                    </Anchors>
+                    <TexCoords left="0" right="0.640625" top="0" bottom="0.640625"/>
+                </Texture>
+            </Layer>
+        </Layers>
+    </Button>
+</Ui>

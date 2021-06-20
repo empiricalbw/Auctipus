@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+    <!-- Main Auctipus frame -->
+    <Frame name="AuctipusFrame" frameStrata="BACKGROUND" toplevel="true" parent="UIParent" inherits="BackdropTemplate">
+        <KeyValues>
+            <KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+            <KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
+        </KeyValues>
+        <Size>
+            <AbsDimension x="800" y="800"/>
+        </Size>
+        <Anchors>
+            <Anchor point="CENTER"/>
+        </Anchors>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture>
+                    <Anchors>
+                        <Anchor point="TOP" relativePoint="TOP"><Offset><AbsDimension x="0" y="-5"/></Offset></Anchor>
+                        <Anchor point="LEFT" relativePoint="LEFT"><Offset><AbsDimension x="5" y="0"/></Offset></Anchor>
+                        <Anchor point="BOTTOM" relativePoint="BOTTOM"><Offset><AbsDimension x="0" y="5"/></Offset></Anchor>
+                        <Anchor point="RIGHT" relativePoint="RIGHT"><Offset><AbsDimension x="-5" y="0"/></Offset></Anchor>
+                    </Anchors>
+                    <Color r="0" g="0" b="0" a="0.5"/>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Frame name="$parentSearchBoxLabel">
+                <Size>
+                    <AbsDimension x="50" y="24"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT"><Offset><AbsDimension x="0" y="-8"/></Offset></Anchor>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <FontString inherits="GameFontNormalSmall" justifyH="RIGHT" justifyV="MIDDLE" text="Search:"/>
+                    </Layer>
+                </Layers>
+            </Frame>
+            <EditBox name="$parentSearchBox" enableMouse="true" autoFocus="false" letters="63" inherits="BackdropTemplate">
+                <KeyValues>
+                    <KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+                    <KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
+                </KeyValues>
+                <Size>
+                    <AbsDimension x="150" y="24"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentSearchBoxLabel" relativePoint="RIGHT"/>
+                </Anchors>
+                <TextInsets left="5" right="0" top="0" bottom="0"/>
+                <FontString inherits="ChatFontNormal"/>
+            </EditBox>
+            <Button name="$parentResult1" inherits="AuctipusItemButton">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parentSearchBoxLabel" relativePoint="BOTTOMLEFT">
+                        <Offset><AbsDimension x="16" y="-8"/></Offset>
+                    </Anchor>
+                </Anchors>
+            </Button>
+        </Frames>
+    </Frame>
+</Ui>

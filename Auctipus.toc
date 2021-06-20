@@ -1,0 +1,12 @@
+## Interface: 20501
+## Title: Auctipus
+## Author: Empirical
+## DefaultState: enabled
+## Dependencies: TGEventManager TGLog
+## SavedVariables:
+
+AuctipusItemButton.xml
+Auctipus.xml
+
+Auctipus.lua
+AuctipusScan.lua
