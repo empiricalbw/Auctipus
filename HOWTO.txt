@@ -1,0 +1,12 @@
+To export Blizzard interface files:
+1. Launch Battle.net.
+2. Click the gear icon beside the WoW "Play" button.
+3. Under "Game Settings" click "Additional command line arguments".
+4. Add the "-console" command line argument.
+5. Click play.
+6. Exit from the character selection screen back to the main login screen.
+7. Type ` (backtick).
+8. Type "ExportInterfaceFiles code".
+9. Optionally type "ExportInterfaceFiles art".
+10. Quit.
+11. Uncheck the "Additional command line arguments" box.
