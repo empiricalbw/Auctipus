@@ -1,19 +1,34 @@
 <?xml version="1.0"?>
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
-    <Button name="AuctipusItemButton" virtual="true">
-        <Size>
-            <AbsDimension x="37" y="37"/>
-        </Size>
+    <Button name="AuctipusItemButtonTemplate" mixin="AuctipusItemButton" virtual="true">
+        <Size x="36" y="36"/>
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture file="Interface\Buttons\UI-Slot-Background">
-                    <Size x="39" y="39"/>
                     <Anchors>
                         <Anchor point="TOPLEFT" x="-1" y="1"/>
+                        <Anchor point="BOTTOMRIGHT" x="1" y="-1"/>
                     </Anchors>
                     <TexCoords left="0" right="0.640625" top="0" bottom="0.640625"/>
                 </Texture>
+                <FontString parentKey="Name" inherits="GameFontNormal" justifyH="LEFT">
+                    <Size x="150" y="32"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" x="6"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString parentKey="Count" inherits="NumberFontNormal" justifyH="RIGHT">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT" x="-5" y="2"/>
+                    </Anchors>
+                </FontString>
             </Layer>
         </Layers>
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+        </Scripts>
+        <HighlightTexture alphaMode="ADD" file="Interface\Buttons\ButtonHilight-Square"/>
     </Button>
 </Ui>

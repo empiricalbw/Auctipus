@@ -1,0 +1,278 @@
+<?xml version="1.0"?>
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+    <Frame name="AuctipusAuctionsFrameTemplate" enableMouse="true" virtual="true">
+        <Size x="832" y="440"/>
+        <Frames>
+            <Button parentKey="ItemButton" inherits="AuctipusItemButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="16" y="-28"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <FontString font="GameFontHighlightSmall" text="AUCTION_ITEM">
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" y="4"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Button>
+
+            <Button name="$parentDecrementStackSizeButton" parentKey="DecrementStackSizeButton">
+                <Size x="23" y="22"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.ItemButton" relativePoint="BOTTOMLEFT" y="-24"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <FontString font="GameFontHighlightSmall" text="AUCTION_STACK_SIZE">
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" y="1"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <NormalTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Up"/>
+                <PushedTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Down"/>
+                <DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Disabled"/>
+                <HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+            </Button>
+            <EditBox name="$parentStackSizeBox" parentKey="StackSizeBox" parentArray="EditBoxes" letters="4" historyLines="0" numeric="true" autoFocus="false"
+             inherits="BackdropTemplate">
+                <KeyValues>
+                    <KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+                    <KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
+                </KeyValues>
+                <Size x="40" y="24"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentDecrementStackSizeButton" relativePoint="RIGHT" x="0"/>
+                </Anchors>
+                <TextInsets left="5" right="0" top="0" bottom="0"/>
+                <FontString inherits="ChatFontNormal"/>
+            </EditBox>
+            <Button name="$parentIncrementStackSizeButton" parentKey="IncrementStackSizeButton">
+                <Size x="23" y="22"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentStackSizeBox" relativePoint="RIGHT"/>
+                </Anchors>
+                <NormalTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Up"/>
+                <PushedTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Down"/>
+                <DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Disabled"/>
+                <HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+            </Button>
+
+            <Button name="$parentDecrementStackCountButton" parentKey="DecrementStackCountButton">
+                <Size x="23" y="22"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parentDecrementStackSizeButton" relativePoint="BOTTOMLEFT" y="-24"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <FontString font="GameFontHighlightSmall" text="AUCTION_NUM_STACKS">
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" y="1"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <NormalTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Up"/>
+                <PushedTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Down"/>
+                <DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Disabled"/>
+                <HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+            </Button>
+            <EditBox name="$parentStackCountBox" parentKey="StackCountBox" parentArray="EditBoxes" letters="4" historyLines="0" numeric="true" autoFocus="false"
+             inherits="BackdropTemplate">
+                <KeyValues>
+                    <KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+                    <KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
+                </KeyValues>
+                <Size x="40" y="24"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentDecrementStackCountButton" relativePoint="RIGHT" x="0"/>
+                </Anchors>
+                <TextInsets left="5" right="0" top="0" bottom="0"/>
+                <FontString inherits="ChatFontNormal"/>
+            </EditBox>
+            <Button name="$parentIncrementStackCountButton" parentKey="IncrementStackCountButton">
+                <Size x="23" y="22"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentStackCountBox" relativePoint="RIGHT"/>
+                </Anchors>
+                <NormalTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Up"/>
+                <PushedTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Down"/>
+                <DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Disabled"/>
+                <HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+            </Button>
+
+            <CheckButton parentKey="DurationButton1" parentArray="DurationButtons" inherits="UIRadioButtonTemplate" id="1">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parentDecrementStackCountButton" relativePoint="BOTTOMLEFT" y="-24"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <FontString font="GameFontHighlightSmall" text="AUCTION_DURATION">
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" y="1"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <ButtonText text="AUCTION_DURATION_ONE"/>
+            </CheckButton>
+            <CheckButton parentKey="DurationButton2" parentArray="DurationButtons" inherits="UIRadioButtonTemplate" text="AUCTION_DURATION_TWO" id="2">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.DurationButton1" relativePoint="BOTTOMLEFT"/>
+                </Anchors>
+            </CheckButton>
+            <CheckButton parentKey="DurationButton3" parentArray="DurationButtons" inherits="UIRadioButtonTemplate" text="AUCTION_DURATION_THREE" id="3">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.DurationButton2" relativePoint="BOTTOMLEFT"/>
+                </Anchors>
+            </CheckButton>
+
+            <Frame name="$parentBidPrice" parentKey="BidPrice" inherits="MoneyInputFrameTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.DurationButton3" relativePoint="BOTTOMLEFT" y="-24"/>
+                </Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString inherits="GameFontHighlightSmall" text="STARTING_PRICE">
+							<Anchors>
+								<Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="-2" y="1"/>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+            </Frame>
+
+            <Frame name="$parentBuyoutPrice" parentKey="BuyoutPrice" inherits="MoneyInputFrameTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.BidPrice" relativePoint="BOTTOMLEFT" y="-24"/>
+                </Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Text" inherits="GameFontHighlightSmall" text="BUYOUT_PRICE">
+							<Anchors>
+								<Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="-2" y="1"/>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+            </Frame>
+
+            <Frame parentKey="VendorPriceLabel">
+                <Size x="150" y="18"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.BuyoutPrice" relativePoint="BOTTOMLEFT" y="-24"/>
+                </Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString inherits="GameFontHighlightSmall" text="Vendor Price">
+							<Anchors>
+								<Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="-2" y="1"/>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+            </Frame>
+            <Frame name="$parentVendorPrice" parentKey="VendorPrice" inherits="AuctipusMoneyFrameTemplate">
+                <Size x="200" y="10"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativeKey="$parent.VendorPriceLabel" relativePoint="BOTTOMRIGHT" y="13"/>
+                </Anchors>
+            </Frame>
+
+            <Frame parentKey="DepositPriceLabel">
+                <Size x="150" y="18"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.VendorPriceLabel" relativePoint="BOTTOMLEFT" y="-20"/>
+                </Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString inherits="GameFontHighlightSmall" text="DEPOSIT">
+							<Anchors>
+								<Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="-2" y="1"/>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+            </Frame>
+            <Frame name="$parentDepositPrice" parentKey="DepositPrice" inherits="AuctipusMoneyFrameTemplate">
+                <Size x="200" y="10"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativeKey="$parent.DepositPriceLabel" relativePoint="BOTTOMRIGHT" y="13"/>
+                </Anchors>
+            </Frame>
+
+            <Button name="$parentCreateButton" parentKey="CreateButton" inherits="UIPanelButtonTemplate" text="CREATE_AUCTION">
+                <Size x="150" y="24"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.DepositPriceLabel" relativePoint="BOTTOMLEFT" y="-10"/>
+                </Anchors>
+            </Button>
+
+            <Button name="$parentAuction1" parentKey="AuctionRow1" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="1"/>
+            <Button name="$parentAuction2" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="2"/>
+            <Button name="$parentAuction3" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="3"/>
+            <Button name="$parentAuction4" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="4"/>
+            <Button name="$parentAuction5" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="5"/>
+            <Button name="$parentAuction6" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="6"/>
+            <Button name="$parentAuction7" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="7"/>
+            <Button name="$parentAuction8" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="8"/>
+            <Button name="$parentAuction9" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="9"/>
+            <Button name="$parentAuction10" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="10"/>
+            <ScrollFrame name="$parentAuctionScrollFrame" parentKey="AuctionScrollFrame" inherits="AuctipusScrollFrameTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parentAuction1" y="-5"/>
+                    <Anchor point="BOTTOMRIGHT" relativeTo="$parentAuction10" x="0" y="2"/>
+                </Anchors>
+            </ScrollFrame>
+			<Button name="$parentNameSort" inherits="AuctipusSortButtonTemplate" text="Name">
+                <Size y="19"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.AuctionRow1.ItemButton.Name" relativePoint="TOPLEFT" y="-1"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.AuctionRow1.ItemButton.Name" x="2"/>
+                </Anchors>
+			</Button>
+			<Button name="$parentDurationSort" inherits="AuctipusSortButtonTemplate" text="CLOSES_IN">
+                <Size y="19"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeTo="$parentNameSort" relativePoint="BOTTOMRIGHT" x="-2"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.AuctionRow1.Duration" x="6"/>
+                </Anchors>
+			</Button>
+			<Button name="$parentHighBidderSort" inherits="AuctipusSortButtonTemplate" text="HIGH_BIDDER">
+                <Size y="19"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeTo="$parentDurationSort" relativePoint="BOTTOMRIGHT" x="-2"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.AuctionRow1.HighBidder" x="6"/>
+                </Anchors>
+			</Button>
+			<Button name="$parentCurrentBidSort" inherits="AuctipusSortButtonTemplate" text="CURRENT_BID">
+                <Size y="19"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeTo="$parentHighBidderSort" relativePoint="BOTTOMRIGHT" x="-2"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.AuctionRow1" x="-4"/>
+                </Anchors>
+			</Button>
+
+            <Button name="$parentCancelButton" parentKey="CancelButton" inherits="UIPanelButtonTemplate" text="CANCEL_AUCTION">
+                <Size x="150" y="24"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativeTo="$parentAuctionScrollFrame" relativePoint="BOTTOMRIGHT" y="-10"/>
+                </Anchors>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnLoad>
+                AuctipusAuctionsFrame.OnLoad(self)
+            </OnLoad>
+        </Scripts>
+    </Frame>
+
+    <Frame name="AuctipusAuctionsFrameMetaTemplate" inherits="AuctipusAuctionsFrameTemplate" virtual="true">
+        <Scripts>
+            <OnLoad/>
+        </Scripts>
+    </Frame>
+</Ui>

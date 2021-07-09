@@ -1,0 +1,236 @@
+<?xml version="1.0"?>
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+    <Frame name="AuctipusBrowseFrameTemplate" enableMouse="true" virtual="true">
+        <Size x="832" y="440"/>
+        <Frames>
+            <Frame name="$parentSearchBoxLabel" parentKey="SearchBoxLabel">
+                <Size x="50" y="24"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="0" y="-7"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <FontString name="$parentFont" inherits="GameFontNormalSmall" justifyH="RIGHT" justifyV="MIDDLE" text="Search:"/>
+                    </Layer>
+                </Layers>
+            </Frame>
+            <EditBox name="$parentSearchBox" parentKey="SearchBox" parentArray="EditBoxes" enableMouse="true" autoFocus="false" letters="63"
+             inherits="BackdropTemplate">
+                <KeyValues>
+                    <KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+                    <KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
+                </KeyValues>
+                <Size x="150" y="24"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentSearchBoxLabel" relativePoint="RIGHT"/>
+                </Anchors>
+                <TextInsets left="5" right="0" top="0" bottom="0"/>
+                <FontString inherits="ChatFontNormal"/>
+            </EditBox>
+
+            <EditBox name="$parentMinLvlBox" parentKey="MinLvlBox" parentArray="EditBoxes" enableMouse="true" autoFocus="false" letters="2" numeric="true"
+             inherits="BackdropTemplate">
+                <KeyValues>
+                    <KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+                    <KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
+                </KeyValues>
+                <Size x="30" y="24"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentSearchBox" relativePoint="RIGHT" x="25"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <FontString font="GameFontNormalSmall" justifyH="RIGHT" justifyV="MIDDLE" text="Lvl:">
+                            <Anchors>
+                                <Anchor point="RIGHT" relativePoint="LEFT"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <TextInsets left="5" right="0" top="0" bottom="0"/>
+                <FontString inherits="ChatFontNormal"/>
+            </EditBox>
+
+            <EditBox name="$parentMaxLvlBox" parentKey="MaxLvlBox" parentArray="EditBoxes" enableMouse="true" autoFocus="false" letters="2" numeric="true"
+             inherits="BackdropTemplate">
+                <KeyValues>
+                    <KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+                    <KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
+                </KeyValues>
+                <Size x="30" y="24"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentMinLvlBox" relativePoint="RIGHT" x="7"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <FontString font="GameFontNormalSmall" justifyH="CENTER" justifyV="MIDDLE" text="-">
+                            <Anchors>
+                                <Anchor point="RIGHT" relativePoint="LEFT"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <TextInsets left="5" right="0" top="0" bottom="0"/>
+                <FontString inherits="ChatFontNormal"/>
+            </EditBox>
+
+            <Frame name="$parentRarityDropDown" parentKey="RarityDropDown" inherits="UIDropDownMenuTemplate">
+                <Size x="80" y="32"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentMaxLvlBox" relativePoint="RIGHT" x="30"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <FontString font="GameFontNormalSmall" justifyH="RIGHT" justifyV="MIDDLE" text="Rarity:">
+                            <Anchors>
+                                <Anchor point="RIGHT" relativePoint="LEFT" x="12"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+
+            <Frame name="$parentCategories" parentKey="CategoriesFrame" inherits="AuctipusDropDownButtonTemplate">
+                <Size x="120" y="24"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentRarityDropDown" relativePoint="RIGHT" x="-20"/>
+                </Anchors>
+            </Frame>
+
+            <CheckButton parentKey="CanUseCheckButton" inherits="UICheckButtonTemplate">
+                <Size x="24" y="24"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.CategoriesFrame" relativePoint="TOPRIGHT" x="8" y="2"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="GameFontNormalSmall" text="USABLE_ITEMS">
+                            <Anchors>
+                                <Anchor point="LEFT" relativePoint="RIGHT" x="-2"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Scripts>
+                    <OnClick>
+                        PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
+                    </OnClick>
+                </Scripts>
+            </CheckButton>
+
+            <Button name="$parentSearchButton" parentKey="SearchButton" inherits="UIPanelButtonTemplate" text="Search">
+                <Size x="100" y="23"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.CanUseCheckButton" relativePoint="RIGHT" x="100"/>
+                </Anchors>
+            </Button>
+
+            <Button name="$parentAuctionGroup1" parentKey="AuctionGroup1" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRow"/>
+            <Button name="$parentAuctionGroup2" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRow"/>
+            <Button name="$parentAuctionGroup3" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRow"/>
+            <Button name="$parentAuctionGroup4" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRow"/>
+            <Button name="$parentAuctionGroup5" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRow"/>
+            <Button name="$parentAuctionGroup6" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRow"/>
+            <Button name="$parentAuctionGroup7" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRow"/>
+            <Button name="$parentAuctionGroup8" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRow"/>
+            <Button name="$parentAuctionGroup9" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRow"/>
+            <ScrollFrame name="$parentAuctionGroupScrollFrame" parentKey="AuctionGroupScrollFrame" inherits="AuctipusScrollFrameTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parentAuctionGroup1" y="-5"/>
+                    <Anchor point="BOTTOMRIGHT" relativeTo="$parentAuctionGroup9" y="2"/>
+                </Anchors>
+            </ScrollFrame>
+			<Button name="$parentNameSort" inherits="AuctipusSortButtonTemplate" text="Name">
+                <Size y="19"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.AuctionGroup1.ItemButton.Name" relativePoint="TOPLEFT" y="2"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.AuctionGroup1.ItemButton.Name" x="2"/>
+                </Anchors>
+			</Button>
+			<Button name="$parentLevelSort" inherits="AuctipusSortButtonTemplate" text="Lvl">
+                <Size y="19"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeTo="$parentNameSort" relativePoint="BOTTOMRIGHT" x="-2"/>
+                    <Anchor point="RIGHT" relativeTo="$parentAuctionGroup1Level" x="6"/>
+                </Anchors>
+			</Button>
+			<Button name="$parentMinBuyoutSort" inherits="AuctipusSortButtonTemplate" text="Min Buyout">
+                <Size y="19"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeTo="$parentLevelSort" relativePoint="BOTTOMRIGHT" x="-2"/>
+                    <Anchor point="RIGHT" relativeTo="$parentAuctionGroup1" x="-4"/>
+                </Anchors>
+			</Button>
+
+            <Button name="$parentAuction1" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
+            <Button name="$parentAuction2" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
+            <Button name="$parentAuction3" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
+            <Button name="$parentAuction4" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
+            <Button name="$parentAuction5" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
+            <Button name="$parentAuction6" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
+            <Button name="$parentAuction7" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
+            <Button name="$parentAuction8" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
+            <Button name="$parentAuction9" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
+            <Button name="$parentAuction10" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
+            <Button name="$parentAuction11" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
+            <Button name="$parentAuction12" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
+            <Button name="$parentAuction13" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
+            <Button name="$parentAuction14" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
+            <Button name="$parentAuction15" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
+            <Button name="$parentAuction16" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
+            <ScrollFrame name="$parentAuctionScrollFrame" parentKey="AuctionScrollFrame" inherits="AuctipusScrollFrameTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parentAuction1" y="-5"/>
+                    <Anchor point="BOTTOMRIGHT" relativeTo="$parentAuction16" x="0" y="2"/>
+                </Anchors>
+            </ScrollFrame>
+			<Button name="$parentSellerSort" inherits="AuctipusSortButtonTemplate" text="Seller">
+                <Size y="19"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeTo="$parentAuction1Owner" relativePoint="TOPLEFT" x="-4" y="-2"/>
+                    <Anchor point="RIGHT" relativeTo="$parentAuction1Owner" x="8"/>
+                </Anchors>
+			</Button>
+			<Button name="$parentCountSort" inherits="AuctipusSortButtonTemplate" text="Units">
+                <Size y="19"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeTo="$parentAuction1CountFrame" relativePoint="TOPLEFT" x="-2" y="-2"/>
+                    <Anchor point="RIGHT" relativeTo="$parentAuction1CountFrame" x="5"/>
+                </Anchors>
+			</Button>
+			<Button name="$parentUnitCostSort" parentKey="UnitCostSort" inherits="AuctipusSortButtonTemplate" text="Unit Cost">
+                <Size y="19"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeTo="$parentSellerSort" relativePoint="BOTTOMRIGHT" x="-2"/>
+                    <Anchor point="RIGHT" relativeTo="$parentCountSort" relativePoint="LEFT" x="2"/>
+                </Anchors>
+			</Button>
+			<Button name="$parentBuyoutSort" parentKey="BuyoutSort" inherits="AuctipusSortButtonTemplate" text="Buyout">
+                <Size y="19"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeTo="$parentCountSort" relativePoint="BOTTOMRIGHT" x="-2"/>
+                    <Anchor point="RIGHT" relativeTo="$parentAuction1" x="-4"/>
+                </Anchors>
+			</Button>
+
+            <Button name="$parentBuyButton" parentKey="BuyButton" inherits="UIPanelButtonTemplate" text="Buy">
+                <Size x="100" y="24"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativeTo="$parentAuctionScrollFrame" relativePoint="BOTTOMRIGHT" y="-10"/>
+                </Anchors>
+            </Button>
+        </Frames>
+
+        <Scripts>
+            <OnLoad>
+                AuctipusBrowseFrame.OnLoad(self)
+            </OnLoad>
+        </Scripts>
+    </Frame>
+
+    <Frame name="AuctipusBrowseFrameMetaTemplate" inherits="AuctipusBrowseFrameTemplate" virtual="true">
+        <Scripts>
+            <OnLoad/>
+        </Scripts>
+    </Frame>
+</Ui>

@@ -1,15 +1,30 @@
 Auctipus = {
-    log_level = 1,
-    log       = TGLog:new(1, true),
+    log       = TGLog:new(1, 2),
 }
 
-function Auctipus.dbg(...)
+UIPanelWindows["AuctipusFrame"] = {
+    area                = "doublewide",
+    pushable            = 8,
+    xoffset             = 16,
+    yoffset             = 12,
+    bottomClampOverride = 140+12,
+    width               = 840,
+}
+
+function Auctipus._log(lvl, ...)
     local timestamp = GetTime()
     Auctipus.log:log(
-        Auctipus.log_level,
-        "[", timestamp, "] ",
+        lvl, "[", timestamp, "] ",
         LIGHTYELLOW_FONT_COLOR_CODE.."Auctipus: "..FONT_COLOR_CODE_CLOSE,
         ...)
+end
+
+function Auctipus.dbg(...)
+    Auctipus._log(1, ...)
+end
+
+function Auctipus.info(...)
+    Auctipus._log(2, ...)
 end
 
 function Auctipus.ADDON_LOADED(addOnName)
@@ -22,12 +37,15 @@ function Auctipus.ADDON_LOADED(addOnName)
     UIParent:UnregisterEvent("AUCTION_HOUSE_CLOSED")
     UIParent:UnregisterEvent("AUCTION_HOUSE_DISABLED")
 
+    -- Tabs.
+    PanelTemplates_SetNumTabs(AuctipusFrame, #AuctipusFrame.Tabs)
+    PanelTemplates_SetTab(AuctipusFrame, 1)
+
     -- Set scripts.
-    local f = AuctipusFrame
-    local e = AuctipusFrameSearchBox
-    f:SetScript("OnHide", Auctipus.OnHide)
-    e:SetScript("OnEnterPressed", AuctipusScan.DoSearch)
-    e:SetScript("OnEscapePressed", function() e:ClearFocus() end)
+    AuctipusFrame:SetScript("OnHide", Auctipus.OnHide)
+    for i, tab in ipairs(AuctipusFrame.Tabs) do
+        tab:SetScript("OnClick", function() Auctipus.SelectTab(i) end)
+    end
 
     -- Make it so that the frame will close when we hit Escape.
     table.insert(UISpecialFrames, AuctipusFrame:GetName())
@@ -36,13 +54,14 @@ end
 function Auctipus.AUCTION_HOUSE_SHOW()
     Auctipus.dbg("AUCTION_HOUSE_SHOW")
 
-    AuctipusFrame:Show()
-    AuctipusFrameSearchBox:SetFocus()
+    ShowUIPanel(AuctipusFrame)
+    Auctipus.SelectTab(1)
+    Auctipus.DumpSortOrder()
 end
 
 function Auctipus.AUCTION_HOUSE_CLOSED()
     Auctipus.dbg("AUCTION_HOUSE_CLOSED")
-    AuctipusFrame:Hide()
+    HideUIPanel(AuctipusFrame)
 end
 
 function Auctipus.OnHide()
@@ -53,13 +72,38 @@ function Auctipus.AUCTION_HOUSE_DISABLED()
     Auctipus.dbg("AUCTION_HOUSE_DISABLED")
 end
 
-function Auctipus.ScanComplete()
-    local itemsPerSecond = #AuctipusScan.items/AuctipusScan.elapsedTime
-    Auctipus.dbg("Scan complete.  Found "..#AuctipusScan.items.." total in "..
-                 AuctipusScan.elapsedTime.." seconds ("..itemsPerSecond..
-                 " items/second)")
+function Auctipus.SelectTab(index)
+    PanelTemplates_SetTab(AuctipusFrame, index)
+    AuctipusFrame.BrowseFrame:Hide()
+    AuctipusFrame.AuctionsFrame:Hide()
+    local f = GetCurrentKeyBoardFocus()
+    if f then
+        f:ClearFocus()
+    end
+    if index == 1 then
+        AuctipusFrame.BrowseFrame:Show()
+        AuctipusFrame.BrowseFrame.SearchBox:SetFocus()
+    elseif index == 2 then
+        AuctipusFrame.AuctionsFrame:Show()
+    end
+end
 
-    AuctipusFrameResult1:SetNormalTexture(AuctipusScan.items[1].texture)
+function Auctipus.DumpSortOrder()
+    local i = 0
+    while true do
+        i = i + 1
+        local sort, reversed = GetAuctionSort("list", i)
+        if sort == nil then
+            break
+        end
+        
+        if reversed then
+            reversed = " (reversed)"
+        else
+            reversed = ""
+        end
+        Auctipus.dbg("Sort: "..sort..reversed)
+    end
 end
 
 TGEventManager.Register(Auctipus)

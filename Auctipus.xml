@@ -1,63 +1,96 @@
 <?xml version="1.0"?>
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
-    <!-- Main Auctipus frame -->
-    <Frame name="AuctipusFrame" frameStrata="BACKGROUND" toplevel="true" parent="UIParent" inherits="BackdropTemplate">
-        <KeyValues>
-            <KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
-            <KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
-        </KeyValues>
-        <Size>
-            <AbsDimension x="800" y="800"/>
-        </Size>
-        <Anchors>
-            <Anchor point="CENTER"/>
-        </Anchors>
+    <Frame name="AuctipusFrame" frameStrata="HIGH" toplevel="true" parent="UIParent">
+        <Size x="832" y="440"/>
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture>
+                <Texture name="$parentBg" file="Interface\FrameGeneral\UI-Background-Rock" horizTile="true" vertTile="true" parentKey="Bg">
                     <Anchors>
-                        <Anchor point="TOP" relativePoint="TOP"><Offset><AbsDimension x="0" y="-5"/></Offset></Anchor>
-                        <Anchor point="LEFT" relativePoint="LEFT"><Offset><AbsDimension x="5" y="0"/></Offset></Anchor>
-                        <Anchor point="BOTTOM" relativePoint="BOTTOM"><Offset><AbsDimension x="0" y="5"/></Offset></Anchor>
-                        <Anchor point="RIGHT" relativePoint="RIGHT"><Offset><AbsDimension x="-5" y="0"/></Offset></Anchor>
+                        <Anchor point="TOPLEFT" x="1" y="-1"/>
+                        <Anchor point="BOTTOMRIGHT" x="-2" y="1"/>
                     </Anchors>
-                    <Color r="0" g="0" b="0" a="0.5"/>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <Texture name="$parentTopRightCorner" parentKey="TopRightCorner" file="Interface\FrameGeneral\UI-Frame">
+                    <Size x="14" y="14"/>
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" x="0" y="1"/>
+                    </Anchors>
+                    <TexCoords left="0.78125" right="0.89062500" top="0.00781250" bottom="0.1171875"/>
+                </Texture>
+                <Texture name="$parentTopLeftCorner" parentKey="TopLeftCorner" file="Interface\FrameGeneral\UI-Frame">
+                    <Size x="14" y="14"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="-6" y="1"/>
+                    </Anchors>
+                    <TexCoords left="0.63281250" right="0.7421875" top="0.28125000" bottom="0.390625"/>
+                </Texture>
+                <Texture name="$parentTopBorder" parentKey="TopBorder" file="Interface\FrameGeneral\_UI-Frame" horizTile="true">
+                    <Size x="256" y="14"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.TopLeftCorner" relativePoint="TOPRIGHT"/>
+                        <Anchor point="TOPRIGHT" relativeKey="$parent.TopRightCorner" relativePoint="TOPLEFT"/>
+                    </Anchors>
+                    <TexCoords left="0.00000000" right="1.00000000" top="0.43750000" bottom="0.546875"/>
+                </Texture>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture name="$parentTopTileStreaks" parentKey="TopTileStreaks" inherits="_UI-Frame-TopTileStreaks">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="0" y="-2"/>
+                        <Anchor point="TOPRIGHT" x="-2" y="-2"/>
+                    </Anchors>
+                </Texture>
+                <Texture name="$parentBotLeftCorner" parentKey="BotLeftCorner" inherits="UI-Frame-BotCornerLeft">
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="-6" y="-5"/>
+                    </Anchors>
+                </Texture>
+                <Texture name="$parentBotRightCorner" parentKey="BotRightCorner" inherits="UI-Frame-BotCornerRight">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT" x="0" y="-5"/>
+                    </Anchors>
+                </Texture>
+                <Texture name="$parentBottomBorder" parentKey="BottomBorder" inherits="_UI-Frame-Bot">
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" relativeKey="$parent.BotLeftCorner" relativePoint="BOTTOMRIGHT" y="0"/>
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.BotRightCorner" relativePoint="BOTTOMLEFT" y="0"/>
+                    </Anchors>
+                </Texture>
+                <Texture name="$parentLeftBorder" parentKey="LeftBorder" inherits="!UI-Frame-LeftTile">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.TopLeftCorner" relativePoint="BOTTOMLEFT" x="0" y="0" />
+                        <Anchor point="BOTTOMLEFT" relativeKey="$parent.BotLeftCorner" relativePoint="TOPLEFT"/>
+                    </Anchors>
+                </Texture>
+                <Texture name="$parentRightBorder" parentKey="RightBorder" inherits="!UI-Frame-RightTile">
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" relativeKey="$parent.TopRightCorner" relativePoint="BOTTOMRIGHT" x="1"/>
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.BotRightCorner" relativePoint="TOPRIGHT"/>
+                    </Anchors>
                 </Texture>
             </Layer>
         </Layers>
         <Frames>
-            <Frame name="$parentSearchBoxLabel">
-                <Size>
-                    <AbsDimension x="50" y="24"/>
-                </Size>
+            <Frame name="$parentBrowseFrame" parentKey="BrowseFrame" inherits="AuctipusBrowseFrameTemplate">
                 <Anchors>
-                    <Anchor point="TOPLEFT"><Offset><AbsDimension x="0" y="-8"/></Offset></Anchor>
+                    <Anchor point="TOPLEFT"/>
                 </Anchors>
-                <Layers>
-                    <Layer level="BACKGROUND">
-                        <FontString inherits="GameFontNormalSmall" justifyH="RIGHT" justifyV="MIDDLE" text="Search:"/>
-                    </Layer>
-                </Layers>
             </Frame>
-            <EditBox name="$parentSearchBox" enableMouse="true" autoFocus="false" letters="63" inherits="BackdropTemplate">
-                <KeyValues>
-                    <KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
-                    <KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
-                </KeyValues>
-                <Size>
-                    <AbsDimension x="150" y="24"/>
-                </Size>
+            <Frame name="$parentAuctionsFrame" parentKey="AuctionsFrame" inherits="AuctipusAuctionsFrameTemplate">
                 <Anchors>
-                    <Anchor point="LEFT" relativeTo="$parentSearchBoxLabel" relativePoint="RIGHT"/>
+                    <Anchor point="TOPLEFT"/>
                 </Anchors>
-                <TextInsets left="5" right="0" top="0" bottom="0"/>
-                <FontString inherits="ChatFontNormal"/>
-            </EditBox>
-            <Button name="$parentResult1" inherits="AuctipusItemButton">
+            </Frame>
+            <Button name="$parentBrowseTab" parentArray="Tabs" inherits="CharacterFrameTabButtonTemplate" text="BROWSE">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="$parentSearchBoxLabel" relativePoint="BOTTOMLEFT">
-                        <Offset><AbsDimension x="16" y="-8"/></Offset>
-                    </Anchor>
+                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="15" y="2"/>
+                </Anchors>
+            </Button>
+            <Button name="$parentAuctionsTab" parentArray="Tabs" inherits="CharacterFrameTabButtonTemplate" text="AUCTIONS">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parentBrowseTab" relativePoint="TOPRIGHT" x="-8"/>
                 </Anchors>
             </Button>
         </Frames>

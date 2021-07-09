@@ -1,12 +1,40 @@
 ## Interface: 20501
 ## Title: Auctipus
+## Version: 0.9
 ## Author: Empirical
 ## DefaultState: enabled
 ## Dependencies: TGEventManager TGLog
 ## SavedVariables:
 
+AuctipusMoneyFrame.xml
 AuctipusItemButton.xml
-Auctipus.xml
+AuctipusAuctionGroupRow.xml
+AuctipusAuctionRow.xml
+AuctipusAuctionSellRow.xml
+AuctipusScrollFrame.xml
+AuctipusSortButton.xml
+AuctipusBrowseFrame.xml
+AuctipusAuctionsFrame.xml
+AuctipusDropDown.xml
 
-Auctipus.lua
+AuctipusCommonUI.lua
+AuctipusSortButton.lua
+AuctipusPaths.lua
+AuctipusSet.lua
+AuctipusAuction.lua
+AuctipusPage.lua
+AuctipusOwnerPage.lua
 AuctipusScan.lua
+AuctipusSearch.lua
+AuctipusMoneyFrame.lua
+AuctipusItemButton.lua
+AuctipusAuctionGroup.lua
+AuctipusAuctionGroupRow.lua
+AuctipusAuctionSellRow.lua
+AuctipusAuctionRow.lua
+AuctipusBrowseFrame.lua
+AuctipusAuctionsFrame.lua
+AuctipusDropDown.lua
+Auctipus.lua
+
+Auctipus.xml
