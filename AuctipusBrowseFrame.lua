@@ -115,6 +115,15 @@ function AuctipusBrowseFrame:OnLoad()
     self:SetScript("OnHide", function() self:OnHide() end)
 end
 
+function AuctipusBrowseFrame.AUCTION_HOUSE_CLOSED()
+    local self = AuctipusFrame.BrowseFrame
+    self.selectedAuctionGroup = nil
+    self.selectedAuctions:Clear()
+    self.scan = nil
+    self:UpdateAuctionGroups()
+    self:UpdateAuctions()
+end
+
 function AuctipusBrowseFrame:OnHide()
     self.CategoryDropdown:Hide()
 end
@@ -377,3 +386,5 @@ function AuctipusBrowseFrame:AuctionLost(searcher)
         searcher:FindAuction(self.selectedAuctions:First(), self)
     end
 end
+
+TGEventManager.Register(AuctipusBrowseFrame)
