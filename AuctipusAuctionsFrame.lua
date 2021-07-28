@@ -174,7 +174,7 @@ end
 
 function AuctipusAuctionsFrame.AUCTION_HOUSE_SHOW()
     local self = AuctipusFrame.AuctionsFrame
-    AOwnerPage:OpenPage(0, self)
+    APage:OpenOwnerPage(0, self)
 end
 
 function AuctipusAuctionsFrame.NEW_AUCTION_UPDATE()

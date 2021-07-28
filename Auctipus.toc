@@ -23,7 +23,6 @@ AuctipusPaths.lua
 AuctipusSet.lua
 AuctipusAuction.lua
 AuctipusPage.lua
-AuctipusOwnerPage.lua
 AuctipusScan.lua
 AuctipusSearch.lua
 AuctipusMoneyFrame.lua

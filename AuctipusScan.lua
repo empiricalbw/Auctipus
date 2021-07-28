@@ -31,7 +31,7 @@ function AScan:LoadNextPage()
     if self.apage then
         page = self.apage.page + 1
     end
-    APage:OpenPage(self.query, page, "QUALITY", self)
+    APage:OpenListPage(self.query, page, "QUALITY", self)
 end
 
 function AScan:PageOpened(p)
