@@ -65,6 +65,9 @@ function AScan:PageUpdated(p)
     end
 end
 
+function AScan:PageClosed(p)
+end
+
 function AScan:ScanComplete()
     self.apage       = nil
     self.elapsedTime = GetTime() - self.startTime

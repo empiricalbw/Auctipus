@@ -177,10 +177,6 @@ function AuctipusAuctionsFrame.AUCTION_HOUSE_SHOW()
     AOwnerPage:OpenPage(0, self)
 end
 
-function AuctipusAuctionsFrame.AUCTION_HOUSE_CLOSED()
-    SetSelectedAuctionItem("owner", 0)
-end
-
 function AuctipusAuctionsFrame.NEW_AUCTION_UPDATE()
     local self = AuctipusFrame.AuctionsFrame
     self.ItemButton:SetAuctionSellItem()
@@ -394,6 +390,12 @@ function AuctipusAuctionsFrame:PageUpdated(page)
     assert(page == self.aopage)
     self:UpdateControls()
     self:UpdateAuctions()
+end
+
+function AuctipusAuctionsFrame:PageClosed(page)
+    assert(page == self.aopage)
+    self.aopage = nil
+    SetSelectedAuctionItem("owner", 0)
 end
 
 function AuctipusAuctionsFrame:SetSelection(index)

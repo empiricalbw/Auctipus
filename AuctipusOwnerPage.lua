@@ -1,9 +1,7 @@
-AOwnerPage = {}
+AOwnerPage = {
+    activePage = nil,
+}
 AOwnerPage.__index = AOwnerPage
-
-local pendingPage = nil
-local openPage    = nil
-local lastOrder   = nil
 
 local SORT_ORDER = {
     ["DURATION"] = {
@@ -17,59 +15,61 @@ local SORT_ORDER = {
     },
 }
 
+local STATE_WAIT_START_QUERY  = 1
+local STATE_WAIT_PAGE_UPDATE  = 2
+local STATE_WAIT_PROCESS_PAGE = 3
+local STATE_CLOSED            = 4
+
 local function IsAHBusy()
     local canQuery, canQueryAll = CanSendAuctionQuery()
     return not canQuery
 end
 
 function AOwnerPage:OpenPage(page, handler)
-    if openPage ~= nil then
+    if AOwnerPage.activePage then
         Auctipus.info("Forcing previous owner page closed.")
-        openPage:ClosePage()
+        AOwnerPage.activePage:ClosePage()
     end
 
-    assert(pendingPage == nil)
-    local ap = {page          = page,
+    local ap = {state         = STATE_WAIT_START_QUERY,
+                page          = page,
                 handler       = handler,
                 totalAuctions = nil,
                 auctions      = nil,
                 nilAuctions   = nil,
-                gotListUpdate = false,
-                closed        = false,
                 }
     setmetatable(ap, self)
 
-    pendingPage = ap
+    AOwnerPage.activePage = ap
+end
+
+function AOwnerPage:IsActivePage()
+    return self == AOwnerPage.activePage
 end
 
 function AOwnerPage:ClosePage()
-    if self == pendingPage then
-        pendingPage = nil
-    end
-    if self == openPage then
-        openPage = nil
+    if self:IsActivePage() then
+        AOwnerPage.activePage = nil
     end
 
-    self.closed = true
-end
-
-function AOwnerPage:ConfigureSortOrder()
-    SortAuctionClearSort("owner")
-    for i, s in ipairs(SORT_ORDER["DURATION"]) do
-        SortAuctionSetSort("owner", s.key, s.reverse)
+    self.state = STATE_CLOSED
+    if self.handler then
+        self.handler:PageClosed(self)
     end
 end
 
 function AOwnerPage:StartQuery()
-    self:ConfigureSortOrder()
+    SortAuctionClearSort("owner")
+    for i, s in ipairs(SORT_ORDER["DURATION"]) do
+        SortAuctionSetSort("owner", s.key, s.reverse)
+    end
+
     GetOwnerAuctionItems()
 end
 
 function AOwnerPage:ProcessPage()
     local numAuctions, totalAuctions = GetNumAuctionItems("owner")
-    Auctipus.info("Num owner auctions: "..numAuctions)
 
-    self.gotListUpdate = false
     self.totalAuctions = totalAuctions
     self.auctions      = {}
     self.nilAuctions   = {}
@@ -90,38 +90,44 @@ function AOwnerPage:ProcessPage()
 end
 
 function AOwnerPage.OnUpdate()
-    if ahOpen and pendingPage and not IsAHBusy() then
-        openPage    = pendingPage
-        pendingPage = nil
-        if openPage.handler then
-            openPage.handler:PageOpened(openPage)
-        end
-        Auctipus.info("Page opened "..openPage.page)
-        openPage:StartQuery()
-    elseif openPage and openPage.gotListUpdate then
-        openPage:ProcessPage()
+    local self = AOwnerPage.activePage
+    if not self then
+        return
     end
-end
 
-function AOwnerPage.AUCTION_HOUSE_SHOW()
-    ahOpen = true
+    if self.state == STATE_WAIT_START_QUERY then
+        if not IsAHBusy() then
+            if self.handler then
+                self.handler:PageOpened(self)
+            end
+
+            self.state = STATE_WAIT_PAGE_UPDATE
+            self:StartQuery()
+        end
+    elseif self.state == STATE_WAIT_PROCESS_PAGE then
+        self.state = STATE_WAIT_PAGE_UPDATE
+        self:ProcessPage()
+    end
 end
 
 function AOwnerPage.AUCTION_OWNED_LIST_UPDATE()
     -- Defer to the next OnUpdate handler so that we batch multiple list into a
     -- single page scan.
-    if openPage then
-        openPage.gotListUpdate = true
+    local self = AOwnerPage.activePage
+    if not self then
+        return
     end
+
+    self.state = STATE_WAIT_PROCESS_PAGE
 end
 
 function AOwnerPage.AUCTION_HOUSE_CLOSED()
-    openPage = nil
-    ahOpen   = false
-    if pendingPage then
-        local p = pendingPage
-        pendingPage = nil
+    local self = AOwnerPage.activePage
+    if not self then
+        return
     end
+
+    self:ClosePage()
 end
 
 function AOwnerPage:Dump()

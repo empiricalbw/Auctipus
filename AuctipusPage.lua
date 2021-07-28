@@ -1,9 +1,8 @@
-APage = {}
+APage = {
+    activePage = nil,
+    lastOrder  = nil,
+}
 APage.__index = APage
-
-local pendingPage = nil
-local openPage    = nil
-local lastOrder   = nil
 
 local SORT_ORDER = {
     ["BUYOUT"] = {
@@ -31,57 +30,67 @@ local SORT_ORDER = {
     },
 }
 
+local STATE_WAIT_START_QUERY  = "STATE_WAIT_START_QUERY"
+local STATE_WAIT_PAGE_UPDATE  = "STATE_WAIT_PAGE_UPDATE"
+local STATE_WAIT_PROCESS_PAGE = "STATE_WAIT_PROCESS_PAGE"
+local STATE_CLOSED            = "STATE_CLOSED"
+
 local function IsAHBusy()
     local canQuery, canQueryAll = CanSendAuctionQuery()
     return not canQuery
 end
 
+function APage:_TRANSITION(newState)
+    Auctipus.dbg("APage: "..self.state.." -> "..newState)
+    self.state = newState
+end
+
 function APage:OpenPage(q, page, order, handler)
-    if openPage ~= nil then
+    if APage.activePage then
         Auctipus.dbg("Forcing previous page closed.")
-        openPage:ClosePage()
+        APage.activePage:ClosePage()
     end
 
-    assert(pendingPage == nil)
-    local ap = {query         = q,
+    local ap = {state         = STATE_WAIT_START_QUERY,
+                query         = q,
                 order         = order,
                 page          = page,
                 handler       = handler,
                 totalAuctions = nil,
                 auctions      = nil,
                 nilAuctions   = nil,
-                gotListUpdate = false,
-                closed        = false,
                 }
     setmetatable(ap, self)
 
-    pendingPage = ap
+    APage.activePage = ap
+end
+
+function APage:IsActivePage()
+    return self == APage.activePage
 end
 
 function APage:ClosePage()
-    if self == pendingPage then
-        pendingPage = nil
-    end
-    if self == openPage then
-        openPage = nil
+    if self:IsActivePage() then
+        APage.activePage = nil
     end
 
-    self.closed = true
-end
-
-function APage:ConfigureSortOrder()
-    if lastOrder ~= self.order then
-        SortAuctionClearSort("list")
-        for i, s in ipairs(SORT_ORDER[self.order]) do
-            SortAuctionSetSort("list", s.key, s.reverse)
-        end
-        lastOrder = self.order
+    self:_TRANSITION(STATE_CLOSED)
+    if self.handler then
+        self.handler:PageClosed(self)
     end
 end
 
 function APage:StartQuery()
-    self:ConfigureSortOrder()
+    if APage.lastOrder ~= self.order then
+        Auctipus.dbg("Updating query sort order...")
+        SortAuctionClearSort("list")
+        for i, s in ipairs(SORT_ORDER[self.order]) do
+            SortAuctionSetSort("list", s.key, s.reverse)
+        end
+        APage.lastOrder = self.order
+    end
 
+    Auctipus.dbg("Querying page "..self.page.."...")
     local q = self.query
     QueryAuctionItems(q.text, q.minLevel, q.maxLevel, self.page, q.usable,
                       q.rarity, q.getAll, q.exactMatch, q.filters)
@@ -90,7 +99,6 @@ end
 function APage:ProcessPage()
     local numAuctions, totalAuctions = GetNumAuctionItems("list")
 
-    self.gotListUpdate = false
     self.totalAuctions = totalAuctions
     self.auctions      = {}
     self.nilAuctions   = {}
@@ -111,32 +119,45 @@ function APage:ProcessPage()
 end
 
 function APage.OnUpdate()
-    if pendingPage and not IsAHBusy() then
-        openPage    = pendingPage
-        pendingPage = nil
-        if openPage.handler then
-            openPage.handler:PageOpened(openPage)
+    local self = APage.activePage
+    if not self then
+        return
+    end
+
+    if self.state == STATE_WAIT_START_QUERY then
+        if not IsAHBusy() then
+            if self.handler then
+                self.handler:PageOpened(self)
+            end
+
+            self:_TRANSITION(STATE_WAIT_PAGE_UPDATE)
+            self:StartQuery()
         end
-        openPage:StartQuery()
-    elseif openPage and openPage.gotListUpdate then
-        openPage:ProcessPage()
+    elseif self.state == STATE_WAIT_PROCESS_PAGE then
+        self:_TRANSITION(STATE_WAIT_PAGE_UPDATE)
+        self:ProcessPage()
     end
 end
 
 function APage.AUCTION_ITEM_LIST_UPDATE()
     -- Defer to the next OnUpdate handler so that we batch multiple list into a
     -- single page scan.
-    if openPage then
-        openPage.gotListUpdate = true
+    Auctipus.dbg("AUCTION_ITEM_LIST_UPDATE")
+    local self = APage.activePage
+    if not self then
+        return
     end
+
+    self:_TRANSITION(STATE_WAIT_PROCESS_PAGE)
 end
 
 function APage.AUCTION_HOUSE_CLOSED()
-    openPage = nil
-    if pendingPage then
-        local p = pendingPage
-        pendingPage = nil
+    local self = APage.activePage
+    if not self then
+        return
     end
+
+    self:ClosePage()
 end
 
 function APage:Dump()
