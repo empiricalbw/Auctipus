@@ -7,6 +7,9 @@ local AUCTION_DURATION = {
     AUCTION_TIME_LEFT4,
 }
 
+local AUCTION_STATUS_UNSOLD = 0
+local AUCTION_STATUS_SOLD   = 1
+
 function AuctipusAuctionSellRow:OnLoad()
     self.ItemButton:SetHeight(self:GetHeight())
     self.ItemButton:SetWidth(self:GetHeight())
@@ -17,10 +20,18 @@ function AuctipusAuctionSellRow:OnClick()
 end
 
 function AuctipusAuctionSellRow:SetAuction(auction)
+    local durationText
+
     if auction then
         self.ItemButton:SetAuction(auction)
-        self.Duration:SetText(AUCTION_DURATION[auction.duration])
-        local bidder = auction.bidderFullName
+        if auction.saleStatus == AUCTION_STATUS_SOLD then
+            durationText = "Sold"
+        else
+            durationText = AUCTION_DURATION[auction.duration]
+        end
+        self.Duration:SetText(durationText)
+
+        local bidder = auction.bidderFullName or auction.highBidder
         if not bidder then
             bidder = RED_FONT_COLOR_CODE..NO_BIDS..FONT_COLOR_CODE_CLOSE
         end
