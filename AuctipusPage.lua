@@ -93,6 +93,10 @@ function APage:IsActivePage()
     return self == APage.activePage[self.category]
 end
 
+function APage:IsLoading()
+    return self.auctions == nil
+end
+
 function APage.ForceClose(category)
     local p = APage.activePage[category]
     if p and p.state ~= STATE_CLOSED then
