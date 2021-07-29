@@ -117,9 +117,7 @@ end
 
 function AuctipusBrowseFrame.AUCTION_HOUSE_CLOSED()
     local self = AuctipusFrame.BrowseFrame
-    self.selectedAuctions:Clear()
-    self:UpdateAuctionGroups()
-    self:UpdateAuctions()
+    self:ClearSearch()
 end
 
 function AuctipusBrowseFrame:OnHide()
@@ -153,8 +151,12 @@ end
 
 function AuctipusBrowseFrame:ClearScan()
     self.selectedAuctionGroup = nil
-    self.selectedAuctions:Clear()
     self.scan = nil
+    self:ClearSearch()
+end
+
+function AuctipusBrowseFrame:ClearSearch()
+    self.selectedAuctions:Clear()
     self:UpdateAuctionGroups()
     self:UpdateAuctions()
 end
@@ -226,12 +228,8 @@ end
 
 function AuctipusBrowseFrame:SelectAuctionGroup(auctionGroup)
     self.selectedAuctionGroup = auctionGroup
-    self.selectedAuctions:Clear()
     self.BuyButton:Disable()
-    self:UpdateAuctionGroups()
-
-    FauxScrollFrame_OnVerticalScroll(self.AuctionScrollFrame, 0, 1,
-                                     function() self:UpdateAuctions() end)
+    self:ClearSearch()
 end
 
 function AuctipusBrowseFrame:UpdateAuctionGroups()
