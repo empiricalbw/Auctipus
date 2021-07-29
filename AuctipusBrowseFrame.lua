@@ -198,6 +198,7 @@ end
 
 function AuctipusBrowseFrame:ScanComplete(scan)
     assert(self.scan == scan)
+    AHistory:ScanComplete(scan)
 
     local auctionsPerSecond = #scan.auctions / scan.elapsedTime
     Auctipus.info("Scan complete.  Found "..#scan.auctions..
