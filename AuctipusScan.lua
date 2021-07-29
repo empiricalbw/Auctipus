@@ -51,7 +51,7 @@ function AScan:PageUpdated(p)
         end
     end
 
-    if #self.apage.auctions > 0 then
+    if #self.apage.auctions > 0 and not self.query.getAll then
         self:LoadNextPage()
     elseif #self.queries > 0 then
         self:StartNextQuery()
