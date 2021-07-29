@@ -55,6 +55,7 @@ function AAuction:FromGetAuctionItemInfo(index, list)
                 hasAllInfo      = hasAllInfo,
                 link            = SaneLink(GetAuctionItemLink(list, index)),
                 duration        = GetAuctionItemTimeLeft(list, index),
+                pageIndex       = index,
                 missing         = false,
                 }
     setmetatable(aa, self)
