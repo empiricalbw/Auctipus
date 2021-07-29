@@ -36,6 +36,7 @@ local SORT_ORDER = {
     },
 }
 
+local STATE_INITIAL           = "STATE_INITIAL"
 local STATE_WAIT_START_QUERY  = "STATE_WAIT_START_QUERY"
 local STATE_WAIT_PAGE_UPDATE  = "STATE_WAIT_PAGE_UPDATE"
 local STATE_WAIT_PROCESS_PAGE = "STATE_WAIT_PROCESS_PAGE"
@@ -48,7 +49,7 @@ end
 
 function APage:OpenListPage(q, page, order, handler)
     local ap = {category      = "list",
-                state         = STATE_WAIT_START_QUERY,
+                state         = STATE_INITIAL,
                 query         = q,
                 order         = order,
                 page          = page,
@@ -61,11 +62,12 @@ function APage:OpenListPage(q, page, order, handler)
 
     APage.ForceClose("list")
     APage.activePage["list"] = ap
+    ap:_TRANSITION(STATE_WAIT_START_QUERY)
 end
 
 function APage:OpenOwnerPage(page, handler)
     local ap = {category      = "owner",
-                state         = STATE_WAIT_START_QUERY,
+                state         = STATE_INITIAL,
                 page          = page,
                 handler       = handler,
                 totalAuctions = nil,
@@ -76,6 +78,7 @@ function APage:OpenOwnerPage(page, handler)
 
     APage.ForceClose("owner")
     APage.activePage["owner"] = ap
+    ap:_TRANSITION(STATE_WAIT_START_QUERY)
 end
 
 function APage:IsAHBusy()
