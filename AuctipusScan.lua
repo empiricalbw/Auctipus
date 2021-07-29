@@ -42,8 +42,14 @@ function AScan:PageUpdated(p)
 
     self.apage:ClosePage()
 
-    local totalPages = ceil(self.apage.totalAuctions / 50)
-    Auctipus.info("Got page "..self.apage.page.." / "..totalPages)
+    local totalPages
+    if self.query.getAll then
+        totalPages = 0
+        Auctipus.info("Got ALL page.")
+    else
+        totalPages = ceil(self.apage.totalAuctions / 50)
+        Auctipus.info("Got page "..self.apage.page.." / "..totalPages)
+    end
 
     for i, auction in ipairs(self.apage.auctions) do
         if auction.hasAllInfo then
