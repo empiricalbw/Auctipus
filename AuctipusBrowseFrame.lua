@@ -151,6 +151,14 @@ function AuctipusBrowseFrame:OnDropdownItemClick(index, selected)
     end
 end
 
+function AuctipusBrowseFrame:ClearScan()
+    self.selectedAuctionGroup = nil
+    self.selectedAuctions:Clear()
+    self.scan = nil
+    self:UpdateAuctionGroups()
+    self:UpdateAuctions()
+end
+
 function AuctipusBrowseFrame:DoSearch()
     if not self.SearchButton:IsEnabled() then
         return
@@ -176,6 +184,8 @@ function AuctipusBrowseFrame:DoSearch()
         }
         table.insert(query.filters, filter)
     end
+
+    self:ClearScan()
 
     self.scan = AScan:New({query}, self)
     self.SearchBox:ClearFocus()
