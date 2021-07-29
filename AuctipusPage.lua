@@ -94,8 +94,9 @@ function APage:IsActivePage()
 end
 
 function APage.ForceClose(category)
-    if APage.activePage[category] then
-        Auctipus.dbg("Forcing previous "..category.." page closed.")
+    local p = APage.activePage[category]
+    if p and p.state ~= STATE_CLOSED then
+        Auctipus.dbg("Forcing "..category.." page closed.")
         APage.activePage[category]:ClosePage()
     end
 end
