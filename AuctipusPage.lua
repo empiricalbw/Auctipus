@@ -105,11 +105,11 @@ function APage:ClosePage()
     if self:IsActivePage() then
         self:SelectItem(0)
         APage.activePage[self.category] = nil
-    end
 
-    self:_TRANSITION(STATE_CLOSED)
-    if self.handler then
-        self.handler:PageClosed(self)
+        self:_TRANSITION(STATE_CLOSED)
+        if self.handler then
+            self.handler:PageClosed(self)
+        end
     end
 end
 
