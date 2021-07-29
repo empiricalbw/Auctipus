@@ -157,6 +157,7 @@ end
 
 function AuctipusBrowseFrame:ClearSearch()
     self.selectedAuctions:Clear()
+    self.BuyButton:Disable()
     self:UpdateAuctionGroups()
     self:UpdateAuctions()
 end
@@ -228,7 +229,6 @@ end
 
 function AuctipusBrowseFrame:SelectAuctionGroup(auctionGroup)
     self.selectedAuctionGroup = auctionGroup
-    self.BuyButton:Disable()
     self:ClearSearch()
 end
 
