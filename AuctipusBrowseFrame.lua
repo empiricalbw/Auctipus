@@ -117,9 +117,7 @@ end
 
 function AuctipusBrowseFrame.AUCTION_HOUSE_CLOSED()
     local self = AuctipusFrame.BrowseFrame
-    self.selectedAuctionGroup = nil
     self.selectedAuctions:Clear()
-    self.scan = nil
     self:UpdateAuctionGroups()
     self:UpdateAuctions()
 end
