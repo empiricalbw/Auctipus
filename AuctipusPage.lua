@@ -41,11 +41,6 @@ local STATE_WAIT_PAGE_UPDATE  = "STATE_WAIT_PAGE_UPDATE"
 local STATE_WAIT_PROCESS_PAGE = "STATE_WAIT_PROCESS_PAGE"
 local STATE_CLOSED            = "STATE_CLOSED"
 
-local function IsAHBusy()
-    local canQuery, canQueryAll = CanSendAuctionQuery()
-    return not canQuery
-end
-
 function APage:_TRANSITION(newState)
     Auctipus.dbg("APage ["..self.category.."]: "..self.state.." -> "..newState)
     self.state = newState
@@ -89,6 +84,14 @@ function APage:OpenOwnerPage(page, handler)
     setmetatable(ap, self)
 
     APage.activePage["owner"] = ap
+end
+
+function APage:IsAHBusy()
+    local canQuery, canQueryAll = CanSendAuctionQuery()
+    if self.category == "list" and self.query.getAll then
+        return not (canQuery and canQueryAll)
+    end
+    return not canQuery
 end
 
 function APage:IsActivePage()
@@ -162,7 +165,7 @@ end
 function APage:OnUpdate()
     for i, self in pairs(APage.activePage) do
         if self.state == STATE_WAIT_START_QUERY then
-            if not IsAHBusy() then
+            if not self:IsAHBusy() then
                 if self.handler then
                     self.handler:PageOpened(self)
                 end
