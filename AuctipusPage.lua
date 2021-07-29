@@ -47,11 +47,6 @@ function APage:_TRANSITION(newState)
 end
 
 function APage:OpenListPage(q, page, order, handler)
-    if APage.activePage["list"] then
-        Auctipus.dbg("Forcing previous list page closed.")
-        APage.activePage["list"]:ClosePage()
-    end
-
     local ap = {category      = "list",
                 state         = STATE_WAIT_START_QUERY,
                 query         = q,
@@ -64,15 +59,11 @@ function APage:OpenListPage(q, page, order, handler)
                 }
     setmetatable(ap, self)
 
+    APage.ForceClose("list")
     APage.activePage["list"] = ap
 end
 
 function APage:OpenOwnerPage(page, handler)
-    if APage.activePage["owner"] then
-        Auctipus.dbg("Forcing previous owner page closed.")
-        APage.activePage["owner"]:ClosePage()
-    end
-
     local ap = {category      = "owner",
                 state         = STATE_WAIT_START_QUERY,
                 page          = page,
@@ -83,6 +74,7 @@ function APage:OpenOwnerPage(page, handler)
                 }
     setmetatable(ap, self)
 
+    APage.ForceClose("owner")
     APage.activePage["owner"] = ap
 end
 
@@ -96,6 +88,13 @@ end
 
 function APage:IsActivePage()
     return self == APage.activePage[self.category]
+end
+
+function APage.ForceClose(category)
+    if APage.activePage[category] then
+        Auctipus.dbg("Forcing previous "..category.." page closed.")
+        APage.activePage[category]:ClosePage()
+    end
 end
 
 function APage:ClosePage()
