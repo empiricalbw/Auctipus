@@ -68,7 +68,11 @@ function AAuction:ToString()
     if owner == nil then
         owner = "<NIL SELLER>"
     end
-    return "Link: "..self.link.." Seller: "..owner.." Cost: "..
+    local link = self.link
+    if link == nil then
+        link = "<NIL LINK>"
+    end
+    return "Link: "..link.." Seller: "..owner.." Cost: "..
            GoldString(self.buyoutPrice)--[[.." Link: "..
            self.link:gsub("|","||")]]
 end
