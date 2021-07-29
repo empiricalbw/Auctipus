@@ -82,7 +82,9 @@ function Auctipus.SelectTab(index)
     end
     if index == 1 then
         AuctipusFrame.BrowseFrame:Show()
-        AuctipusFrame.BrowseFrame.SearchBox:SetFocus()
+        if AuctipusFrame.BrowseFrame.SearchBox:GetText() == "" then
+            AuctipusFrame.BrowseFrame.SearchBox:SetFocus()
+        end
     elseif index == 2 then
         AuctipusFrame.AuctionsFrame:Show()
     end
