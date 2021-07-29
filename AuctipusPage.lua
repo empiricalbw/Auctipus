@@ -138,6 +138,12 @@ function APage:StartQuery()
     end
 end
 
+function APage:IsNilAuction(auction)
+    return not auction.link or
+       (self.category == "list" and not self.query.getAll and
+        auction.owner == nil)
+end
+
 function APage:ProcessPage()
     local numAuctions, totalAuctions = GetNumAuctionItems(self.category)
 
@@ -146,7 +152,7 @@ function APage:ProcessPage()
     self.nilAuctions   = {}
     for i = 1, numAuctions do
         local auction = AAuction:FromGetAuctionItemInfo(i, self.category)
-        if auction.owner == nil or auction.link == nil then
+        if self:IsNilAuction(auction) then
             table.insert(self.nilAuctions, auction)
         end
         table.insert(self.auctions, auction)
