@@ -218,6 +218,12 @@ function AuctipusBrowseFrame:ScanComplete(scan)
     self:SelectAuctionGroup(auctionGroup)
 end
 
+function AuctipusBrowseFrame:ScanAborted(scan)
+    assert(self.scan == scan)
+    self.scan = nil
+    self.SearchButton:Enable()
+end
+
 function AuctipusBrowseFrame:SelectAuctionGroup(auctionGroup)
     self.selectedAuctionGroup = auctionGroup
     self.selectedAuctions:Clear()

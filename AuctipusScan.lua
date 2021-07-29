@@ -61,6 +61,9 @@ function AScan:PageUpdated(p)
 end
 
 function AScan:PageClosed(p, forced)
+    if forced then
+        self.handler:ScanAborted(self)
+    end
 end
 
 function AScan:ScanComplete()
