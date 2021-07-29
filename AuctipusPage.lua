@@ -40,6 +40,7 @@ local STATE_INITIAL           = "STATE_INITIAL"
 local STATE_WAIT_START_QUERY  = "STATE_WAIT_START_QUERY"
 local STATE_WAIT_PAGE_UPDATE  = "STATE_WAIT_PAGE_UPDATE"
 local STATE_WAIT_PROCESS_PAGE = "STATE_WAIT_PROCESS_PAGE"
+local STATE_WAIT_PROCESS_NIL  = "STATE_WAIT_PROCESS_NIL"
 local STATE_CLOSED            = "STATE_CLOSED"
 
 function APage.OpenListPage(q, page, order, handler)
@@ -158,6 +159,41 @@ function APage:ProcessPage()
         table.insert(self.auctions, auction)
     end
 
+    if #self.nilAuctions > 0 then
+        self:_TRANSITION(STATE_WAIT_PROCESS_NIL)
+    else
+        self:_TRANSITION(STATE_WAIT_PAGE_UPDATE)
+    end
+
+    if self.handler then
+        self.handler:PageUpdated(self)
+    else
+        Auctipus.dbg("Page ["..self.category.."] processing complete:")
+        self:Dump()
+    end
+end
+
+function APage:ProcessNilAuctions()
+    if #self.nilAuctions == 0 then
+        return
+    end
+
+    self.nilAuctions = {}
+    for i, a in ipairs(self.auctions) do
+        if self:IsNilAuction(a) then
+            local auction = AAuction:FromGetAuctionItemInfo(a.pageIndex,
+                                                            self.category)
+            if self:IsNilAuction(auction) then
+                table.insert(self.nilAuctions, auction)
+            end
+            self.auctions[i] = auction
+        end
+    end
+
+    if #self.nilAuctions == 0 then
+        self:_TRANSITION(STATE_WAIT_PAGE_UPDATE)
+    end
+
     if self.handler then
         self.handler:PageUpdated(self)
     else
@@ -188,22 +224,28 @@ function APage:OnUpdate()
                 self:StartQuery()
             end
         elseif self.state == STATE_WAIT_PROCESS_PAGE then
-            self:_TRANSITION(STATE_WAIT_PAGE_UPDATE)
             self:ProcessPage()
+        elseif self.state == STATE_WAIT_PROCESS_NIL then
+            self:ProcessNilAuctions()
         end
     end
 end
 
 function APage.AUCTION_ITEM_LIST_UPDATE()
+    Auctipus.info("AUCTION_ITEM_LIST_UPDATE")
     local self = APage.activePage["list"]
-    if self and self.state == STATE_WAIT_PAGE_UPDATE then
+    if self and (self.state == STATE_WAIT_PAGE_UPDATE or
+                 self.state == STATE_WAIT_PROCESS_NIL)
+    then
         self:_TRANSITION(STATE_WAIT_PROCESS_PAGE)
     end
 end
 
 function APage.AUCTION_OWNED_LIST_UPDATE()
     local self = APage.activePage["owner"]
-    if self and self.state == STATE_WAIT_PAGE_UPDATE then
+    if self and (self.state == STATE_WAIT_PAGE_UPDATE or
+                 self.state == STATE_WAIT_PROCESS_NIL)
+    then
         self:_TRANSITION(STATE_WAIT_PROCESS_PAGE)
     end
 end
