@@ -42,12 +42,7 @@ local STATE_WAIT_PAGE_UPDATE  = "STATE_WAIT_PAGE_UPDATE"
 local STATE_WAIT_PROCESS_PAGE = "STATE_WAIT_PROCESS_PAGE"
 local STATE_CLOSED            = "STATE_CLOSED"
 
-function APage:_TRANSITION(newState)
-    Auctipus.dbg("APage ["..self.category.."]: "..self.state.." -> "..newState)
-    self.state = newState
-end
-
-function APage:OpenListPage(q, page, order, handler)
+function APage.OpenListPage(q, page, order, handler)
     local ap = {category      = "list",
                 state         = STATE_INITIAL,
                 query         = q,
@@ -58,14 +53,14 @@ function APage:OpenListPage(q, page, order, handler)
                 auctions      = nil,
                 nilAuctions   = nil,
                 }
-    setmetatable(ap, self)
+    setmetatable(ap, APage)
 
     APage.ForceClose("list")
     APage.activePage["list"] = ap
     ap:_TRANSITION(STATE_WAIT_START_QUERY)
 end
 
-function APage:OpenOwnerPage(page, handler)
+function APage.OpenOwnerPage(page, handler)
     local ap = {category      = "owner",
                 state         = STATE_INITIAL,
                 page          = page,
@@ -74,11 +69,16 @@ function APage:OpenOwnerPage(page, handler)
                 auctions      = nil,
                 nilAuctions   = nil,
                 }
-    setmetatable(ap, self)
+    setmetatable(ap, APage)
 
     APage.ForceClose("owner")
     APage.activePage["owner"] = ap
     ap:_TRANSITION(STATE_WAIT_START_QUERY)
+end
+
+function APage:_TRANSITION(newState)
+    Auctipus.dbg("APage ["..self.category.."]: "..self.state.." -> "..newState)
+    self.state = newState
 end
 
 function APage:IsAHBusy()

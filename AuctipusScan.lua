@@ -22,11 +22,11 @@ end
 
 function AScan:StartNextQuery()
     self.query = table.remove(self.queries)
-    APage:OpenListPage(self.query, 0, "QUALITY", self)
+    APage.OpenListPage(self.query, 0, "QUALITY", self)
 end
 
 function AScan:LoadNextPage()
-    APage:OpenListPage(self.query, self.apage.page + 1, "QUALITY", self)
+    APage.OpenListPage(self.query, self.apage.page + 1, "QUALITY", self)
 end
 
 function AScan:PageOpened(p)
