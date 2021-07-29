@@ -198,9 +198,8 @@ function APage.AUCTION_OWNED_LIST_UPDATE()
 end
 
 function APage.AUCTION_HOUSE_CLOSED()
-    for i, self in pairs(APage.activePage) do
-        self:ClosePage()
-    end
+    APage.ForceClose("list")
+    APage.ForceClose("owner")
 end
 
 function APage:Dump()
