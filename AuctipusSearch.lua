@@ -64,7 +64,9 @@ function ASearcher:LoadNextPage()
     local index = self:PopPage()
 
     if self.apage then
-        if self.apage.page == index then
+        if not self.apage:IsLoading() and self.apage:IsActivePage() and
+            self.apage.page == index
+        then
             self:SearchPage()
             return
         end
