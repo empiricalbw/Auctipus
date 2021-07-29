@@ -77,6 +77,7 @@ function ASearcher:LoadNextPage()
     if index then
         self.lastPageSize = nil
         APage.OpenListPage(self.query, index, "BUYOUT", self)
+        self:SearchPending()
     else
         self:SearchFailed()
     end
@@ -102,6 +103,11 @@ function ASearcher:PageUpdated(p)
 end
 
 function ASearcher:PageClosed(p, forced)
+    assert(p == self.apage)
+    self.apage = nil
+    if forced and self.targetAuction then
+        self:SearchAborted()
+    end
 end
 
 function ASearcher:SearchPage()
@@ -171,6 +177,7 @@ function ASearcher:SearchPage()
     end
 
     -- No match, so continue searching.
+    self:SearchPending()
     self:LoadNextPage()
 end
 
@@ -189,6 +196,12 @@ end
 function ASearcher:SearchFailed()
     if self.handler then
         self.handler:SearchFailed(self)
+    end
+end
+
+function ASearcher:SearchAborted()
+    if self.handler then
+        self.handler:SearchAborted(self)
     end
 end
 

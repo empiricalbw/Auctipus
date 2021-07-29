@@ -350,6 +350,11 @@ function AuctipusBrowseFrame:SearchSucceeded(search, page, index)
     self.BuyButton:Enable()
 end
 
+function AuctipusBrowseFrame:SearchAborted(search)
+    Auctipus.info("-------- Auction search aborted --------")
+    self:ClearSearch()
+end
+
 function AuctipusBrowseFrame:SearchFailed(search)
     Auctipus.info("-------- Auction not found. --------")
 
