@@ -99,7 +99,7 @@ function ASearcher:PageUpdated(p)
     self:SearchPage()
 end
 
-function ASearcher:PageClosed()
+function ASearcher:PageClosed(p, forced)
 end
 
 function ASearcher:SearchPage()

@@ -392,7 +392,8 @@ function AuctipusAuctionsFrame:PageUpdated(page)
     self:UpdateAuctions()
 end
 
-function AuctipusAuctionsFrame:PageClosed(page)
+function AuctipusAuctionsFrame:PageClosed(page, forced)
+    assert(forced)
     assert(page == self.aopage)
     self.aopage = nil
 end

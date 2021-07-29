@@ -97,18 +97,18 @@ function APage.ForceClose(category)
     local p = APage.activePage[category]
     if p and p.state ~= STATE_CLOSED then
         Auctipus.dbg("Forcing "..category.." page closed.")
-        APage.activePage[category]:ClosePage()
+        APage.activePage[category]:ClosePage(true)
     end
 end
 
-function APage:ClosePage()
+function APage:ClosePage(forced)
     if self:IsActivePage() then
         self:SelectItem(0)
         APage.activePage[self.category] = nil
 
         self:_TRANSITION(STATE_CLOSED)
         if self.handler then
-            self.handler:PageClosed(self)
+            self.handler:PageClosed(self, forced or false)
         end
     end
 end

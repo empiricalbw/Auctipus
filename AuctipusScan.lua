@@ -60,7 +60,7 @@ function AScan:PageUpdated(p)
     end
 end
 
-function AScan:PageClosed(p)
+function AScan:PageClosed(p, forced)
 end
 
 function AScan:ScanComplete()
