@@ -189,14 +189,14 @@ end
 
 function APage.AUCTION_ITEM_LIST_UPDATE()
     local self = APage.activePage["list"]
-    if self then
+    if self and self.state == STATE_WAIT_PAGE_UPDATE then
         self:_TRANSITION(STATE_WAIT_PROCESS_PAGE)
     end
 end
 
 function APage.AUCTION_OWNED_LIST_UPDATE()
     local self = APage.activePage["owner"]
-    if self then
+    if self and self.state == STATE_WAIT_PAGE_UPDATE then
         self:_TRANSITION(STATE_WAIT_PROCESS_PAGE)
     end
 end
