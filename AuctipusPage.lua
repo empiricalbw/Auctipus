@@ -180,25 +180,17 @@ function APage:OnUpdate()
 end
 
 function APage.AUCTION_ITEM_LIST_UPDATE()
-    -- Defer to the next OnUpdate handler so that we batch multiple list into a
-    -- single page scan.
     local self = APage.activePage["list"]
-    if not self then
-        return
+    if self then
+        self:_TRANSITION(STATE_WAIT_PROCESS_PAGE)
     end
-
-    self:_TRANSITION(STATE_WAIT_PROCESS_PAGE)
 end
 
 function APage.AUCTION_OWNED_LIST_UPDATE()
-    -- Defer to the next OnUpdate handler so that we batch multiple list into a
-    -- single page scan.
     local self = APage.activePage["owner"]
-    if not self then
-        return
+    if self then
+        self:_TRANSITION(STATE_WAIT_PROCESS_PAGE)
     end
-
-    self:_TRANSITION(STATE_WAIT_PROCESS_PAGE)
 end
 
 function APage.AUCTION_HOUSE_CLOSED()
