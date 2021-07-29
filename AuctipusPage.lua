@@ -110,8 +110,9 @@ function APage:ClosePage(forced)
         self:SelectItem(0)
         APage.activePage[self.category] = nil
 
+        local prevState = self.state
         self:_TRANSITION(STATE_CLOSED)
-        if self.handler then
+        if prevState ~= STATE_WAIT_START_QUERY and self.handler then
             self.handler:PageClosed(self, forced or false)
         end
     end
