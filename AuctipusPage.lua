@@ -97,6 +97,7 @@ end
 
 function APage:ClosePage()
     if self:IsActivePage() then
+        self:SelectItem(0)
         APage.activePage[self.category] = nil
     end
 
@@ -146,6 +147,16 @@ function APage:ProcessPage()
         Auctipus.dbg("Page ["..self.category.."] processing complete:")
         self:Dump()
     end
+end
+
+function APage:SelectItem(index)
+    assert(self:IsActivePage())
+    SetSelectedAuctionItem(self.category, index)
+end
+
+function APage:GetSelectedItem()
+    assert(self:IsActivePage())
+    return GetSelectedAuctionItem(self.category)
 end
 
 function APage:OnUpdate()

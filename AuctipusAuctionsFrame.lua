@@ -395,18 +395,17 @@ end
 function AuctipusAuctionsFrame:PageClosed(page)
     assert(page == self.aopage)
     self.aopage = nil
-    SetSelectedAuctionItem("owner", 0)
 end
 
 function AuctipusAuctionsFrame:SetSelection(index)
-    SetSelectedAuctionItem("owner",
+    self.aopage:SelectItem(
         FauxScrollFrame_GetOffset(self.AuctionScrollFrame) + index)
     self:UpdateControls()
     self:UpdateAuctions()
 end
 
 function AuctipusAuctionsFrame:CancelAuction()
-    CancelAuction(GetSelectedAuctionItem("owner"))
+    CancelAuction(self.aopage:GetSelectedItem())
 end
 
 function AuctipusAuctionsFrame:UpdateAuctions()
@@ -416,7 +415,7 @@ function AuctipusAuctionsFrame:UpdateAuctions()
                            1)
 
     local offset    = FauxScrollFrame_GetOffset(self.AuctionScrollFrame)
-    local selection = GetSelectedAuctionItem("owner")
+    local selection = self.aopage:GetSelectedItem()
     for i, row in ipairs(self.AuctionRows) do
         row:UnlockHighlight()
 
