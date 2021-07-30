@@ -52,6 +52,23 @@ function AuctipusItemButton:SetAuction(auction)
     self.Name:Show()
 end
 
+function AuctipusItemButton:SetHistoryGroup(historyGroup)
+    self.historyGroup = historyGroup
+
+    self.Count:Hide()
+    if historyGroup then
+        self.link = historyGroup.link
+        self:SetNormalTexture(historyGroup.texture)
+
+        local color = historyGroup.color
+        self.Name:SetText(historyGroup.name)
+        self.Name:SetVertexColor(color.r, color.g, color.b)
+        self.Name:Show()
+    else
+        self:Clear()
+    end
+end
+
 function AuctipusItemButton:Clear()
     self.auctionGroup = nil
     self.link         = nil

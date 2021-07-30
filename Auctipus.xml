@@ -83,6 +83,11 @@
                     <Anchor point="TOPLEFT"/>
                 </Anchors>
             </Frame>
+            <Frame name="$parentHistoryFrame" parentKey="HistoryFrame" inherits="AuctipusHistoryFrameTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT"/>
+                </Anchors>
+            </Frame>
             <Button name="$parentBrowseTab" parentArray="Tabs" inherits="CharacterFrameTabButtonTemplate" text="BROWSE">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="15" y="2"/>
@@ -91,6 +96,11 @@
             <Button name="$parentAuctionsTab" parentArray="Tabs" inherits="CharacterFrameTabButtonTemplate" text="AUCTIONS">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="$parentBrowseTab" relativePoint="TOPRIGHT" x="-8"/>
+                </Anchors>
+            </Button>
+            <Button name="$parentHistoryTab" parentArray="Tabs" inherits="CharacterFrameTabButtonTemplate" text="History">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parentAuctionsTab" relativePoint="TOPRIGHT" x="-8"/>
                 </Anchors>
             </Button>
         </Frames>

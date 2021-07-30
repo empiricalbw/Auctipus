@@ -11,13 +11,16 @@ AuctipusItemButton.xml
 AuctipusAuctionGroupRow.xml
 AuctipusAuctionRow.xml
 AuctipusAuctionSellRow.xml
+AuctipusHistoryGroupRow.xml
 AuctipusScrollFrame.xml
 AuctipusSortButton.xml
 AuctipusBrowseFrame.xml
 AuctipusAuctionsFrame.xml
+AuctipusHistoryFrame.xml
 AuctipusDropDown.xml
 
 AuctipusCommonUI.lua
+AuctipusLink.lua
 AuctipusHistory.lua
 AuctipusSortButton.lua
 AuctipusPaths.lua
@@ -32,8 +35,10 @@ AuctipusAuctionGroup.lua
 AuctipusAuctionGroupRow.lua
 AuctipusAuctionSellRow.lua
 AuctipusAuctionRow.lua
+AuctipusHistoryGroupRow.lua
 AuctipusBrowseFrame.lua
 AuctipusAuctionsFrame.lua
+AuctipusHistoryFrame.lua
 AuctipusDropDown.lua
 Auctipus.lua
 

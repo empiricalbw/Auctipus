@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+    <Button name="AuctipusHistoryBarTemplate" virtual="true">
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture parentKey="Top" file="Interface\Addons\Auctipus\Bar.tga">
+                    <Size y="5"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT"/>
+                        <Anchor point="TOPRIGHT"/>
+                    </Anchors>
+                    <TexCoords left="0" right="1" top="0" bottom="0.25"/>
+                </Texture>
+                <Texture parentKey="Bottom" file="Interface\Addons\Auctipus\Bar.tga">
+                    <Size y="5"/>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT"/>
+                        <Anchor point="BOTTOMRIGHT"/>
+                    </Anchors>
+                    <TexCoords left="0" right="1" top="0.75" bottom="1"/>
+                </Texture>
+                <Texture parentKey="Middle" file="Interface\Addons\Auctipus\Bar.tga">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.Top" relativePoint="BOTTOMLEFT"/>
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.Bottom" relativePoint="TOPRIGHT"/>
+                    </Anchors>
+                    <TexCoords left="0" right="1" top="0.25" bottom="0.75"/>
+                </Texture>
+            </Layer>
+        </Layers>
+    </Button>
+
+    <Frame name="AuctipusHistoryFrameTemplate" enableMouse="true" virtual="true" mixin="AuctipusHistoryFrame">
+        <Size x="832" y="440"/>
+        <Frames>
+            <Frame name="$parentSearchBoxLabel" parentKey="SearchBoxLabel">
+                <Size x="50" y="24"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="0" y="-7"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <FontString name="$parentFont" inherits="GameFontNormalSmall" justifyH="RIGHT" justifyV="MIDDLE" text="Search:"/>
+                    </Layer>
+                </Layers>
+            </Frame>
+            <EditBox name="$parentSearchBox" parentKey="SearchBox" parentArray="EditBoxes" enableMouse="true" autoFocus="false" letters="63"
+             inherits="BackdropTemplate">
+                <KeyValues>
+                    <KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+                    <KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
+                </KeyValues>
+                <Size x="150" y="24"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentSearchBoxLabel" relativePoint="RIGHT"/>
+                </Anchors>
+                <TextInsets left="5" right="0" top="0" bottom="0"/>
+                <FontString inherits="ChatFontNormal"/>
+            </EditBox>
+
+            <Button name="$parentFullScanButton" parentKey="FullScanButton" inherits="UIPanelButtonTemplate" text="Full Scan">
+                <Size x="100" y="23"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.SearchBox" relativePoint="RIGHT" x="10"/>
+                </Anchors>
+            </Button>
+
+            <Button name="$parentHistoryGroup1" parentKey="HistoryGroup1" parentArray="HistoryGroupRows" inherits="AuctipusHistoryGroupRowTemplate"/>
+            <Button name="$parentHistoryGroup2" parentArray="HistoryGroupRows" inherits="AuctipusHistoryGroupRowTemplate"/>
+            <Button name="$parentHistoryGroup3" parentArray="HistoryGroupRows" inherits="AuctipusHistoryGroupRowTemplate"/>
+            <Button name="$parentHistoryGroup4" parentArray="HistoryGroupRows" inherits="AuctipusHistoryGroupRowTemplate"/>
+            <Button name="$parentHistoryGroup5" parentArray="HistoryGroupRows" inherits="AuctipusHistoryGroupRowTemplate"/>
+            <Button name="$parentHistoryGroup6" parentArray="HistoryGroupRows" inherits="AuctipusHistoryGroupRowTemplate"/>
+            <Button name="$parentHistoryGroup7" parentArray="HistoryGroupRows" inherits="AuctipusHistoryGroupRowTemplate"/>
+            <Button name="$parentHistoryGroup8" parentArray="HistoryGroupRows" inherits="AuctipusHistoryGroupRowTemplate"/>
+            <Button name="$parentHistoryGroup9" parentArray="HistoryGroupRows" inherits="AuctipusHistoryGroupRowTemplate"/>
+            <ScrollFrame name="$parentHistoryGroupScrollFrame" parentKey="HistoryGroupScrollFrame" inherits="AuctipusScrollFrameTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parentHistoryGroup1" y="-5"/>
+                    <Anchor point="BOTTOMRIGHT" relativeTo="$parentHistoryGroup9" y="2"/>
+                </Anchors>
+            </ScrollFrame>
+			<Button name="$parentNameSort" inherits="AuctipusSortButtonTemplate" text="Name">
+                <Size y="19"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.HistoryGroup1.ItemButton.Name" relativePoint="TOPLEFT" y="2"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.HistoryGroup1.ItemButton.Name" x="2"/>
+                </Anchors>
+			</Button>
+
+            <Frame name="$parentGraph" parentKey="Graph" inherits="BackdropTemplate">
+                <KeyValues>
+                    <KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+                    <KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
+                </KeyValues>
+                <Size x="512" y="380"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.FullScanButton" relativePoint="BOTTOMLEFT" x="96" y="-16"/>
+                </Anchors>
+            </Frame>
+            <Frame name="$parentMinPrice" parentKey="MinPrice" inherits="SmallMoneyFrameTemplate">
+                <Size x="200" y="10"/>
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT" relativeKey="$parent.Graph" relativePoint="BOTTOMLEFT" x="10"/>
+                </Anchors>
+            </Frame>
+            <Frame name="$parentMaxPrice" parentKey="MaxPrice" inherits="SmallMoneyFrameTemplate">
+                <Size x="200" y="10"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativeKey="$parent.Graph" relativePoint="TOPLEFT" x="10"/>
+                </Anchors>
+            </Frame>
+            <Button name="$parentHistory1" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory1" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory2" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory3" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory4" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory5" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory6" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory7" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory8" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory9" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory10" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory12" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory13" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory14" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory15" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory16" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory17" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory18" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory19" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory20" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory21" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory22" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory23" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory24" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory25" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory26" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory27" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+            <Button name="$parentHistory28" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+        </Scripts>
+    </Frame>
+</Ui>

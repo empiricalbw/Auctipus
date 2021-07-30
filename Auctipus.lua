@@ -76,6 +76,7 @@ function Auctipus.SelectTab(index)
     PanelTemplates_SetTab(AuctipusFrame, index)
     AuctipusFrame.BrowseFrame:Hide()
     AuctipusFrame.AuctionsFrame:Hide()
+    AuctipusFrame.HistoryFrame:Hide()
     local f = GetCurrentKeyBoardFocus()
     if f then
         f:ClearFocus()
@@ -87,6 +88,11 @@ function Auctipus.SelectTab(index)
         end
     elseif index == 2 then
         AuctipusFrame.AuctionsFrame:Show()
+    elseif index == 3 then
+        AuctipusFrame.HistoryFrame:Show()
+        if AuctipusFrame.HistoryFrame.SearchBox:GetText() == "" then
+            AuctipusFrame.HistoryFrame.SearchBox:SetFocus()
+        end
     end
 end
 
