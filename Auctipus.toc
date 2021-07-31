@@ -6,6 +6,7 @@
 ## Dependencies: TGEventManager TGLog
 ## SavedVariables: AUCTIPUS_ITEM_HISTORY_DB
 
+BetterMoneyFrame.xml
 AuctipusMoneyFrame.xml
 AuctipusItemButton.xml
 AuctipusAuctionGroupRow.xml
@@ -19,6 +20,7 @@ AuctipusAuctionsFrame.xml
 AuctipusHistoryFrame.xml
 AuctipusDropDown.xml
 
+BetterMoneyFrame.lua
 AuctipusCommonUI.lua
 AuctipusLink.lua
 AuctipusHistory.lua

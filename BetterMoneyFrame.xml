@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+    <Frame name="BetterMoneyFrameTemplate" virtual="true" mixin="BetterMoneyFrameMixin">
+        <Size x="126" y="13"/>
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture parentKey="CopperIcon" file="Interface\MoneyFrame\UI-MoneyIcons">
+                    <Size x="13" y="13"/>
+                    <Anchors><Anchor point="RIGHT"/></Anchors>
+                    <TexCoords left="0.5" right="0.75" top="0" bottom="1"/>
+                </Texture>
+                <FontString parentKey="CopperText" inherits="NumberFontNormalRight" justifyV="MIDDLE">
+                    <Size x="17" y="13"/>
+                    <Anchors><Anchor point="RIGHT" relativeKey="$parent.CopperIcon" relativePoint="LEFT" x="1"/></Anchors>
+                </FontString>
+
+                <Texture parentKey="SilverIcon" file="Interface\MoneyFrame\UI-MoneyIcons">
+                    <Size x="13" y="13"/>
+                    <Anchors><Anchor point="RIGHT" relativeKey="$parent.CopperText" relativePoint="LEFT"/></Anchors>
+                    <TexCoords left="0.25" right="0.5" top="0" bottom="1"/>
+                </Texture>
+                <FontString parentKey="SilverText" inherits="NumberFontNormalRight" justifyV="MIDDLE">
+                    <Size x="17" y="13"/>
+                    <Anchors><Anchor point="RIGHT" relativeKey="$parent.SilverIcon" relativePoint="LEFT" x="1"/></Anchors>
+                </FontString>
+
+                <Texture parentKey="GoldIcon" file="Interface\MoneyFrame\UI-MoneyIcons">
+                    <Size x="13" y="13"/>
+                    <Anchors><Anchor point="RIGHT" relativeKey="$parent.SilverText" relativePoint="LEFT"/></Anchors>
+                    <TexCoords left="0" right="0.25" top="0" bottom="1"/>
+                </Texture>
+                <FontString parentKey="GoldText" inherits="NumberFontNormalRight" justifyV="MIDDLE">
+                    <Size x="51" y="13"/>
+                    <Anchors><Anchor point="RIGHT" relativeKey="$parent.GoldIcon" relativePoint="LEFT" x="1"/></Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+        </Scripts>
+    </Frame>
+
+    <Frame name="BetterMoneyFrameNormalTemplate" virtual="true" inherits="BetterMoneyFrameTemplate">
+        <KeyValues>
+            <KeyValue key="style" value="normal"/>
+        </KeyValues>
+    </Frame>
+
+    <Frame name="BetterMoneyFrameFixedTemplate" virtual="true" inherits="BetterMoneyFrameTemplate">
+        <KeyValues>
+            <KeyValue key="style" value="fixed"/>
+        </KeyValues>
+    </Frame>
+</Ui>

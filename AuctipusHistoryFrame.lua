@@ -35,7 +35,8 @@ function AuctipusHistoryFrame:OnLoad()
     self:UpdateHistoryGroups()
 
     -- History bars.
-    for i, bar in ipairs(self.HistoryBars) do
+    self.buyoutSpan = {}
+    for i, bar in ipairs(self.Graph.HistoryBars) do
         bar:SetPoint("LEFT", self.Graph, "LEFT", 5 + ((i-1)*18), 0)
         bar:SetPoint("TOP", self.Graph, "TOP", 0, -4)
         bar:SetPoint("BOTTOM", self.Graph, "BOTTOM", 0, 4)
@@ -45,12 +46,19 @@ function AuctipusHistoryFrame:OnLoad()
         bar.Bottom:SetVertexColor(0, 0.6, 0, 0.85)
         bar:Hide()
     end
+    for i, hl in ipairs(self.Graph.HistoryHighlights) do
+        table.insert(self.buyoutSpan, nil)
+        hl:SetPoint("LEFT", self.Graph, "LEFT", 4 + ((i-1)*18), 0)
+        hl:SetPoint("TOP", self.Graph, "TOP", 0, -4)
+        hl:SetPoint("BOTTOM", self.Graph, "BOTTOM", 0, 4)
+        hl:SetWidth(18)
+        hl:SetScript("OnEnter", function() self:OnEnterBar(i) end)
+        hl:Show()
+    end
 
     -- Money frames.
-    MoneyFrame_SetType(self.MinPrice, "STATIC")
-    MoneyFrame_SetType(self.MaxPrice, "STATIC")
-    self.MinPrice:Hide()
-    self.MaxPrice:Hide()
+    self.Graph.MinPrice:Hide()
+    self.Graph.MaxPrice:Hide()
 end
 
 function AuctipusHistoryFrame.OnUpdate()
@@ -60,6 +68,14 @@ function AuctipusHistoryFrame.OnUpdate()
         self.FullScanButton:Enable()
     else
         self.FullScanButton:Disable()
+    end
+end
+
+function AuctipusHistoryFrame:OnEnterBar(index)
+    local span = self.buyoutSpan[index]
+    if span then
+        self.MinPrice:SetMoney(floor(span[1] + 0.5))
+        self.MaxPrice:SetMoney(floor(span[2] + 0.5))
     end
 end
 
@@ -115,7 +131,7 @@ function AuctipusHistoryFrame:UpdateGraph()
     end
 
     local today     = AHistory:GetServerDay()
-    local firstDay  = today - #self.HistoryBars + 1
+    local firstDay  = today - #self.Graph.HistoryBars + 1
     local minBuyout = 100000000000
     local maxBuyout = 0
     local pos       = nil
@@ -132,7 +148,7 @@ function AuctipusHistoryFrame:UpdateGraph()
     elseif maxBuyout > 100 then
         maxBuyout = ceil(maxBuyout / 100) * 100
     end
-    for _, b in ipairs(self.HistoryBars) do
+    for _, b in ipairs(self.Graph.HistoryBars) do
         b:Hide()
     end
     if pos ~= nil then
@@ -146,7 +162,8 @@ function AuctipusHistoryFrame:UpdateGraph()
         print(minBuyout, maxBuyout, buySpan)
         while pos <= #hg.history do
             local info   = hg.history[pos]
-            local b      = self.HistoryBars[info[1] - firstDay + 1]
+            local index  = info[1] - firstDay + 1
+            local b      = self.Graph.HistoryBars[index]
             local bottom = ((info[2] - minBuyout) / buySpan) * gheight + 4
             local top    = ((info[3] - minBuyout) / buySpan) * gheight + 12
             b:SetPoint("BOTTOM", self.Graph, "BOTTOM", 0, bottom)
@@ -155,14 +172,15 @@ function AuctipusHistoryFrame:UpdateGraph()
             pos = pos + 1
 
             print(info[1], info[2], info[3], bottom, top)
+            self.buyoutSpan[index] = {info[2], info[3]}
         end
-        self.MinPrice:Show()
-        self.MaxPrice:Show()
-        MoneyFrame_Update(self.MinPrice, minBuyout, true)
-        MoneyFrame_Update(self.MaxPrice, maxBuyout)
+        self.Graph.MinPrice:Show()
+        self.Graph.MaxPrice:Show()
+        self.Graph.MinPrice:SetMoney(minBuyout)
+        self.Graph.MaxPrice:SetMoney(maxBuyout)
     else
-        self.MinPrice:Hide()
-        self.MaxPrice:Hide()
+        self.Graph.MinPrice:Hide()
+        self.Graph.MaxPrice:Hide()
     end
 end
 
