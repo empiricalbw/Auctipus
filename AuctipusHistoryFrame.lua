@@ -159,7 +159,6 @@ function AuctipusHistoryFrame:UpdateGraph()
             maxBuyout = maxBuyout + 1
             buySpan   = 2
         end
-        print(minBuyout, maxBuyout, buySpan)
         while pos <= #hg.history do
             local info   = hg.history[pos]
             local index  = info[1] - firstDay + 1
@@ -171,7 +170,6 @@ function AuctipusHistoryFrame:UpdateGraph()
             b:Show()
             pos = pos + 1
 
-            print(info[1], info[2], info[3], bottom, top)
             self.buyoutSpan[index] = {info[2], info[3]}
         end
         self.Graph.MinPrice:Show()

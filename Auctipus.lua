@@ -32,6 +32,10 @@ function Auctipus.ADDON_LOADED(addOnName)
         return
     end
 
+    -- Slash.
+    SlashCmdList["AUCTIPUS"] = Auctipus.OnSlash
+    SLASH_AUCTIPUS1          = "/auctipus"
+
     -- Disable the Blizzard auction house frames.
     UIParent:UnregisterEvent("AUCTION_HOUSE_SHOW")
     UIParent:UnregisterEvent("AUCTION_HOUSE_CLOSED")
@@ -39,7 +43,9 @@ function Auctipus.ADDON_LOADED(addOnName)
 
     -- Tabs.
     PanelTemplates_SetNumTabs(AuctipusFrame, #AuctipusFrame.Tabs)
-    PanelTemplates_SetTab(AuctipusFrame, 1)
+    PanelTemplates_DisableTab(AuctipusFrame, 1)
+    PanelTemplates_DisableTab(AuctipusFrame, 2)
+    PanelTemplates_SetTab(AuctipusFrame, 3)
 
     -- Set scripts.
     AuctipusFrame:SetScript("OnHide", Auctipus.OnHide)
@@ -54,14 +60,24 @@ end
 function Auctipus.AUCTION_HOUSE_SHOW()
     Auctipus.dbg("AUCTION_HOUSE_SHOW")
 
+    PanelTemplates_EnableTab(AuctipusFrame, 1)
+    PanelTemplates_EnableTab(AuctipusFrame, 2)
     ShowUIPanel(AuctipusFrame)
     Auctipus.SelectTab(1)
     Auctipus.DumpSortOrder()
 end
 
+function Auctipus.OnSlash()
+    ShowUIPanel(AuctipusFrame)
+    Auctipus.SelectTab(3)
+end
+
 function Auctipus.AUCTION_HOUSE_CLOSED()
     Auctipus.dbg("AUCTION_HOUSE_CLOSED")
     HideUIPanel(AuctipusFrame)
+    PanelTemplates_DisableTab(AuctipusFrame, 1)
+    PanelTemplates_DisableTab(AuctipusFrame, 2)
+    PanelTemplates_SetTab(AuctipusFrame, 3)
 end
 
 function Auctipus.OnHide()
