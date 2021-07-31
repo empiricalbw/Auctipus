@@ -7,7 +7,6 @@
 ## SavedVariables: AUCTIPUS_ITEM_HISTORY_DB
 
 BetterMoneyFrame.xml
-AuctipusMoneyFrame.xml
 AuctipusItemButton.xml
 AuctipusAuctionGroupRow.xml
 AuctipusAuctionRow.xml
@@ -31,7 +30,6 @@ AuctipusAuction.lua
 AuctipusPage.lua
 AuctipusScan.lua
 AuctipusSearch.lua
-AuctipusMoneyFrame.lua
 AuctipusItemButton.lua
 AuctipusAuctionGroup.lua
 AuctipusAuctionGroupRow.lua

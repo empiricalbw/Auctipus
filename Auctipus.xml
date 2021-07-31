@@ -98,7 +98,7 @@
                     <Anchor point="TOPLEFT" relativeTo="$parentBrowseTab" relativePoint="TOPRIGHT" x="-8"/>
                 </Anchors>
             </Button>
-            <Button name="$parentHistoryTab" parentArray="Tabs" inherits="CharacterFrameTabButtonTemplate" text="History">
+            <Button name="$parentHistoryTab" parentArray="Tabs" inherits="CharacterFrameTabButtonTemplate" text="Scans">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="$parentAuctionsTab" relativePoint="TOPRIGHT" x="-8"/>
                 </Anchors>
