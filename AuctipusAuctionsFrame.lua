@@ -134,7 +134,7 @@ function AuctipusAuctionsFrame:SetAuctionsTabShowing(showing)
 end
 
 function AuctipusAuctionsFrame:OnItemButtonClick(button)
-    print("OnItemButtonClick")
+    Auctipus.dbg("OnItemButtonClick")
     if CursorHasItem() then
         ClickAuctionSellItemButton(self.ItemButton, button)
         ClearCursor()
@@ -144,7 +144,7 @@ function AuctipusAuctionsFrame:OnItemButtonClick(button)
 end
 
 function AuctipusAuctionsFrame:OnItemButtonDrag(button)
-    print("OnItemButtonDrag")
+    Auctipus.dbg("OnItemButtonDrag")
     ClickAuctionSellItemButton(self.ItemButton, button)
 end
 
@@ -157,19 +157,19 @@ function AuctipusAuctionsFrame:OnDurationButtonClick(index, button)
 end
 
 function AuctipusAuctionsFrame.AUCTION_OWNED_LIST_UPDATE()
-    print("AUCTION_OWNED_LIST_UPDATE")
+    Auctipus.dbg("AUCTION_OWNED_LIST_UPDATE")
 end
 
 function AuctipusAuctionsFrame.AUCTION_MULTISELL_START(numAuctions)
-    print("AUCTION_MULTISELL_START: ",numAuctions)
+    Auctipus.dbg("AUCTION_MULTISELL_START: ",numAuctions)
 end
 
 function AuctipusAuctionsFrame.AUCTION_MULTISELL_UPDATE(numCreated, numAuctions)
-    print("AUCTION_MULTISELL_UPDATE: "..numCreated.." / "..numAuctions)
+    Auctipus.dbg("AUCTION_MULTISELL_UPDATE: "..numCreated.." / "..numAuctions)
 end
 
 function AuctipusAuctionsFrame.AUCTION_MULTISELL_FAILURE()
-    print("AUCTION_MULTISELL_FAILURE")
+    Auctipus.dbg("AUCTION_MULTISELL_FAILURE")
 end
 
 function AuctipusAuctionsFrame.AUCTION_HOUSE_SHOW()
@@ -183,8 +183,8 @@ function AuctipusAuctionsFrame.NEW_AUCTION_UPDATE()
 
     local name, _, count, quality, _, _, vendorUnitPrice, maxStackSize,
         invCount, _ = GetAuctionSellItemInfo()
-    print("NEW_AUCTION_UPDATE: "..tostring(name).." "..count.." "..
-          maxStackSize.." "..invCount)
+    Auctipus.dbg("NEW_AUCTION_UPDATE: "..tostring(name).." "..count.." "..
+                 maxStackSize.." "..invCount)
     self.name            = name
     self.count           = count
     self.quality         = quality

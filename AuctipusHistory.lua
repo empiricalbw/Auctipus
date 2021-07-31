@@ -6,12 +6,14 @@ AUCTIPUS_ITEM_HISTORY = nil
 
 local LOCAL_DB = {}
 
-function AHistory.PLAYER_ENTERING_WORLD()
+function AHistory.ProcessSavedVars()
+    Auctipus.info("Processing saved variables...")
     local rf = GetRealmName()..":"..UnitFactionGroup("player")
     local ih = AUCTIPUS_ITEM_HISTORY_DB[rf] or {}
     AUCTIPUS_ITEM_HISTORY = ih
     AUCTIPUS_ITEM_HISTORY_DB[rf] = ih
     AHistory:ProcessDB()
+    Auctipus.info("Saved variables processed.")
 end
 
 function AHistory:GetServerDay()
@@ -29,7 +31,7 @@ function AHistory:ScanComplete(scan)
 
     for i, ag in ipairs(scan.auctionGroups) do
         if #ag.unitPriceAuctions == 0 then
-            print("Item "..ag.link.." has no buyout.")
+            Auctipus.dbg("Item "..ag.link.." has no buyout.")
         else
             ag:SortByBuyout()
             local hg = AUCTIPUS_ITEM_HISTORY[ag.link] or {}
@@ -79,5 +81,3 @@ function AHistory:Match(substring)
 
     return match
 end
-
-TGEventManager.Register(AHistory)

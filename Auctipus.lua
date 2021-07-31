@@ -32,6 +32,9 @@ function Auctipus.ADDON_LOADED(addOnName)
         return
     end
 
+    -- Saved variables.
+    AHistory.ProcessSavedVars()
+
     -- Slash.
     SlashCmdList["AUCTIPUS"] = Auctipus.OnSlash
     SLASH_AUCTIPUS1          = "/auctipus"
