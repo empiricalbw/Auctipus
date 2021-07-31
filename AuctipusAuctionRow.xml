@@ -47,9 +47,9 @@
                     </Layer>
                 </Layers>
             </Frame>
-            <Frame name="$parentBuyoutPerItem" parentKey="BuyoutPerItem" inherits="AuctipusMoneyFrameTemplate">
+            <Frame name="$parentBuyoutPerItem" parentKey="BuyoutPerItem" inherits="BetterMoneyFrameFixedTemplate">
                 <Anchors>
-                    <Anchor point="RIGHT" x="-154" y="0"/>
+                    <Anchor point="RIGHT" x="-166" y="0"/>
                 </Anchors>
             </Frame>
             <Frame name="$parentCountFrame" parentKey="CountFrame">
@@ -63,9 +63,9 @@
                     </Layer>
                 </Layers>
             </Frame>
-            <Frame name="$parentBuyoutTotal" parentKey="BuyoutTotal" inherits="AuctipusMoneyFrameTemplate">
+            <Frame name="$parentBuyoutTotal" parentKey="BuyoutTotal" inherits="BetterMoneyFrameFixedTemplate">
                 <Anchors>
-                    <Anchor point="RIGHT" x="6"/>
+                    <Anchor point="RIGHT" x="-6"/>
                 </Anchors>
             </Frame>
         </Frames>

@@ -58,14 +58,14 @@
             </Layer>
         </Layers>
         <Frames>
-            <Frame name="$parentCurrentBid" parentKey="CurrentBid" inherits="AuctipusMoneyFrameTemplate">
+            <Frame name="$parentCurrentBid" parentKey="CurrentBid" inherits="BetterMoneyFrameFixedTemplate">
                 <Anchors>
-                    <Anchor point="RIGHT" x="6" y="7"/>
+                    <Anchor point="RIGHT" x="-6" y="7"/>
                 </Anchors>
             </Frame>
-            <Frame name="$parentBuyout" parentKey="Buyout" inherits="AuctipusMoneyFrameTemplate">
+            <Frame name="$parentBuyout" parentKey="Buyout" inherits="BetterMoneyFrameFixedTemplate">
                 <Anchors>
-                    <Anchor point="RIGHT" x="6" y="-7"/>
+                    <Anchor point="RIGHT" x="-6" y="-7"/>
                 </Anchors>
             </Frame>
         </Frames>

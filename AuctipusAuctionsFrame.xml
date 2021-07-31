@@ -175,8 +175,7 @@
 					</Layer>
 				</Layers>
             </Frame>
-            <Frame name="$parentVendorPrice" parentKey="VendorPrice" inherits="AuctipusMoneyFrameTemplate">
-                <Size x="200" y="10"/>
+            <Frame name="$parentVendorPrice" parentKey="VendorPrice" inherits="BetterMoneyFrameFixedTemplate">
                 <Anchors>
                     <Anchor point="TOPRIGHT" relativeKey="$parent.VendorPriceLabel" relativePoint="BOTTOMRIGHT" y="13"/>
                 </Anchors>
@@ -197,8 +196,7 @@
 					</Layer>
 				</Layers>
             </Frame>
-            <Frame name="$parentDepositPrice" parentKey="DepositPrice" inherits="AuctipusMoneyFrameTemplate">
-                <Size x="200" y="10"/>
+            <Frame name="$parentDepositPrice" parentKey="DepositPrice" inherits="BetterMoneyFrameFixedTemplate">
                 <Anchors>
                     <Anchor point="TOPRIGHT" relativeKey="$parent.DepositPriceLabel" relativePoint="BOTTOMRIGHT" y="13"/>
                 </Anchors>

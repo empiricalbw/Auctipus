@@ -6,9 +6,9 @@
             <Button parentKey="ItemButton" inherits="AuctipusItemButtonTemplate">
                 <Anchors><Anchor point="TOPLEFT"/></Anchors>
             </Button>
-            <Frame name="$parentMinBuyoutPerItem" parentKey="MinBuyoutPerItem" inherits="AuctipusMoneyFrameTemplate">
+            <Frame name="$parentMinBuyoutPerItem" parentKey="MinBuyoutPerItem" inherits="BetterMoneyFrameFixedTemplate">
                 <Anchors>
-                    <Anchor point="RIGHT" x="6"/>
+                    <Anchor point="RIGHT" x="-6"/>
                 </Anchors>
             </Frame>
         </Frames>
