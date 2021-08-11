@@ -10,12 +10,13 @@ BetterMoneyFrame.xml
 AuctipusItemButton.xml
 AuctipusAuctionGroupRow.xml
 AuctipusAuctionRow.xml
-AuctipusAuctionSellRow.xml
+AuctipusListingsSellRow.xml
 AuctipusHistoryGroupRow.xml
 AuctipusScrollFrame.xml
 AuctipusSortButton.xml
 AuctipusBrowseFrame.xml
 AuctipusAuctionsFrame.xml
+AuctipusListingsFrame.xml
 AuctipusHistoryFrame.xml
 AuctipusDropDown.xml
 
@@ -33,11 +34,12 @@ AuctipusSearch.lua
 AuctipusItemButton.lua
 AuctipusAuctionGroup.lua
 AuctipusAuctionGroupRow.lua
-AuctipusAuctionSellRow.lua
+AuctipusListingsSellRow.lua
 AuctipusAuctionRow.lua
 AuctipusHistoryGroupRow.lua
 AuctipusBrowseFrame.lua
 AuctipusAuctionsFrame.lua
+AuctipusListingsFrame.lua
 AuctipusHistoryFrame.lua
 AuctipusDropDown.lua
 Auctipus.lua

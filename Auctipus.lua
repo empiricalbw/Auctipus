@@ -48,7 +48,8 @@ function Auctipus.ADDON_LOADED(addOnName)
     PanelTemplates_SetNumTabs(AuctipusFrame, #AuctipusFrame.Tabs)
     PanelTemplates_DisableTab(AuctipusFrame, 1)
     PanelTemplates_DisableTab(AuctipusFrame, 2)
-    PanelTemplates_SetTab(AuctipusFrame, 3)
+    PanelTemplates_DisableTab(AuctipusFrame, 3)
+    PanelTemplates_SetTab(AuctipusFrame, 4)
 
     -- Set scripts.
     AuctipusFrame:SetScript("OnHide", Auctipus.OnHide)
@@ -65,6 +66,7 @@ function Auctipus.AUCTION_HOUSE_SHOW()
 
     PanelTemplates_EnableTab(AuctipusFrame, 1)
     PanelTemplates_EnableTab(AuctipusFrame, 2)
+    PanelTemplates_EnableTab(AuctipusFrame, 3)
     ShowUIPanel(AuctipusFrame)
     Auctipus.SelectTab(1)
     Auctipus.DumpSortOrder()
@@ -72,7 +74,7 @@ end
 
 function Auctipus.OnSlash()
     ShowUIPanel(AuctipusFrame)
-    Auctipus.SelectTab(3)
+    Auctipus.SelectTab(4)
 end
 
 function Auctipus.AUCTION_HOUSE_CLOSED()
@@ -80,7 +82,8 @@ function Auctipus.AUCTION_HOUSE_CLOSED()
     HideUIPanel(AuctipusFrame)
     PanelTemplates_DisableTab(AuctipusFrame, 1)
     PanelTemplates_DisableTab(AuctipusFrame, 2)
-    PanelTemplates_SetTab(AuctipusFrame, 3)
+    PanelTemplates_DisableTab(AuctipusFrame, 3)
+    PanelTemplates_SetTab(AuctipusFrame, 4)
 end
 
 function Auctipus.OnHide()
@@ -95,6 +98,7 @@ function Auctipus.SelectTab(index)
     PanelTemplates_SetTab(AuctipusFrame, index)
     AuctipusFrame.BrowseFrame:Hide()
     AuctipusFrame.AuctionsFrame:Hide()
+    AuctipusFrame.ListingsFrame:Hide()
     AuctipusFrame.HistoryFrame:Hide()
     local f = GetCurrentKeyBoardFocus()
     if f then
@@ -108,6 +112,8 @@ function Auctipus.SelectTab(index)
     elseif index == 2 then
         AuctipusFrame.AuctionsFrame:Show()
     elseif index == 3 then
+        AuctipusFrame.ListingsFrame:Show()
+    elseif index == 4 then
         AuctipusFrame.HistoryFrame:Show()
         if AuctipusFrame.HistoryFrame.SearchBox:GetText() == "" then
             AuctipusFrame.HistoryFrame.SearchBox:SetFocus()

@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+    <Frame name="AuctipusListingsFrameTemplate" enableMouse="true" virtual="true">
+        <Size x="832" y="440"/>
+        <Frames>
+            <Button name="$parentListing1" parentKey="ListingRow1" parentArray="ListingRows" inherits="AuctipusListingsSellRowTemplate" id="1"/>
+            <Button name="$parentListing2" parentArray="ListingRows" inherits="AuctipusListingsSellRowTemplate" id="2"/>
+            <Button name="$parentListing3" parentArray="ListingRows" inherits="AuctipusListingsSellRowTemplate" id="3"/>
+            <Button name="$parentListing4" parentArray="ListingRows" inherits="AuctipusListingsSellRowTemplate" id="4"/>
+            <Button name="$parentListing5" parentArray="ListingRows" inherits="AuctipusListingsSellRowTemplate" id="5"/>
+            <Button name="$parentListing6" parentArray="ListingRows" inherits="AuctipusListingsSellRowTemplate" id="6"/>
+            <Button name="$parentListing7" parentArray="ListingRows" inherits="AuctipusListingsSellRowTemplate" id="7"/>
+            <Button name="$parentListing8" parentArray="ListingRows" inherits="AuctipusListingsSellRowTemplate" id="8"/>
+            <Button name="$parentListing9" parentArray="ListingRows" inherits="AuctipusListingsSellRowTemplate" id="9"/>
+            <Button name="$parentListing10" parentArray="ListingRows" inherits="AuctipusListingsSellRowTemplate" id="10"/>
+            <ScrollFrame name="$parentListingsScrollFrame" parentKey="ListingsScrollFrame" inherits="AuctipusScrollFrameTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parentListing1" y="-5"/>
+                    <Anchor point="BOTTOMRIGHT" relativeTo="$parentListing10" x="0" y="2"/>
+                </Anchors>
+            </ScrollFrame>
+			<Button name="$parentNameSort" inherits="AuctipusSortButtonTemplate" text="Name">
+                <Size y="19"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.ListingRow1.ItemButton.Name" relativePoint="TOPLEFT" y="-1"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.ListingRow1.ItemButton.Name" x="2"/>
+                </Anchors>
+			</Button>
+			<Button name="$parentDurationSort" inherits="AuctipusSortButtonTemplate" text="CLOSES_IN">
+                <Size y="19"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeTo="$parentNameSort" relativePoint="BOTTOMRIGHT" x="-2"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.ListingRow1.Duration" x="6"/>
+                </Anchors>
+			</Button>
+			<Button name="$parentHighBidderSort" inherits="AuctipusSortButtonTemplate" text="HIGH_BIDDER">
+                <Size y="19"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeTo="$parentDurationSort" relativePoint="BOTTOMRIGHT" x="-2"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.ListingRow1.HighBidder" x="6"/>
+                </Anchors>
+			</Button>
+			<Button name="$parentCurrentBidSort" inherits="AuctipusSortButtonTemplate" text="CURRENT_BID">
+                <Size y="19"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeTo="$parentHighBidderSort" relativePoint="BOTTOMRIGHT" x="-2"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.ListingRow1" x="-4"/>
+                </Anchors>
+			</Button>
+
+            <Button name="$parentCancelButton" parentKey="CancelButton" inherits="UIPanelButtonTemplate" text="CANCEL_AUCTION">
+                <Size x="150" y="24"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativeTo="$parentListingsScrollFrame" relativePoint="BOTTOMRIGHT" y="-10"/>
+                </Anchors>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnLoad>
+                AuctipusListingsFrame.OnLoad(self)
+            </OnLoad>
+        </Scripts>
+    </Frame>
+
+    <Frame name="AuctipusListingsFrameMetaTemplate" inherits="AuctipusListingsFrameTemplate" virtual="true">
+        <Scripts>
+            <OnLoad/>
+        </Scripts>
+    </Frame>
+</Ui>

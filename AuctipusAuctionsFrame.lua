@@ -61,20 +61,6 @@ function AuctipusAuctionsFrame:OnLoad()
     MoneyInputFrame_SetPreviousFocus(self.BuyoutPrice, self.BidPrice.copper)
     MoneyInputFrame_SetNextFocus(self.BuyoutPrice, self.BidPrice.gold)
 
-    -- Instantiate all the auction rows.
-    for i, row in ipairs(self.AuctionRows) do
-        if i == 1 then
-            row:SetPoint("TOPLEFT", self, "TOPLEFT", 230, -36)
-            row:SetPoint("TOPRIGHT", self, "TOPRIGHT", -40, -36)
-        else
-            row:SetPoint("TOPLEFT", self.AuctionRows[i-1], "BOTTOMLEFT", 0, -4)
-            row:SetPoint("TOPRIGHT", self.AuctionRows[i-1], "BOTTOMRIGHT", 0,
-                         -4)
-        end
-        row.CurrentBid:SetMoney(100000)
-        row.Buyout:SetMoney(100000)
-    end
-
     -- Set scripts.
     self.ItemButton:RegisterForDrag("LeftButton")
     self.ItemButton:SetScript("OnClick",
@@ -101,19 +87,6 @@ function AuctipusAuctionsFrame:OnLoad()
         function() self:UpdateControls() end)
     self.CreateButton:SetScript("OnClick",
         function() self:PostAuction() end)
-    self.CancelButton:SetScript("OnClick",
-        function() self:CancelAuction() end)
-
-    -- Scroll bars.
-    self.AuctionScrollFrame:SetScript("OnVerticalScroll",
-        function(self2, offset)
-            FauxScrollFrame_OnVerticalScroll(self2, offset, 1,
-                                             function()
-                                                 self:UpdateAuctions()
-                                             end)
-        end)
-    self.AuctionScrollFrame.ScrollBar.scrollStep = 1
-    FauxScrollFrame_Update(self.AuctionScrollFrame, 0, #self.AuctionRows, 1)
 
     self:UpdateControls()
 end
@@ -156,10 +129,6 @@ function AuctipusAuctionsFrame:OnDurationButtonClick(index, button)
     self:UpdateControls()
 end
 
-function AuctipusAuctionsFrame.AUCTION_OWNED_LIST_UPDATE()
-    Auctipus.dbg("AUCTION_OWNED_LIST_UPDATE")
-end
-
 function AuctipusAuctionsFrame.AUCTION_MULTISELL_START(numAuctions)
     Auctipus.dbg("AUCTION_MULTISELL_START: ",numAuctions)
 end
@@ -170,11 +139,6 @@ end
 
 function AuctipusAuctionsFrame.AUCTION_MULTISELL_FAILURE()
     Auctipus.dbg("AUCTION_MULTISELL_FAILURE")
-end
-
-function AuctipusAuctionsFrame.AUCTION_HOUSE_SHOW()
-    local self = AuctipusFrame.AuctionsFrame
-    APage.OpenOwnerPage(0, self)
 end
 
 function AuctipusAuctionsFrame.NEW_AUCTION_UPDATE()
@@ -288,11 +252,6 @@ function AuctipusAuctionsFrame:UpdateControls()
         self.DepositPrice:SetMoney(0)
         self.CreateButton:Disable()
     end
-
-    self.CancelButton:SetEnabled(
-        not self.waitForNilAuction and
-        CanCancelAuction(GetSelectedAuctionItem("owner"))
-        )
 end
 
 function AuctipusAuctionsFrame:GetDeposit()
@@ -380,60 +339,6 @@ function AuctipusAuctionsFrame:PostAuction()
     self.waitForNilAuction = true
     PostAuction(bidPrice, buyoutPrice, self.selectedDuration, self.count,
                 self.stackCount)
-end
-
-function AuctipusAuctionsFrame:PageOpened(page)
-    self.aopage = page
-end
-
-function AuctipusAuctionsFrame:PageUpdated(page)
-    assert(page == self.aopage)
-    self:UpdateControls()
-    self:UpdateAuctions()
-end
-
-function AuctipusAuctionsFrame:PageClosed(page, forced)
-    assert(forced)
-    assert(page == self.aopage)
-    self.aopage = nil
-end
-
-function AuctipusAuctionsFrame:SetSelection(index)
-    self.aopage:SelectItem(
-        FauxScrollFrame_GetOffset(self.AuctionScrollFrame) + index)
-    self:UpdateControls()
-    self:UpdateAuctions()
-end
-
-function AuctipusAuctionsFrame:CancelAuction()
-    CancelAuction(self.aopage:GetSelectedItem())
-end
-
-function AuctipusAuctionsFrame:UpdateAuctions()
-    FauxScrollFrame_Update(self.AuctionScrollFrame,
-                           #self.aopage.auctions,
-                           #self.AuctionRows,
-                           1)
-
-    local offset    = FauxScrollFrame_GetOffset(self.AuctionScrollFrame)
-    local selection = self.aopage:GetSelectedItem()
-    for i, row in ipairs(self.AuctionRows) do
-        row:UnlockHighlight()
-
-        local index = offset + i
-        if index <= #self.aopage.auctions then
-            local auction = self.aopage.auctions[index]
-            row:SetAuction(auction)
-
-            if selection == index then
-                row:LockHighlight()
-            end
-            row:Enable()
-        else
-            row:SetAuction(nil)
-            row:Disable()
-        end
-    end
 end
 
 TGEventManager.Register(AuctipusAuctionsFrame)
