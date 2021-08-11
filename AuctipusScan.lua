@@ -49,6 +49,9 @@ function AScan:PageUpdated(p)
     else
         totalPages = ceil(self.apage.totalAuctions / 50)
         Auctipus.info("Got page "..self.apage.page.." / "..totalPages)
+        if self.handler then
+            self.handler:ScanProgress(self, self.apage.page, totalPages)
+        end
     end
 
     for i, auction in ipairs(self.apage.auctions) do

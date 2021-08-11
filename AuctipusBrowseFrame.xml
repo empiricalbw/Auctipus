@@ -220,6 +220,16 @@
                 </Anchors>
             </Button>
         </Frames>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <FontString parentKey="StatusText" inherits="GameFontNormalSmall" justifyH="CENTER" justifyV="MIDDLE">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.AuctionScrollFrame"/>
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.AuctionScrollFrame"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
 
         <Scripts>
             <OnLoad>

@@ -111,6 +111,9 @@ function AuctipusBrowseFrame:OnLoad()
     self.UnitCostSort.Text:SetJustifyH("RIGHT")
     self.BuyoutSort.Text:SetJustifyH("RIGHT")
 
+    -- Status text.
+    self.StatusText:SetText("Submit a search query.")
+
     -- Cleanup upon hiding.
     self:SetScript("OnHide", function() self:OnHide() end)
 end
@@ -190,10 +193,16 @@ function AuctipusBrowseFrame:DoSearch()
 
     self:ClearScan()
 
+    self.StatusText:SetText("Searching...")
+    self.StatusText:Show()
     self.scan = AScan:New({query}, self)
     self.SearchBox:ClearFocus()
     self.SearchButton:Disable()
     self.CategoryDropdown:Hide()
+end
+
+function AuctipusBrowseFrame:ScanProgress(scan, page, totalPages)
+    self.StatusText:SetText("Searching ("..page.." / "..totalPages..")")
 end
 
 function AuctipusBrowseFrame:ScanComplete(scan)
@@ -208,9 +217,6 @@ function AuctipusBrowseFrame:ScanComplete(scan)
 
     self.SearchButton:Enable()
  
-    FauxScrollFrame_OnVerticalScroll(self.AuctionGroupScrollFrame, 0, 1,
-                                     function() self:UpdateAuctionGroups() end)
-
     for i, ag in ipairs(scan.auctionGroups) do
         ag:SortByBuyout()
     end
@@ -234,37 +240,45 @@ function AuctipusBrowseFrame:SelectAuctionGroup(auctionGroup)
 end
 
 function AuctipusBrowseFrame:UpdateAuctionGroups()
-    if not self.scan then
-        FauxScrollFrame_Update(self.AuctionGroupScrollFrame,
-                               0, #self.AuctionGroupRows, 1)
-
-        for i, row in ipairs(self.AuctionGroupRows) do
-            row:SetAuctionGroup(nil)
-            row:Disable()
+    local nauctionGroups
+    if self.scan then
+        nauctionGroups = #self.scan.auctionGroups
+        if nauctionGroups > 0 then
+            if #self.selectedAuctionGroup.unitPriceAuctions then
+                self.StatusText:Hide()
+            else
+                self.StatusText:SetText("All results are bid-only auctions.")
+                self.StatusText:Show()
+            end
+        else
+            self.StatusText:SetText("No auctions found.")
+            self.StatusText:Show()
         end
     else
-        FauxScrollFrame_Update(self.AuctionGroupScrollFrame,
-                               #self.scan.auctionGroups,
-                               #self.AuctionGroupRows,
-                               1)
+        nauctionGroups = 0
+        self.StatusText:SetText("Enter a search query.")
+        self.StatusText:Show()
+    end
 
-        local offset = FauxScrollFrame_GetOffset(self.AuctionGroupScrollFrame)
-        for i, row in ipairs(self.AuctionGroupRows) do
-            row:UnlockHighlight()
+    FauxScrollFrame_Update(self.AuctionGroupScrollFrame, nauctionGroups,
+                           #self.AuctionGroupRows, 1)
 
-            local index = offset + i
-            if index <= #self.scan.auctionGroups then
-                local auctionGroup = self.scan.auctionGroups[index]
-                row:SetAuctionGroup(auctionGroup)
+    local offset = FauxScrollFrame_GetOffset(self.AuctionGroupScrollFrame)
+    for i, row in ipairs(self.AuctionGroupRows) do
+        row:UnlockHighlight()
 
-                if auctionGroup == self.selectedAuctionGroup then
-                    row:LockHighlight()
-                end
-                row:Enable()
-            else
-                row:SetAuctionGroup(nil)
-                row:Disable()
+        local index = offset + i
+        if index <= nauctionGroups then
+            local auctionGroup = self.scan.auctionGroups[index]
+            row:SetAuctionGroup(auctionGroup)
+
+            if auctionGroup == self.selectedAuctionGroup then
+                row:LockHighlight()
             end
+            row:Enable()
+        else
+            row:SetAuctionGroup(nil)
+            row:Disable()
         end
     end
 end
@@ -294,41 +308,37 @@ function AuctipusBrowseFrame:ToggleAuctionSelection(auction)
 end
 
 function AuctipusBrowseFrame:UpdateAuctions()
+    local nauctions
     local auctionGroup = self.selectedAuctionGroup
-
     if auctionGroup then
-        FauxScrollFrame_Update(self.AuctionScrollFrame,
-                               #auctionGroup.unitPriceAuctions,
-                               #self.AuctionRows,
-                               1)
-
-        local offset = FauxScrollFrame_GetOffset(self.AuctionScrollFrame)
-        for i, row in ipairs(self.AuctionRows) do
-            row:UnlockHighlight()
-
-            local index = offset + i
-            if index <= #auctionGroup.unitPriceAuctions then
-                local auction = auctionGroup.unitPriceAuctions[index]
-                row:SetAuction(auction)
-
-                if auction.missing then
-                    row:SetAlpha(0.5)
-                    row:Disable()
-                else
-                    row:SetAlpha(1)
-                    row:Enable()
-                    if self.selectedAuctions:Contains(auction) then
-                        row:LockHighlight()
-                    end
-                end
-            else
-                row:SetAuction(nil)
-            end
-        end
+        nauctions = #auctionGroup.unitPriceAuctions
     else
-        FauxScrollFrame_Update(self.AuctionScrollFrame, 0, #self.AuctionRows, 1)
+        nauctions = 0
+    end
 
-        for i, row in ipairs(self.AuctionRows) do
+    FauxScrollFrame_Update(self.AuctionScrollFrame, nauctions,
+                           #self.AuctionRows, 1)
+
+    local offset = FauxScrollFrame_GetOffset(self.AuctionScrollFrame)
+    for i, row in ipairs(self.AuctionRows) do
+        row:UnlockHighlight()
+
+        local index = offset + i
+        if index <= nauctions then
+            local auction = auctionGroup.unitPriceAuctions[index]
+            row:SetAuction(auction)
+
+            if auction.missing then
+                row:SetAlpha(0.5)
+                row:Disable()
+            else
+                row:SetAlpha(1)
+                row:Enable()
+                if self.selectedAuctions:Contains(auction) then
+                    row:LockHighlight()
+                end
+            end
+        else
             row:SetAuction(nil)
         end
     end
