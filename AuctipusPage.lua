@@ -16,6 +16,12 @@ local SORT_ORDER = {
         {key="quantity", reverse=false},
         {key="buyout",   reverse=false},
     },
+    ["UNITPRICE"] = {
+        {key="seller",   reverse=false},
+        {key="quantity", reverse=false},
+        {key="buyout",   reverse=false},
+        {key="unitprice",reverse=false},
+    },
     ["QUALITY"] = {
         {key="duration", reverse=false},
         {key="bid",      reverse=false},

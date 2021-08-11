@@ -61,6 +61,21 @@ function AuctipusAuctionsFrame:OnLoad()
     MoneyInputFrame_SetPreviousFocus(self.BuyoutPrice, self.BidPrice.copper)
     MoneyInputFrame_SetNextFocus(self.BuyoutPrice, self.BidPrice.gold)
 
+    -- Instantiate all the auction bid preview rows.
+    for i, row in ipairs(self.AuctionBidRows) do
+        if i == 1 then
+            row:SetPoint("TOPLEFT", self, "TOPLEFT", 230, -36)
+            row:SetPoint("TOPRIGHT", self, "TOPRIGHT", -40, -36)
+        else
+            row:SetPoint("TOPLEFT", self.AuctionBidRows[i-1], "BOTTOMLEFT", 0,
+                         -4)
+            row:SetPoint("TOPRIGHT", self.AuctionBidRows[i-1], "BOTTOMRIGHT", 0,
+                         -4)
+        end
+        row.BuyoutPerItem:SetMoney(100000)
+        row.BuyoutTotal:SetMoney(100000)
+    end
+
     -- Set scripts.
     self.ItemButton:RegisterForDrag("LeftButton")
     self.ItemButton:SetScript("OnClick",
@@ -88,7 +103,18 @@ function AuctipusAuctionsFrame:OnLoad()
     self.CreateButton:SetScript("OnClick",
         function() self:PostAuction() end)
 
+    -- Scroll bars.
+    self.AuctionBidsScrollFrame:SetScript("OnVerticalScroll",
+        function(self2, offset)
+            FauxScrollFrame_OnVerticalScroll(self2, offset, 1,
+                                             function()
+                                                 self:UpdateComparables()
+                                             end)
+        end)
+    self.AuctionBidsScrollFrame.ScrollBar.scrollStep = 1
+
     self:UpdateControls()
+    self:UpdateComparables()
 end
 
 function AuctipusAuctionsFrame:ResetVars()
@@ -161,6 +187,15 @@ function AuctipusAuctionsFrame.NEW_AUCTION_UPDATE()
 
     if self.waitForNilAuction and self.name == nil then
         self.waitForNilAuction = false
+    end
+
+    if name ~= nil then
+        APage.OpenListPage({text = name, exactMatch = true}, 0, "UNITPRICE",
+                           self)
+    elseif self.aopage then
+        self.aopage:ClosePage()
+        self.aopage = nil
+        self:UpdateComparables()
     end
 
     self:UpdateControls()
@@ -339,6 +374,54 @@ function AuctipusAuctionsFrame:PostAuction()
     self.waitForNilAuction = true
     PostAuction(bidPrice, buyoutPrice, self.selectedDuration, self.count,
                 self.stackCount)
+end
+
+function AuctipusAuctionsFrame:PageOpened(page)
+    self.aopage = page
+end
+
+function AuctipusAuctionsFrame:PageUpdated(page)
+    assert(page == self.aopage)
+    self:UpdateComparables()
+end
+
+function AuctipusAuctionsFrame:PageClosed(page, forced)
+    assert(page == self.aopage)
+end
+
+function AuctipusAuctionsFrame:UpdateComparables()
+    local nauctions
+    if self.aopage then
+        nauctions = #self.aopage.auctions
+        if nauctions > 0 then
+            self.StatusText:Hide()
+        else
+            self.StatusText:SetText("No auctions found.")
+            self.StatusText:Show()
+        end
+    else
+        nauctions = 0
+        self.StatusText:SetText("Select item to auction.")
+        self.StatusText:Show()
+    end
+
+    FauxScrollFrame_Update(self.AuctionBidsScrollFrame, nauctions,
+                           #self.AuctionBidRows, 1)
+
+    local offset = FauxScrollFrame_GetOffset(self.AuctionBidsScrollFrame)
+    for i, row in ipairs(self.AuctionBidRows) do
+        row:UnlockHighlight()
+
+        local index = offset + i
+        if index <= nauctions then
+            local auction = self.aopage.auctions[index]
+            row:SetAuction(auction)
+            row:Enable()
+        else
+            row:SetAuction(nil)
+            row:Disable()
+        end
+    end
 end
 
 TGEventManager.Register(AuctipusAuctionsFrame)

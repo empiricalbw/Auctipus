@@ -42,6 +42,7 @@ function AAuction:FromGetAuctionItemInfo(index, list)
                 level           = level,
                 levelColHeader  = levelColHeader,
                 minBid          = minBid,
+                minUnitBid      = minBid / count,
                 minIncrement    = minIncrement,
                 buyoutPrice     = buyoutPrice,
                 unitPrice       = buyoutPrice / count,

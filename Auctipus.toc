@@ -10,6 +10,7 @@ BetterMoneyFrame.xml
 AuctipusItemButton.xml
 AuctipusAuctionGroupRow.xml
 AuctipusAuctionRow.xml
+AuctipusAuctionBidRow.xml
 AuctipusListingsSellRow.xml
 AuctipusHistoryGroupRow.xml
 AuctipusScrollFrame.xml
@@ -36,6 +37,7 @@ AuctipusAuctionGroup.lua
 AuctipusAuctionGroupRow.lua
 AuctipusListingsSellRow.lua
 AuctipusAuctionRow.lua
+AuctipusAuctionBidRow.lua
 AuctipusHistoryGroupRow.lua
 AuctipusBrowseFrame.lua
 AuctipusAuctionsFrame.lua
