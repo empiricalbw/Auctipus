@@ -40,30 +40,30 @@
         </Layers>
         <Frames>
             <Frame name="$parentOwner" parentKey="Owner">
-                <Size x="78" y="24"/>
+                <Size x="150" y="24"/>
                 <Anchors>
                     <Anchor point="LEFT" x="12" y="0"/>
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
-                        <FontString parentKey="Text" inherits="GameFontHighlight" justifyH="LEFT"/>
+                        <FontString parentKey="Text" inherits="GameFontHighlight" justifyH="CENTER"/>
                     </Layer>
                 </Layers>
             </Frame>
             <Frame name="$parentBidPerItem" parentKey="BidPerItem" inherits="BetterMoneyFrameFixedTemplate">
                 <Anchors>
-                    <Anchor point="RIGHT" x="-166" y="7"/>
+                    <Anchor point="RIGHT" x="-226" y="7"/>
                 </Anchors>
             </Frame>
             <Frame name="$parentBuyoutPerItem" parentKey="BuyoutPerItem" inherits="BetterMoneyFrameFixedTemplate">
                 <Anchors>
-                    <Anchor point="RIGHT" x="-166" y="-7"/>
+                    <Anchor point="RIGHT" x="-226" y="-7"/>
                 </Anchors>
             </Frame>
             <Frame name="$parentCountFrame" parentKey="CountFrame">
-                <Size x="48" y="24"/>
+                <Size x="68" y="24"/>
                 <Anchors>
-                    <Anchor point="RIGHT" x="-116" y="0"/>
+                    <Anchor point="RIGHT" x="-156" y="0"/>
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">

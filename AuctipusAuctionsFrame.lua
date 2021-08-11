@@ -378,6 +378,7 @@ end
 
 function AuctipusAuctionsFrame:PageOpened(page)
     self.aopage = page
+    self:UpdateComparables()
 end
 
 function AuctipusAuctionsFrame:PageUpdated(page)
@@ -392,11 +393,17 @@ end
 function AuctipusAuctionsFrame:UpdateComparables()
     local nauctions
     if self.aopage then
-        nauctions = #self.aopage.auctions
-        if nauctions > 0 then
-            self.StatusText:Hide()
+        if self.aopage.auctions then
+            nauctions = #self.aopage.auctions
+            if nauctions > 0 then
+                self.StatusText:Hide()
+            else
+                self.StatusText:SetText("No auctions found.")
+                self.StatusText:Show()
+            end
         else
-            self.StatusText:SetText("No auctions found.")
+            nauctions = 0
+            self.StatusText:SetText("Searching...")
             self.StatusText:Show()
         end
     else

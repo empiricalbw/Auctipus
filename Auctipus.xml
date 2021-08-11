@@ -99,12 +99,12 @@
                     <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="15" y="2"/>
                 </Anchors>
             </Button>
-            <Button name="$parentAuctionsTab" parentArray="Tabs" inherits="CharacterFrameTabButtonTemplate" text="AUCTIONS">
+            <Button name="$parentAuctionsTab" parentArray="Tabs" inherits="CharacterFrameTabButtonTemplate" text="CREATE_AUCTION">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="$parentBrowseTab" relativePoint="TOPRIGHT" x="-8"/>
                 </Anchors>
             </Button>
-            <Button name="$parentListingsTab" parentArray="Tabs" inherits="CharacterFrameTabButtonTemplate" text="Listings">
+            <Button name="$parentListingsTab" parentArray="Tabs" inherits="CharacterFrameTabButtonTemplate" text="AUCTIONS">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="$parentAuctionsTab" relativePoint="TOPRIGHT" x="-8"/>
                 </Anchors>
