@@ -351,6 +351,15 @@ function AuctipusAuctionsFrame:IncrementStackSize()
 end
 
 function AuctipusAuctionsFrame:OnStackCountBoxChanged()
+    local newStackCount = self.StackCountBox:GetNumber() or 0
+    if self.count * newStackCount > self.invCount then
+        newStackCount = floor(self.invCount / self.count)
+        self.StackCountBox:SetText(newStackCount)
+        return
+    end
+
+    self.stackCount = newStackCount
+    self:UpdateControls()
 end
 
 function AuctipusAuctionsFrame:DecrementStackCount()
