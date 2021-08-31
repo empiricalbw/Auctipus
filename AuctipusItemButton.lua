@@ -3,6 +3,8 @@ AuctipusItemButton = {}
 function AuctipusItemButton:OnLoad()
     self:SetScript("OnEnter", function() self:OnEnter() end)
     self:SetScript("OnLeave", function() self:OnLeave() end)
+    self:SetScript("OnEvent", function() self:OnEvent() end)
+    self:RegisterEvent("MODIFIER_STATE_CHANGED")
     self.auctionGroup = nil
     self.link         = nil
     self.sellInfo     = nil
@@ -99,4 +101,10 @@ end
 
 function AuctipusItemButton:OnLeave()
     GameTooltip_Hide()
+end
+
+function AuctipusItemButton:OnEvent()
+    if GameTooltip:GetOwner() == self then
+        self:OnEnter()
+    end
 end
