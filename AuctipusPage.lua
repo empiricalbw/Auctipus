@@ -123,7 +123,8 @@ function APage:ClosePage(forced)
 
         local prevState = self.state
         self:_TRANSITION(STATE_CLOSED)
-        if prevState ~= STATE_WAIT_START_QUERY and self.handler then
+
+        if self.handler then
             self.handler:PageClosed(self, forced or false)
         end
     end
