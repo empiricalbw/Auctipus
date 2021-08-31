@@ -65,6 +65,8 @@ function APage.OpenListPage(q, page, order, handler)
     APage.ForceClose("list")
     APage.activePage["list"] = ap
     ap:_TRANSITION(STATE_WAIT_START_QUERY)
+
+    return ap
 end
 
 function APage.OpenOwnerPage(page, handler)
@@ -81,6 +83,8 @@ function APage.OpenOwnerPage(page, handler)
     APage.ForceClose("owner")
     APage.activePage["owner"] = ap
     ap:_TRANSITION(STATE_WAIT_START_QUERY)
+
+    return ap
 end
 
 function APage:_TRANSITION(newState)
@@ -222,10 +226,6 @@ function APage:OnUpdate()
     for i, self in pairs(APage.activePage) do
         if self.state == STATE_WAIT_START_QUERY then
             if not self:IsAHBusy() then
-                if self.handler then
-                    self.handler:PageOpened(self)
-                end
-
                 self:_TRANSITION(STATE_WAIT_PAGE_UPDATE)
                 self:StartQuery()
             end

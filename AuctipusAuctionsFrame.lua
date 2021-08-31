@@ -190,14 +190,14 @@ function AuctipusAuctionsFrame.NEW_AUCTION_UPDATE()
     end
 
     if name ~= nil then
-        APage.OpenListPage({text = name, exactMatch = true}, 0, "UNITPRICE",
-                           self)
+        self.aopage = APage.OpenListPage({text = name, exactMatch = true}, 0,
+                                         "UNITPRICE", self)
     elseif self.aopage then
         self.aopage:ClosePage()
         self.aopage = nil
-        self:UpdateComparables()
     end
 
+    self:UpdateComparables()
     self:UpdateControls()
 end
 
@@ -374,11 +374,6 @@ function AuctipusAuctionsFrame:PostAuction()
     self.waitForNilAuction = true
     PostAuction(bidPrice, buyoutPrice, self.selectedDuration, self.count,
                 self.stackCount)
-end
-
-function AuctipusAuctionsFrame:PageOpened(page)
-    self.aopage = page
-    self:UpdateComparables()
 end
 
 function AuctipusAuctionsFrame:PageUpdated(page)

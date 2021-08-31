@@ -43,17 +43,13 @@ end
 
 function AuctipusListingsFrame.AUCTION_HOUSE_SHOW()
     local self = AuctipusFrame.ListingsFrame
-    APage.OpenOwnerPage(0, self)
+    self.aopage = APage.OpenOwnerPage(0, self)
 end
 
 function AuctipusListingsFrame:UpdateControls()
     self.CancelButton:SetEnabled(
         CanCancelAuction(GetSelectedAuctionItem("owner"))
         )
-end
-
-function AuctipusListingsFrame:PageOpened(page)
-    self.aopage = page
 end
 
 function AuctipusListingsFrame:PageUpdated(page)

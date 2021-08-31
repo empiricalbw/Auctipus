@@ -76,15 +76,11 @@ function ASearcher:LoadNextPage()
 
     if index then
         self.lastPageSize = nil
-        APage.OpenListPage(self.query, index, "BUYOUT", self)
+        self.apage = APage.OpenListPage(self.query, index, "BUYOUT", self)
         self:SearchPending()
     else
         self:SearchFailed()
     end
-end
-
-function ASearcher:PageOpened(p)
-    self.apage = p
 end
 
 function ASearcher:PageUpdated(p)
