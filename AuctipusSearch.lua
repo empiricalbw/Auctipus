@@ -33,7 +33,6 @@ local buyoutSearcher = nil
 function ASearcher:New(name)
     local as = {
         targetAuction   = nil,
-        targetIndex     = nil,
         handler         = nil,
         query           = {text       = name,
                            exactMatch = true,
@@ -57,7 +56,6 @@ function ASearcher:FindAuction(auction, handler)
     assert(auction.name == self.query.text)
 
     self.targetAuction = auction
-    self.targetIndex   = nil
     self.handler       = handler
     self.searchQueue   = {}
     self.searchedPages:Clear()
@@ -198,9 +196,9 @@ function ASearcher:SearchPage()
                 self.targetAuction:Print()
                 a:Print()
 
-                self.targetIndex = i
                 self.searchQueue = {}
                 self.searchedPages:Clear()
+                self.apage:SelectItem(i)
                 self:SearchSucceeded(i)
                 return
             end
@@ -265,16 +263,17 @@ end
 
 function ASearcher:PlaceAuctionBid(copper)
     -- Places a bid on the currently-found auction.
-    assert(self.targetIndex ~= nil)
+    local selectedItem = self.apage:GetSelectedItem()
+    Auctipus.info("Selected auction item: "..selectedItem)
 
-    local auction = AAuction:FromGetAuctionItemInfo(self.targetIndex)
+    local auction = AAuction:FromGetAuctionItemInfo(selectedItem)
     assert(self.targetAuction:Matches(auction))
 
-    PlaceAuctionBid("list", self.targetIndex, copper)
+    PlaceAuctionBid("list", selectedItem, copper)
 end
 
 function ASearcher:BuyoutAuction(buyoutHandler)
-    Auctipus.dbg("***** BUYING INDEX "..self.targetIndex.." *****")
+    Auctipus.dbg("***** BUYING INDEX "..self.apage:GetSelectedItem().." *****")
     buyoutSearcher      = self
     self.buyoutHandler  = buyoutHandler
     self.gotBidAccepted = false
@@ -298,7 +297,9 @@ function ASearcher:PageShrank()
 end
 
 function ASearcher:AuctionWon()
+    Auctipus.info("Selected auction item: "..self.apage:GetSelectedItem())
     assert(self == buyoutSearcher)
+    assert(self.apage:GetSelectedItem() == 0)
     buyoutSearcher = nil
     if self.buyoutHandler then
         self.buyoutHandler:AuctionWon(self)
