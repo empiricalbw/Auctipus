@@ -92,6 +92,9 @@ function ASearcher:PageUpdated(p)
     if prevLastPageSize then
         if #p.auctions < prevLastPageSize then
             self:PageShrank()
+            if self.gotBidAccepted and self.gotPageShrank then
+                self:AuctionWon()
+            end
         end
     end
 
@@ -117,6 +120,10 @@ function ASearcher:SearchPage()
     end
 
     if #self.apage.auctions > 0 then
+        -- Mark this page.
+        self:MarkPage(self.apage.page)
+
+        -- Auctions needed for edge checking.
         local firstAuction = self.apage.auctions[1]
         local lastAuction  = self.apage.auctions[#self.apage.auctions]
         
@@ -206,6 +213,9 @@ function ASearcher.CHAT_MSG_SYSTEM(msg)
         if msg == ERR_AUCTION_BID_PLACED then
             Auctipus.dbg("Got bid placed event.")
             buyoutSearcher:BidAccepted()
+            if self.gotBidAccepted and self.gotPageShrank then
+                self:AuctionWon()
+            end
         elseif msg == ERR_AUCTION_BID_OWN then
             Auctipus.dbg("Tried to bid on own auction.")
             buyoutSearcher:BidRejected()
@@ -235,9 +245,6 @@ end
 function ASearcher:BidAccepted()
     assert(self == buyoutSearcher)
     self.gotBidAccepted = true
-    if self.gotPageShrank then
-        self:AuctionWon()
-    end
 end
 
 function ASearcher:BidRejected()
@@ -248,9 +255,6 @@ end
 function ASearcher:PageShrank()
     assert(self == buyoutSearcher)
     self.gotPageShrank = true
-    if self.gotBidAccepted then
-        self:AuctionWon()
-    end
 end
 
 function ASearcher:AuctionWon()
