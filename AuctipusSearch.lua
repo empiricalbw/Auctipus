@@ -1,3 +1,30 @@
+--[[
+--  Class for finding a specific auction in the AH so that you can place a bid
+--  or buyout on it.  This tracks the target auction until the auction page has
+--  stabilized and notifies as the auction page changes.  It allows you to buy
+--  the auction and then notifies again once that succeeds (or fails) and the
+--  page has re-stabilized.
+--
+--  Global error strings relevant to placing a bid or buyout:
+--  
+--  ERR_AUCTION_ALREADY_BID = "You have already bid on this item."
+--  ERR_AUCTION_BID_INCREMENT = "Your bid increment is too small."
+--  ERR_AUCTION_BID_OWN = "You cannot bid on your own auction."
+--  ERR_AUCTION_DATABASE_ERROR = "Internal auction error."
+--  ERR_AUCTION_HIGHER_BID = "There is already a higher bid on that item."
+--  ERR_AUCTION_HOUSE_DISABLED =
+--      "The auction house is closed at the moment.|nPlease try again later."
+--  ERR_AUCTION_MIN_BID = "You must meet the min bid."
+--
+--  Global success string relevant to placing a bid or buyout:
+--
+--  ERR_AUCTION_BID_PLACED = "Bid accepted."
+--
+--  Global status strings relevant to the outcome of a prior bid:
+--
+--  ERR_AUCTION_WON_S = "You won an auction for %s"
+--  ERR_AUCTION_OUTBID_S = "You have been outbid on %s."
+--]]
 ASearcher = {}
 ASearcher.__index = ASearcher
 
@@ -5,20 +32,21 @@ local buyoutSearcher = nil
 
 function ASearcher:New(name)
     local as = {
-        targetAuction  = nil,
-        targetIndex    = nil,
-        handler        = nil,
-        query          = {text       = name,
-                          exactMatch = true,
-                          filters    = {},
-                          },
-        searchQueue    = {},
-        searchedPages  = ASet:New(),
-        apage          = nil,
-        lastPageSize   = nil,
-        gotBidAccepted = nil,
-        gotPageShrank  = nil,
-        buyoutHandler  = nil,
+        targetAuction   = nil,
+        targetIndex     = nil,
+        handler         = nil,
+        query           = {text       = name,
+                           exactMatch = true,
+                           filters    = {},
+                           },
+        ERR_AUCTION_WON = ERR_AUCTION_WON_S:format(name),
+        searchQueue     = {},
+        searchedPages   = ASet:New(),
+        apage           = nil,
+        lastPageSize    = nil,
+        gotBidAccepted  = nil,
+        gotPageShrank   = nil,
+        buyoutHandler   = nil,
     }
     setmetatable(as, self)
 
@@ -209,17 +237,29 @@ function ASearcher:SearchAborted()
 end
 
 function ASearcher.CHAT_MSG_SYSTEM(msg)
-    if buyoutSearcher ~= nil then
-        if msg == ERR_AUCTION_BID_PLACED then
-            Auctipus.dbg("Got bid placed event.")
-            buyoutSearcher:BidAccepted()
-            if self.gotBidAccepted and self.gotPageShrank then
-                self:AuctionWon()
-            end
-        elseif msg == ERR_AUCTION_BID_OWN then
-            Auctipus.dbg("Tried to bid on own auction.")
-            buyoutSearcher:BidRejected()
+    if not buyoutSearcher then
+        return
+    end
+
+    local self = buyoutSearcher
+    if msg == ERR_AUCTION_BID_PLACED then
+        Auctipus.dbg("Got bid placed event.")
+        self:BidAccepted()
+        if self.gotBidAccepted and self.gotPageShrank then
+            self:AuctionWon()
         end
+    elseif msg == self.ERR_AUCTION_WON then
+        Auctipus.info("Detected win chat message.")
+    elseif msg == ERR_AUCTION_ALREADY_BID or
+           msg == ERR_AUCTION_BID_INCREMENT or
+           msg == ERR_AUCTION_BID_OWN or
+           msg == ERR_AUCTION_DATABASE_ERROR or
+           msg == ERR_AUCTION_HIGHER_BID or
+           msg == ERR_AUCTION_HOUSE_DISABLED or
+           msg == ERR_AUCTION_MIN_BID
+    then
+        Auctipus.dbg("Bid rejected: "..msg)
+        self:BidRejected()
     end
 end
 

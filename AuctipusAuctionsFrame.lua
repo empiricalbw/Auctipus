@@ -18,6 +18,26 @@
 --  duration (1=12h, 2=24h, 3=48h)
 --  sizeOfStackToPost
 --  numberOfStacksToPost
+--
+--  Global error strings relevant to creating an auction:
+--
+--  ERR_AUCTION_BAG = "You cannot sell a non-empty bag."
+--  ERR_AUCTION_BOUND_ITEM = "You cannot sell a soulbound item."
+--  ERR_AUCTION_CONJURED_ITEM = "You cannot auction a conjured item."
+--  ERR_AUCTION_ENOUGH_ITEMS = "You do not have enough items."
+--  ERR_AUCTION_EQUIPPED_BAG = "You cannot sell an equipped bag."
+--  ERR_AUCTION_EXPIRED_S = "Your auction of %s has expired."
+--  ERR_AUCTION_LIMITED_DURATION_ITEM =
+--      "You cannot auction items with a limited duration."
+--  ERR_AUCTION_LOOT_ITEM = "You cannot auction a lootable item."
+--  ERR_AUCTION_QUEST_ITEM = "You cannot sell a quest item."
+--  ERR_AUCTION_REMOVED = "Auction cancelled."
+--  ERR_AUCTION_REMOVED_S = "Your auction of %s has been cancelled by the seller."
+--  ERR_AUCTION_REPAIR_ITEM = "You must repair that item before you auction it."
+--  ERR_AUCTION_SOLD_S = "A buyer has been found for your auction of %s."
+--  ERR_AUCTION_STARTED = "Auction created."
+--  ERR_AUCTION_USED_CHARGES = "You cannot auction an item with used charges"
+--  ERR_AUCTION_WRAPPED_ITEM = "You cannot auction a wrapped item."
 AuctipusAuctionsFrame = CreateFrame("Frame", nil, nil,
                                     "AuctipusAuctionsFrameMetaTemplate")
 AuctipusAuctionsFrame.__index = AuctipusAuctionsFrame
