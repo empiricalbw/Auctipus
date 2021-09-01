@@ -237,10 +237,6 @@ function ASearcher:FindAuction(auction, handler)
     self:LoadNextPage()
 end
 
-function ASearcher:CancelFind()
-    error("CancelFind not supported yet!")
-end
-
 function ASearcher:PageUpdated(p, delta)
     assert(p == self.apage)
 
@@ -344,6 +340,20 @@ function ASearcher.CHAT_MSG_SYSTEM(msg)
 
         self:_TRANSITION(STATE_INITIAL)
         self:NotifyAuctionLost()
+    end
+end
+
+function ASearcher:Reset()
+    if self.state == STATE_WAIT_PAGE_STABLE or
+       self.state == STATE_WAIT_SELECTED or
+       self.state == STATE_INITIAL_OPENED
+    then
+        self.apage:ClosePage()
+        self:_TRANSITION(STATE_INITIAL)
+    elseif self.state == STATE_WAIT_BUYOUT_RESULT or
+           self.state == STATE_WAIT_BUYOUT_RESULT_CLOSED
+    then
+        error("Cannot Reset in "..self.state)
     end
 end
 

@@ -235,6 +235,10 @@ function AuctipusBrowseFrame:ScanAborted(scan)
 end
 
 function AuctipusBrowseFrame:SelectAuctionGroup(auctionGroup)
+    if self.selectedAuctionGroup then
+        Auctipus.dbg("Resetting searcher...")
+        self.selectedAuctionGroup.searcher:Reset()
+    end
     self.selectedAuctionGroup = auctionGroup
     self:ClearSearch()
 end
@@ -391,7 +395,6 @@ function AuctipusBrowseFrame:DoBuy()
 
     searcher:BuyoutAuction(self)
     auction.missing = true
-    searcher:CancelFind()
 
     self:UpdateAuctions()
 end
