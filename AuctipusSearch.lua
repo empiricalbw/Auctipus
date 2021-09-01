@@ -65,7 +65,7 @@ end
 function ASearcher:_TRANSITION(newState)
     assert(newState)
     if self.state ~= newState then
-        Auctipus.info("ASearcher: ", tostring(self.state), " -> ", newState)
+        Auctipus.dbg("ASearcher: ", tostring(self.state), " -> ", newState)
         self.state = newState
     end
 end
@@ -181,7 +181,7 @@ end
 function ASearcher:_PlaceAuctionBid(copper)
     -- Places a bid on the currently-found auction.
     local selectedItem = self.apage:GetSelectedItem()
-    Auctipus.info("Selected auction item: "..selectedItem)
+    Auctipus.dbg("Selected auction item: "..selectedItem)
 
     local auction = AAuction:FromGetAuctionItemInfo(selectedItem)
     assert(self.targetAuction:Matches(auction))
@@ -320,9 +320,11 @@ function ASearcher.CHAT_MSG_SYSTEM(msg)
            self.state == STATE_WAIT_BUYOUT_RESULT_CLOSED)
 
     if msg == ERR_AUCTION_BID_PLACED then
+        Auctipus.dbg("Got bid accepted event.")
         self.gotBidAcceptedMsg = true
         self:CheckBuyoutState()
     elseif msg == self.ERR_AUCTION_WON then
+        Auctipus.dbg("Got auction won event.")
         self.gotAuctionWonMsg = true
         self:CheckBuyoutState()
     elseif msg == ERR_AUCTION_ALREADY_BID or
@@ -333,6 +335,7 @@ function ASearcher.CHAT_MSG_SYSTEM(msg)
            msg == ERR_AUCTION_HOUSE_DISABLED or
            msg == ERR_AUCTION_MIN_BID
     then
+        Auctipus.dbg("Got bid rejected event.")
         buyoutSearcher = nil
         if self.state == STATE_WAIT_BUYOUT_RESULT then
             self.apage:ClosePage()

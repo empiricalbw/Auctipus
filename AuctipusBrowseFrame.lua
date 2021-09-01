@@ -349,24 +349,24 @@ function AuctipusBrowseFrame:UpdateAuctions()
 end
 
 function AuctipusBrowseFrame:SearchPending(search)
-    Auctipus.info("-------- Auction search now pending --------")
+    Auctipus.dbg("-------- Auction search now pending --------")
     self.BuyButton:Disable()
 end
 
 function AuctipusBrowseFrame:SearchSucceeded(search, page, index)
-    Auctipus.info("-------- Found auction on page "..page.." at index "..index..
-                  "--------")
+    Auctipus.dbg("-------- Found auction on page "..page.." at index "..index..
+                 "--------")
     local fauction = self.selectedAuctions:First()
     local pauction = AAuction:FromGetAuctionItemInfo(index)
-    Auctipus.info("Desired auction: "..fauction:ToString())
-    Auctipus.info("Found auction:"..pauction:ToString())
+    Auctipus.dbg("Desired auction: "..fauction:ToString())
+    Auctipus.dbg("Found auction:"..pauction:ToString())
 
     assert(search.targetAuction == self.selectedAuctions:First())
     self.BuyButton:Enable()
 end
 
 function AuctipusBrowseFrame:SearchAborted(search)
-    Auctipus.info("-------- Auction search aborted --------")
+    Auctipus.dbg("-------- Auction search aborted --------")
     self:ClearSearch()
 end
 

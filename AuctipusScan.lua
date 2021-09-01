@@ -42,10 +42,10 @@ function AScan:PageUpdated(p)
     local totalPages
     if self.query.getAll then
         totalPages = 0
-        Auctipus.info("Got ALL page.")
+        Auctipus.dbg("Got ALL page.")
     else
         totalPages = ceil(self.apage.totalAuctions / 50)
-        Auctipus.info("Got page "..self.apage.page.." / "..totalPages)
+        Auctipus.dbg("Got page "..self.apage.page.." / "..totalPages)
         if self.handler then
             self.handler:ScanProgress(self, self.apage.page, totalPages)
         end

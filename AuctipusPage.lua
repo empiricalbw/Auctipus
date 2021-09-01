@@ -245,7 +245,7 @@ function APage:OnUpdate()
 end
 
 function APage.AUCTION_ITEM_LIST_UPDATE()
-    Auctipus.info("AUCTION_ITEM_LIST_UPDATE")
+    Auctipus.dbg("AUCTION_ITEM_LIST_UPDATE")
     local self = APage.activePage["list"]
     if self and (self.state == STATE_WAIT_PAGE_UPDATE or
                  self.state == STATE_WAIT_PROCESS_NIL)
