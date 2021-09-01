@@ -59,6 +59,7 @@ function APage.OpenListPage(q, page, order, handler)
                 totalAuctions = nil,
                 auctions      = nil,
                 nilAuctions   = nil,
+                lastPageSize  = 0,
                 }
     setmetatable(ap, APage)
 
@@ -77,6 +78,7 @@ function APage.OpenOwnerPage(page, handler)
                 totalAuctions = nil,
                 auctions      = nil,
                 nilAuctions   = nil,
+                lastPageSize  = 0,
                 }
     setmetatable(ap, APage)
 
@@ -176,8 +178,10 @@ function APage:ProcessPage()
         self:_TRANSITION(STATE_WAIT_PAGE_UPDATE)
     end
 
+    local delta = #self.auctions - self.lastPageSize
+    self.lastPageSize = #self.auctions
     if self.handler then
-        self.handler:PageUpdated(self)
+        self.handler:PageUpdated(self, delta)
     else
         Auctipus.dbg("Page ["..self.category.."] processing complete:")
         self:Dump()
@@ -205,8 +209,10 @@ function APage:ProcessNilAuctions()
         self:_TRANSITION(STATE_WAIT_PAGE_UPDATE)
     end
 
+    local delta = #self.auctions - self.lastPageSize
+    self.lastPageSize = #self.auctions
     if self.handler then
-        self.handler:PageUpdated(self)
+        self.handler:PageUpdated(self, delta)
     else
         Auctipus.dbg("Page ["..self.category.."] processing complete:")
         self:Dump()

@@ -28,48 +28,46 @@
 ASearcher = {}
 ASearcher.__index = ASearcher
 
+local STATE_INITIAL                     = "STATE_INITIAL"
+local STATE_WAIT_PAGE_STABLE            = "STATE_WAIT_PAGE_STABLE"
+local STATE_WAIT_SELECTED               = "STATE_WAIT_SELECTED"
+local STATE_WAIT_BUYOUT_RESULT          = "STATE_WAIT_BUYOUT_RESULT"
+local STATE_WAIT_BUYOUT_RESULT_CLOSED   = "STATE_WAIT_BUYOUT_RESULT_CLOSED"
+local STATE_INITIAL_OPENED              = "STATE_INITIAL_OPENED"
+
 local buyoutSearcher = nil
 
 function ASearcher:New(name)
     local as = {
-        targetAuction   = nil,
-        handler         = nil,
-        query           = {text       = name,
-                           exactMatch = true,
-                           filters    = {},
-                           },
-        ERR_AUCTION_WON = ERR_AUCTION_WON_S:format(name),
-        searchQueue     = {},
-        searchedPages   = ASet:New(),
-        apage           = nil,
-        lastPageSize    = nil,
-        gotBidAccepted  = nil,
-        gotPageShrank   = nil,
-        buyoutHandler   = nil,
+        state             = nil,
+        query             = {text       = name,
+                             exactMatch = true,
+                             filters    = {},
+                             },
+        ERR_AUCTION_WON   = ERR_AUCTION_WON_S:format(name),
+        targetAuction     = nil,
+        handler           = nil,
+        searchQueue       = nil,
+        searchedPages     = ASet:New(),
+        apage             = nil,
+        gotBidAcceptedMsg = nil,
+        gotAuctionWonMsg  = nil,
+        gotPageShrank     = nil,
+        buyoutHandler     = nil,
     }
     setmetatable(as, self)
+
+    as:_TRANSITION(STATE_INITIAL)
 
     return as
 end
 
-function ASearcher:FindAuction(auction, handler)
-    assert(auction.name == self.query.text)
-
-    self.targetAuction = auction
-    self.handler       = handler
-    self.searchQueue   = {}
-    self.searchedPages:Clear()
-    if auction.buyoutIndex ~= nil then
-        self:PushPage(floor((auction.buyoutIndex - 1) / 50))
-    else
-        self:PushPage(0)
+function ASearcher:_TRANSITION(newState)
+    assert(newState)
+    if self.state ~= newState then
+        Auctipus.info("ASearcher: ", tostring(self.state), " -> ", newState)
+        self.state = newState
     end
-
-    self:LoadNextPage()
-end
-
-function ASearcher:CancelFind()
-    self.targetAuction = nil
 end
 
 function ASearcher:PushPage(index)
@@ -90,9 +88,7 @@ function ASearcher:LoadNextPage()
     local index = self:PopPage()
 
     if self.apage then
-        if not self.apage:IsLoading() and self.apage:IsActivePage() and
-            self.apage.page == index
-        then
+        if self.apage.page == index then
             self:SearchPage()
             return
         end
@@ -101,47 +97,18 @@ function ASearcher:LoadNextPage()
     end
 
     if index then
-        self.lastPageSize = nil
         self.apage = APage.OpenListPage(self.query, index, "BUYOUT", self)
-        self:SearchPending()
+        self:_TRANSITION(STATE_WAIT_PAGE_STABLE)
+        self:NotifySearchPending()
     else
-        self:SearchFailed()
-    end
-end
-
-function ASearcher:PageUpdated(p)
-    assert(p == self.apage)
-
-    local prevLastPageSize = self.lastPageSize
-    self.lastPageSize = #p.auctions
-
-    if prevLastPageSize then
-        if #p.auctions < prevLastPageSize then
-            self:PageShrank()
-            if self.gotBidAccepted and self.gotPageShrank then
-                self:AuctionWon()
-            end
-        end
-    end
-
-    self:SearchPage()
-end
-
-function ASearcher:PageClosed(p, forced)
-    assert(p == self.apage)
-    self.apage = nil
-    if forced and self.targetAuction then
-        self:SearchAborted()
+        self:_TRANSITION(STATE_INITIAL)
+        self:NotifySearchFailed()
     end
 end
 
 function ASearcher:SearchPage()
-    if self.targetAuction == nil then
-        return
-    end
-
     if #self.apage.nilAuctions > 0 then
-        self:SearchPending()
+        self:_TRANSITION(STATE_WAIT_PAGE_STABLE)
         return
     end
 
@@ -196,72 +163,22 @@ function ASearcher:SearchPage()
                 self.targetAuction:Print()
                 a:Print()
 
+                self.apage:SelectItem(i)
                 self.searchQueue = {}
                 self.searchedPages:Clear()
-                self.apage:SelectItem(i)
-                self:SearchSucceeded(i)
+
+                self:_TRANSITION(STATE_WAIT_SELECTED)
+                self:NotifySearchSucceeded(i)
                 return
             end
         end
     end
 
     -- No match, so continue searching.
-    self:SearchPending()
     self:LoadNextPage()
 end
 
-function ASearcher:SearchPending()
-    if self.handler then
-        self.handler:SearchPending(self)
-    end
-end
-
-function ASearcher:SearchSucceeded(index)
-    if self.handler then
-        self.handler:SearchSucceeded(self, self.apage.page, index)
-    end
-end
-
-function ASearcher:SearchFailed()
-    if self.handler then
-        self.handler:SearchFailed(self)
-    end
-end
-
-function ASearcher:SearchAborted()
-    if self.handler then
-        self.handler:SearchAborted(self)
-    end
-end
-
-function ASearcher.CHAT_MSG_SYSTEM(msg)
-    if not buyoutSearcher then
-        return
-    end
-
-    local self = buyoutSearcher
-    if msg == ERR_AUCTION_BID_PLACED then
-        Auctipus.dbg("Got bid placed event.")
-        self:BidAccepted()
-        if self.gotBidAccepted and self.gotPageShrank then
-            self:AuctionWon()
-        end
-    elseif msg == self.ERR_AUCTION_WON then
-        Auctipus.info("Detected win chat message.")
-    elseif msg == ERR_AUCTION_ALREADY_BID or
-           msg == ERR_AUCTION_BID_INCREMENT or
-           msg == ERR_AUCTION_BID_OWN or
-           msg == ERR_AUCTION_DATABASE_ERROR or
-           msg == ERR_AUCTION_HIGHER_BID or
-           msg == ERR_AUCTION_HOUSE_DISABLED or
-           msg == ERR_AUCTION_MIN_BID
-    then
-        Auctipus.dbg("Bid rejected: "..msg)
-        self:BidRejected()
-    end
-end
-
-function ASearcher:PlaceAuctionBid(copper)
+function ASearcher:_PlaceAuctionBid(copper)
     -- Places a bid on the currently-found auction.
     local selectedItem = self.apage:GetSelectedItem()
     Auctipus.info("Selected auction item: "..selectedItem)
@@ -272,43 +189,195 @@ function ASearcher:PlaceAuctionBid(copper)
     PlaceAuctionBid("list", selectedItem, copper)
 end
 
+function ASearcher:CheckBuyoutState()
+    if self.state == STATE_WAIT_BUYOUT_RESULT then
+        if self.gotBidAcceptedMsg and self.gotAuctionWonMsg and
+           self.gotPageShrank and self.apage:GetSelectedItem() == 0
+        then
+            buyoutSearcher = nil
+            self:_TRANSITION(STATE_INITIAL_OPENED)
+            self:NotifyAuctionWon()
+        end
+    elseif self.state == STATE_WAIT_BUYOUT_RESULT_CLOSED then
+        if self.gotBidAccepted and self.gotAuctionWonMsg then
+            buyoutSearcher = nil
+            self:_TRANSITION(STATE_INITIAL)
+            self:NotifyAuctionWon()
+        end
+    else
+        error("Unexpected CheckBuyoutState in "..self.state)
+    end
+end
+
+function ASearcher:FindAuction(auction, handler)
+    assert(auction.name == self.query.text)
+
+    if self.state == STATE_WAIT_BUYOUT_RESULT or
+       self.state == STATE_WAIT_BUYOUT_RESULT_CLOSED
+    then
+        error("FindAuction illegal in "..self.state)
+    end
+
+    if self.state == STATE_WAIT_PAGE_STABLE then
+        self.apage:ClosePage()
+    elseif self.state == STATE_WAIT_SELECTED then
+        self.apage:SelectItem(0)
+    end
+
+    self.targetAuction = auction
+    self.handler       = handler
+    self.searchQueue   = {}
+    self.searchedPages:Clear()
+    if auction.buyoutIndex ~= nil then
+        self:PushPage(floor((auction.buyoutIndex - 1) / 50))
+    else
+        self:PushPage(0)
+    end
+
+    self:LoadNextPage()
+end
+
+function ASearcher:CancelFind()
+    error("CancelFind not supported yet!")
+end
+
+function ASearcher:PageUpdated(p, delta)
+    assert(p == self.apage)
+
+    if self.state == STATE_INITIAL or
+       self.state == STATE_WAIT_SELECTED or
+       self.state == STATE_WAIT_BUYOUT_RESULT_CLOSED or
+       self.state == STATE_INITIAL_OPENED
+    then
+        error("PageUpdated not expected in "..self.state)
+    end
+
+    if self.state == STATE_WAIT_PAGE_STABLE then
+        assert(delta >= 0)
+        self:SearchPage()
+    elseif self.state == STATE_WAIT_BUYOUT_RESULT then
+        assert(delta <= 0)
+        if delta < 0 then
+            self.gotPageShrank = true
+            self:CheckBuyoutState()
+        end
+    end
+end
+
+function ASearcher:PageClosed(p, forced)
+    assert(p == self.apage)
+    self.apage = nil
+
+    if forced == false then
+        return
+    end
+
+    if self.state == STATE_INITIAL or
+       self.state == STATE_WAIT_BUYOUT_RESULT_CLOSED
+    then
+        error("PageForceClosed not expected in "..self.state)
+    end
+
+    if self.state == STATE_WAIT_PAGE_STABLE or
+       self.state == STATE_WAIT_SELECTED
+    then
+        self:_TRANSITION(STATE_INITIAL)
+        self:NotifySearchAborted()
+    elseif self.state == STATE_WAIT_BUYOUT_RESULT then
+        self:_TRANSITION(STATE_WAIT_BUYOUT_RESULT_CLOSED)
+        self:CheckBuyoutState()
+    elseif self.state == STATE_INITIAL_OPENED then
+        self:_TRANSITION(STATE_INITIAL)
+    end
+end
+
 function ASearcher:BuyoutAuction(buyoutHandler)
+    if self.state == STATE_INITIAL or
+       self.state == STATE_WAIT_PAGE_STABLE or
+       self.state == STATE_WAIT_BUYOUT_RESULT or
+       self.state == STATE_WAIT_BUYOUT_RESULT_CLOSED or
+       self.state == STATE_WAIT_INITIAL_OPENED
+    then
+        error("BuyoutAuction not expected in "..self.state)
+    end
+
+    assert(self.state == STATE_WAIT_SELECTED)
+    assert(not buyoutSearcher)
+
     Auctipus.dbg("***** BUYING INDEX "..self.apage:GetSelectedItem().." *****")
-    buyoutSearcher      = self
-    self.buyoutHandler  = buyoutHandler
-    self.gotBidAccepted = false
-    self.gotPageShrank  = false
-    self:PlaceAuctionBid(self.targetAuction.buyoutPrice)
+    buyoutSearcher         = self
+    self.buyoutHandler     = buyoutHandler
+    self.gotBidAcceptedMsg = false
+    self.gotAuctionWonMsg  = false
+    self.gotPageShrank     = false
+    self:_TRANSITION(STATE_WAIT_BUYOUT_RESULT)
+    self:_PlaceAuctionBid(self.targetAuction.buyoutPrice)
 end
 
-function ASearcher:BidAccepted()
-    assert(self == buyoutSearcher)
-    self.gotBidAccepted = true
+function ASearcher.CHAT_MSG_SYSTEM(msg)
+    local self = buyoutSearcher
+    if not self then
+        return
+    end
+
+    assert(self.state == STATE_WAIT_BUYOUT_RESULT or
+           self.state == STATE_WAIT_BUYOUT_RESULT_CLOSED)
+
+    if msg == ERR_AUCTION_BID_PLACED then
+        self.gotBidAcceptedMsg = true
+        self:CheckBuyoutState()
+    elseif msg == self.ERR_AUCTION_WON then
+        self.gotAuctionWonMsg = true
+        self:CheckBuyoutState()
+    elseif msg == ERR_AUCTION_ALREADY_BID or
+           msg == ERR_AUCTION_BID_INCREMENT or
+           msg == ERR_AUCTION_BID_OWN or
+           msg == ERR_AUCTION_DATABASE_ERROR or
+           msg == ERR_AUCTION_HIGHER_BID or
+           msg == ERR_AUCTION_HOUSE_DISABLED or
+           msg == ERR_AUCTION_MIN_BID
+    then
+        buyoutSearcher = nil
+        if self.state == STATE_WAIT_BUYOUT_RESULT then
+            self.apage:ClosePage()
+        end
+
+        self:_TRANSITION(STATE_INITIAL)
+        self:NotifyAuctionLost()
+    end
 end
 
-function ASearcher:BidRejected()
-    assert(self == buyoutSearcher)
-    self:AuctionLost()
+function ASearcher:NotifySearchPending()
+    if self.handler then
+        self.handler:SearchPending(self)
+    end
 end
 
-function ASearcher:PageShrank()
-    assert(self == buyoutSearcher)
-    self.gotPageShrank = true
+function ASearcher:NotifySearchSucceeded(index)
+    if self.handler then
+        self.handler:SearchSucceeded(self, self.apage.page, index)
+    end
 end
 
-function ASearcher:AuctionWon()
-    Auctipus.info("Selected auction item: "..self.apage:GetSelectedItem())
-    assert(self == buyoutSearcher)
-    assert(self.apage:GetSelectedItem() == 0)
-    buyoutSearcher = nil
+function ASearcher:NotifySearchFailed()
+    if self.handler then
+        self.handler:SearchFailed(self)
+    end
+end
+
+function ASearcher:NotifySearchAborted()
+    if self.handler then
+        self.handler:SearchAborted(self)
+    end
+end
+
+function ASearcher:NotifyAuctionWon()
     if self.buyoutHandler then
         self.buyoutHandler:AuctionWon(self)
     end
 end
 
-function ASearcher:AuctionLost()
-    assert(self == buyoutSearcher)
-    buyoutSearcher = nil
+function ASearcher:NotifyAuctionLost()
     if self.buyoutHandler then
         self.buyoutHandler:AuctionLost(self)
     end
