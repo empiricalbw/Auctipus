@@ -4,7 +4,7 @@
 ## Author: Empirical
 ## DefaultState: enabled
 ## Dependencies: TGEventManager TGLog
-## SavedVariables: AUCTIPUS_ITEM_HISTORY_DB
+## SavedVariables: AUCTIPUS_ITEM_HISTORY_DB, AUCTIPUS_ITEM_HISTORY_DB_VERSION
 
 BetterMoneyFrame.xml
 AuctipusItemButton.xml

@@ -1,13 +1,16 @@
 AHistory = {}
 AHistory.__index = AHistory
 
+-- Saved variables.
 AUCTIPUS_ITEM_HISTORY_DB = {}
-AUCTIPUS_ITEM_HISTORY = nil
+AUCTIPUS_ITEM_HISTORY_DB_VERSION = 0
 
+local AUCTIPUS_ITEM_HISTORY = nil
 local LOCAL_DB = {}
 
 function AHistory.ProcessSavedVars()
     Auctipus.info("Processing saved variables...")
+    AHistory:UpdateDB()
     local rf = GetRealmName()..":"..UnitFactionGroup("player")
     local ih = AUCTIPUS_ITEM_HISTORY_DB[rf] or {}
     AUCTIPUS_ITEM_HISTORY = ih
@@ -49,11 +52,58 @@ function AHistory:ScanComplete(scan)
 
     self:ProcessDB()
 
-    Auctipus.info("Full scan complete.")
+    Auctipus.dbg("Full scan complete.")
 end
 
 function AHistory:ScanAborted(scan)
     Auctipus.info("Scan aborted.")
+end
+
+function AHistory:UpdateDB()
+    local versionStr, buildStr, dateStr, tocVersion = GetBuildInfo()
+
+    if AUCTIPUS_ITEM_HISTORY_DB_VERSION < 20502 and tocVersion >= 20502 then
+        AHistory:Update0To20502()
+    end
+end
+
+function AHistory:Update0To20502()
+    -- In 2.5.2, an extra field was added to the end of item links.  Prior to
+    -- 2.5.2 there would be 17 attributes in an item link.  Scan for old link
+    -- formats in the database.
+    assert(AUCTIPUS_ITEM_HISTORY_DB_VERSION < 20502)
+    for realm, realmHistory in pairs(AUCTIPUS_ITEM_HISTORY_DB) do
+        local oldLinks = {}
+        for link, history in pairs(realmHistory) do
+            if ALink.CountAttrs(link) == 17 then
+                table.insert(oldLinks, link)
+            end
+        end
+
+        -- Update the old links to new links and concatenate them into the
+        -- database.
+        for _, link in ipairs(oldLinks) do
+            local newLink = ALink.UpdateLink(link)
+            assert(ALink.CountAttrs(newLink) == 18)
+
+            local oldData = realmHistory[link]
+            local newData = realmHistory[newLink] or {}
+
+            if #newData > 0 then
+                assert(newData[1][1] > oldData[#oldData][1])
+            end
+
+            for i=1, #newData do
+                oldData[#oldData] = newData[i]
+            end
+
+            realmHistory[newLink] = oldData
+            realmHistory[link]    = nil
+        end
+    end
+
+    AUCTIPUS_ITEM_HISTORY_DB_VERSION = 20502
+    Auctipus.info("Updated database to 2.5.2.")
 end
 
 function AHistory:ProcessDB()

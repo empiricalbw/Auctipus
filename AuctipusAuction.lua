@@ -1,19 +1,6 @@
 AAuction = {}
 AAuction.__index = AAuction
 
-local function SaneLink(l)
-    -- Remove the uniqueID, linkLevel and specializationID fields from the link
-    -- since they contain no information usable by the client but can vary for
-    -- items that otherwise seem identical.  An example is "Dreadhawk's
-    -- Schynbald of the Hunt" which has different uniqueIDs.
-    if not l then
-        return nil
-    end
-    return l:gsub(
-        "(|Hitem:[^:]+:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*):[^:]*:%d+:%d*",
-        "%1::70:")
-end
-
 local function GoldString(c)
     local cost = ""
     if c >=10000 then
@@ -54,7 +41,8 @@ function AAuction:FromGetAuctionItemInfo(index, list)
                 saleStatus      = saleStatus,
                 itemId          = itemId,
                 hasAllInfo      = hasAllInfo,
-                link            = SaneLink(GetAuctionItemLink(list, index)),
+                link            = ALink.SaneLink(GetAuctionItemLink(list,
+                                                                    index)),
                 duration        = GetAuctionItemTimeLeft(list, index),
                 pageIndex       = index,
                 missing         = false,

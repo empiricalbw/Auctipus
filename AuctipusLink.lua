@@ -1,19 +1,6 @@
 ALink = {}
 ALink.__index = AAuction
 
-local function SaneLink(l)
-    -- Remove the uniqueID, linkLevel and specializationID fields from the link
-    -- since they contain no information usable by the client but can vary for
-    -- items that otherwise seem identical.  An example is "Dreadhawk's
-    -- Schynbald of the Hunt" which has different uniqueIDs.
-    if not l then
-        return nil
-    end
-    return l:gsub(
-        "(|Hitem:[^:]+:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*):[^:]*:%d+:%d*",
-        "%1::70:")
-end
-
 local function LinkColor(l)
     local _, _, a, r, g, b = l:find("|c(..)(..)(..)(..)|H")
     a = tonumber(a, 16)
@@ -37,7 +24,7 @@ end
 
 function ALink:New(l)
     local al = {
-        link    = SaneLink(l),
+        link    = ALink.SaneLink(l),
         color   = LinkColor(l),
         texture = LinkTexture(l),
         name    = LinkName(l),
@@ -49,3 +36,31 @@ function ALink:New(l)
     return al
 end
 
+function ALink.SaneLink(l)
+    -- Remove the uniqueID, linkLevel and specializationID fields from the link
+    -- since they contain no information usable by the client but can vary for
+    -- items that otherwise seem identical.  An example is "Dreadhawk's
+    -- Schynbald of the Hunt" which has different uniqueIDs.
+    if not l then
+        return nil
+    end
+    return l:gsub(
+        "(|Hitem:[^:]+:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*):[^:]*:%d+:%d*",
+        "%1::70:")
+end
+
+function ALink.CountAttrs(l)
+    -- Counts the number of colon-separated attributes in the hyperlink.
+    local attrs = l:match("|Hitem:(.*)|h.*|h|r")
+    return select(2, attrs:gsub(":", "")) + 1
+end
+
+function ALink.UpdateLink(l)
+    -- In 2.5.2, an extra field was added to item links.  Unknown what is in
+    -- this field, but we need to update old links to support it.
+    if ALink.CountAttrs(l) >= 18 then
+        return l
+    end
+
+    return l:gsub("|Hitem:(.*)|h(.*)|h|r", "|Hitem:%1:|h%2|h|r")
+end
