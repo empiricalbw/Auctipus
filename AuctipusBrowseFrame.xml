@@ -14,64 +14,45 @@
                     </Layer>
                 </Layers>
             </Frame>
-            <EditBox name="$parentSearchBox" parentKey="SearchBox" parentArray="EditBoxes" enableMouse="true" autoFocus="false" letters="63"
-             inherits="BackdropTemplate">
-                <KeyValues>
-                    <KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
-                    <KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
-                </KeyValues>
+            <EditBox name="$parentSearchBox" parentKey="SearchBox" parentArray="EditBoxes" autoFocus="false" letters="63" inherits="InputBoxTemplate">
                 <Size x="150" y="24"/>
                 <Anchors>
-                    <Anchor point="LEFT" relativeTo="$parentSearchBoxLabel" relativePoint="RIGHT"/>
+                    <Anchor point="LEFT" relativeTo="$parentSearchBoxLabel" relativePoint="RIGHT" x="5"/>
                 </Anchors>
-                <TextInsets left="5" right="0" top="0" bottom="0"/>
-                <FontString inherits="ChatFontNormal"/>
             </EditBox>
 
-            <EditBox name="$parentMinLvlBox" parentKey="MinLvlBox" parentArray="EditBoxes" enableMouse="true" autoFocus="false" letters="2" numeric="true"
-             inherits="BackdropTemplate">
-                <KeyValues>
-                    <KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
-                    <KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
-                </KeyValues>
-                <Size x="30" y="24"/>
+            <EditBox name="$parentMinLvlBox" parentKey="MinLvlBox" parentArray="EditBoxes" autoFocus="false" letters="2" numeric="true"
+             inherits="InputBoxTemplate">
+                <Size x="25" y="24"/>
                 <Anchors>
-                    <Anchor point="LEFT" relativeTo="$parentSearchBox" relativePoint="RIGHT" x="25"/>
+                    <Anchor point="LEFT" relativeTo="$parentSearchBox" relativePoint="RIGHT" x="30"/>
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
                         <FontString font="GameFontNormalSmall" justifyH="RIGHT" justifyV="MIDDLE" text="Lvl:">
                             <Anchors>
-                                <Anchor point="RIGHT" relativePoint="LEFT"/>
+                                <Anchor point="RIGHT" relativePoint="LEFT" x="-5"/>
                             </Anchors>
                         </FontString>
                     </Layer>
                 </Layers>
-                <TextInsets left="5" right="0" top="0" bottom="0"/>
-                <FontString inherits="ChatFontNormal"/>
             </EditBox>
 
-            <EditBox name="$parentMaxLvlBox" parentKey="MaxLvlBox" parentArray="EditBoxes" enableMouse="true" autoFocus="false" letters="2" numeric="true"
-             inherits="BackdropTemplate">
-                <KeyValues>
-                    <KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
-                    <KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
-                </KeyValues>
-                <Size x="30" y="24"/>
+            <EditBox name="$parentMaxLvlBox" parentKey="MaxLvlBox" parentArray="EditBoxes" autoFocus="false" letters="2" numeric="true"
+             inherits="InputBoxTemplate">
+                <Size x="25" y="24"/>
                 <Anchors>
-                    <Anchor point="LEFT" relativeTo="$parentMinLvlBox" relativePoint="RIGHT" x="7"/>
+                    <Anchor point="LEFT" relativeTo="$parentMinLvlBox" relativePoint="RIGHT" x="13"/>
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
                         <FontString font="GameFontNormalSmall" justifyH="CENTER" justifyV="MIDDLE" text="-">
                             <Anchors>
-                                <Anchor point="RIGHT" relativePoint="LEFT"/>
+                                <Anchor point="RIGHT" relativePoint="LEFT" x="-6"/>
                             </Anchors>
                         </FontString>
                     </Layer>
                 </Layers>
-                <TextInsets left="5" right="0" top="0" bottom="0"/>
-                <FontString inherits="ChatFontNormal"/>
             </EditBox>
 
             <Frame name="$parentRarityDropDown" parentKey="RarityDropDown" inherits="UIDropDownMenuTemplate">
