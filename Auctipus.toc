@@ -1,4 +1,4 @@
-## Interface: 20501
+## Interface: 20502
 ## Title: Auctipus
 ## Version: 0.9
 ## Author: Empirical
