@@ -211,8 +211,9 @@ function AuctipusBrowseFrame:ScanComplete(scan)
 
     local auctionsPerSecond = #scan.auctions / scan.elapsedTime
     Auctipus.info("Scan complete.  Found "..#scan.auctions..
-                  " total in "..scan.elapsedTime..
-                  " seconds ("..auctionsPerSecond.." auctions/second)")
+                  " total in "..string.format("%.2f", scan.elapsedTime)..
+                  " seconds ("..string.format("%.2f", auctionsPerSecond)..
+                  " auctions/second)")
     Auctipus.info("Found "..#scan.auctionGroups.." unique groups.")
 
     self.SearchButton:Enable()
