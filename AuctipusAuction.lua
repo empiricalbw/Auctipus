@@ -91,7 +91,11 @@ function AAuction.CompareByBuyout(l, r)
     end
 
     if l.owner ~= r.owner then
-        if l.owner < r.owner then
+        if not l.owner then
+            return -1
+        elseif not r.owner then
+            return 1
+        elseif l.owner < r.owner then
             return -1
         else
             return 1
@@ -126,7 +130,11 @@ function AAuction.CompareByUnitPrice(l, r)
     end
 
     if l.owner ~= r.owner then
-        if l.owner < r.owner then
+        if not l.owner then
+            return -1
+        elseif not r.owner then
+            return 1
+        elseif l.owner < r.owner then
             return -1
         else
             return 1

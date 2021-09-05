@@ -33,6 +33,8 @@ end
 function AScan:PageUpdated(p)
     assert(self.apage == p)
 
+    -- TODO: There can be auctions with nil owners if the auctions belong to
+    --       characters that have been deleted.
     if #self.apage.nilAuctions > 0 then
         return
     end

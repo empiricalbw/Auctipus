@@ -32,7 +32,14 @@ end
 function AHistory:ScanComplete(scan)
     local serverDay = self:GetServerDay()
 
-    for i, ag in ipairs(scan.auctionGroups) do
+    for _, ag in ipairs(scan.auctionGroups) do
+        --[[
+        for _, a in ipairs(ag.auctions) do
+            if not a.owner then
+                a:Print()
+            end
+        end
+        ]]
         if #ag.unitPriceAuctions == 0 then
             Auctipus.dbg("Item "..ag.link.." has no buyout.")
         else
@@ -52,7 +59,7 @@ function AHistory:ScanComplete(scan)
 
     self:ProcessDB()
 
-    Auctipus.dbg("Full scan complete.")
+    Auctipus.info("Full scan complete.")
 end
 
 function AHistory:ScanAborted(scan)
