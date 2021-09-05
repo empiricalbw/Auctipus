@@ -1,6 +1,6 @@
 ## Interface: 20502
 ## Title: Auctipus
-## Version: 0.9
+## Version: 2.5.2-v1
 ## Author: Empirical
 ## DefaultState: enabled
 ## Dependencies: TGEventManager TGLog
