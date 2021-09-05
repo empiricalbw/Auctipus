@@ -93,9 +93,17 @@ function AuctipusItemButton:OnEnter()
     if self.link then
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
         GameTooltip:SetHyperlink(self.link)
+        if IsModifiedClick("DRESSUP") then
+            ShowInspectCursor()
+        else
+            ResetCursor()
+        end
     elseif self.sellInfo then
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
         GameTooltip:SetAuctionSellItem()
+        ResetCursor()
+    else
+        ResetCursor()
     end
 end
 

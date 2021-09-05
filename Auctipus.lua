@@ -52,6 +52,7 @@ function Auctipus.ADDON_LOADED(addOnName)
     PanelTemplates_SetTab(AuctipusFrame, 4)
 
     -- Set scripts.
+    AuctipusFrame:SetScript("OnShow", Auctipus.OnShow)
     AuctipusFrame:SetScript("OnHide", Auctipus.OnHide)
     for i, tab in ipairs(AuctipusFrame.Tabs) do
         tab:SetScript("OnClick", function() Auctipus.SelectTab(i) end)
@@ -84,6 +85,11 @@ function Auctipus.AUCTION_HOUSE_CLOSED()
     PanelTemplates_DisableTab(AuctipusFrame, 2)
     PanelTemplates_DisableTab(AuctipusFrame, 3)
     PanelTemplates_SetTab(AuctipusFrame, 4)
+end
+
+function Auctipus.OnShow()
+    SetUpSideDressUpFrame(AuctipusFrame, 840, 1020, "TOPLEFT", "TOPRIGHT", -2,
+                          -28)
 end
 
 function Auctipus.OnHide()

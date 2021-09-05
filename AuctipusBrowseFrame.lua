@@ -235,6 +235,10 @@ function AuctipusBrowseFrame:ScanAborted(scan)
     self.SearchButton:Enable()
 end
 
+function AuctipusBrowseFrame:DressupAuctionGroup(auctionGroup)
+    DressUpItemLink(auctionGroup.link)
+end
+
 function AuctipusBrowseFrame:SelectAuctionGroup(auctionGroup)
     if self.selectedAuctionGroup then
         Auctipus.dbg("Resetting searcher...")
