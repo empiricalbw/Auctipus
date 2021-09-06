@@ -66,7 +66,7 @@
             </Button>
 
             <Frame name="$parentMaxPrice" parentKey="MaxPrice" inherits="BetterMoneyFrameFixedTemplate">
-                <Anchors><Anchor point="TOPRIGHT" y="-10" x="-16"/></Anchors>
+                <Anchors><Anchor point="TOPRIGHT" y="-10" x="-30"/></Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
                         <FontString name="$parentFont" inherits="GameFontNormalSmall" justifyH="RIGHT" justifyV="MIDDLE" text="Minimum buyout range:">
@@ -170,13 +170,24 @@
                     <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory28" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
 
                     <Frame name="$parentMinPrice" parentKey="MinPrice" inherits="BetterMoneyFrameNormalTemplate">
-                        <Anchors><Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMLEFT" x="0"/></Anchors>
+                        <Anchors><Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMLEFT" x="-0"/></Anchors>
                     </Frame>
                     <Frame name="$parentMaxPrice" parentKey="MaxPrice" inherits="BetterMoneyFrameNormalTemplate">
-                        <Anchors><Anchor point="TOPRIGHT" relativePoint="TOPLEFT" x="0"/></Anchors>
+                        <Anchors><Anchor point="TOPRIGHT" relativePoint="TOPLEFT" x="-0"/></Anchors>
                     </Frame>
                 </Frames>
             </Frame>
+
+            <Button name="$parentCloseButton" inherits="UIPanelCloseButton">
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="2" y="3"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        HideUIPanel(AuctipusFrame)
+                    </OnClick>
+                </Scripts>
+            </Button>
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad"/>

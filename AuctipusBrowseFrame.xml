@@ -102,8 +102,19 @@
             <Button name="$parentSearchButton" parentKey="SearchButton" inherits="UIPanelButtonTemplate" text="Search">
                 <Size x="100" y="23"/>
                 <Anchors>
-                    <Anchor point="LEFT" relativeKey="$parent.CanUseCheckButton" relativePoint="RIGHT" x="100"/>
+                    <Anchor point="LEFT" relativeKey="$parent.CanUseCheckButton" relativePoint="RIGHT" x="85"/>
                 </Anchors>
+            </Button>
+
+            <Button name="$parentCloseButton" inherits="UIPanelCloseButton">
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="2" y="3"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        HideUIPanel(AuctipusFrame)
+                    </OnClick>
+                </Scripts>
             </Button>
 
             <Button name="$parentAuctionGroup1" parentKey="AuctionGroup1" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRowTemplate"/>

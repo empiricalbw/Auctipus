@@ -48,6 +48,17 @@
                 </Anchors>
 			</Button>
 
+            <Button name="$parentCloseButton" inherits="UIPanelCloseButton">
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="2" y="3"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        HideUIPanel(AuctipusFrame)
+                    </OnClick>
+                </Scripts>
+            </Button>
+
             <Button name="$parentCancelButton" parentKey="CancelButton" inherits="UIPanelButtonTemplate" text="CANCEL_AUCTION">
                 <Size x="150" y="24"/>
                 <Anchors>

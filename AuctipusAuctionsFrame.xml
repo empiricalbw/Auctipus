@@ -254,6 +254,17 @@
                     <Anchor point="RIGHT" relativeTo="$parentAuctionBid1" x="-4"/>
                 </Anchors>
 			</Button>
+
+            <Button name="$parentCloseButton" inherits="UIPanelCloseButton">
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="2" y="3"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        HideUIPanel(AuctipusFrame)
+                    </OnClick>
+                </Scripts>
+            </Button>
         </Frames>
         <Layers>
             <Layer level="BACKGROUND">
