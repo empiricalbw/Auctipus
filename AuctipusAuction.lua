@@ -70,6 +70,10 @@ function AAuction:Print()
     Auctipus.info(self:ToString())
 end
 
+function AAuction:DbgPrint()
+    Auctipus.dbg(self:ToString())
+end
+
 function AAuction.CompareByBuyout(l, r)
     -- Compares two auctions based on their buyout price, item count and seller.
     -- Note that this doesn't compare things like the item name or item link;

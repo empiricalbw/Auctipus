@@ -59,7 +59,9 @@ function AHistory:ScanComplete(scan)
 
     self:ProcessDB()
 
-    Auctipus.info("Full scan complete.")
+    if scan.query.getAll then
+        Auctipus.info("Full scan complete.")
+    end
 end
 
 function AHistory:ScanAborted(scan)

@@ -125,7 +125,7 @@ function ASearcher:SearchPage()
         if ctf == -1 then
             Auctipus.dbg("Target auction comes before this page.")
             Auctipus.dbg("First auction:")
-            firstAuction:Print()
+            firstAuction:DbgPrint()
 
             if self.apage.page > 0 then
                 self:PushPage(self.apage.page - 1)
@@ -137,7 +137,7 @@ function ASearcher:SearchPage()
         if ctl == 1 then
             Auctipus.dbg("Target auction comes after this page.")
             Auctipus.dbg("Last auction:")
-            lastAuction:Print()
+            lastAuction:DbgPrint()
 
             self:PushPage(self.apage.page + 1)
         end
@@ -160,8 +160,8 @@ function ASearcher:SearchPage()
         for i, a in ipairs(self.apage.auctions) do
             if self.targetAuction:Matches(a) then
                 Auctipus.dbg("Found matching auction at index "..i.."!")
-                self.targetAuction:Print()
-                a:Print()
+                self.targetAuction:DbgPrint()
+                a:DbgPrint()
 
                 self.apage:SelectItem(i)
                 self.searchQueue = {}
