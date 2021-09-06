@@ -6,6 +6,7 @@ function AuctipusBrowseFrame:OnLoad()
     self.selectedAuctions     = ASet:New()
     self.purchasedAuctions    = ASet:New()
     self.scan                 = nil
+    self.auctionMenuRow       = nil
 
     -- Instantiate all the result rows.
     for i, row in ipairs(self.AuctionGroupRows) do
@@ -75,6 +76,19 @@ function AuctipusBrowseFrame:OnLoad()
             self.CategoryDropdown:Toggle()
         end)
     self.CategoriesFrame.Label:SetText("Categories")
+
+    -- Ignore dropdown.
+    local config2 = {
+        handler = self,
+        width   = 150,
+        rows    = 3,
+        items   = {"",
+                   "Ignore Seller",
+                   "Stop Ignoring Seller",
+                   }
+    }
+    self.AuctionRowDropDown = ADropDown:New(config2)
+    self.AuctionRowDropDown:SetItemTitle(1)
 
     -- Search button.
     self.SearchButton:SetScript("OnClick", function() self:DoSearch() end)
@@ -148,6 +162,49 @@ function AuctipusBrowseFrame:OnDropdownItemClick(index, selected)
             end
         end
     end
+end
+
+function AuctipusBrowseFrame:ShowAuctionMenu(auctionRow)
+    if self.auctionMenuRow == auctionRow then
+        self:HideAuctionMenu()
+        return
+    end
+
+    local seller  = auctionRow.auction.owner
+    local ignored = (AUCTIPUS_IGNORED_SELLERS[seller] ~= nil)
+    self.AuctionRowDropDown:SetItemText(1, seller)
+    self.AuctionRowDropDown:SetItemEnabled(2, not ignored)
+    self.AuctionRowDropDown:SetItemEnabled(3, ignored)
+    self.AuctionRowDropDown:Show({point         = "TOPLEFT",
+                                  relativeTo    = auctionRow,
+                                  relativePoint = "BOTTOMLEFT",
+                                  dx            = 10,
+                                  dy            = -5,
+                                  })
+    self.auctionMenuRow = auctionRow
+end
+
+function AuctipusBrowseFrame:HideAuctionMenu()
+    self.auctionMenuRow = nil
+    self.AuctionRowDropDown:Hide()
+end
+
+function AuctipusBrowseFrame:OnDropdownItemClick(index)
+    local seller = self.AuctionRowDropDown:GetItemText(1)
+    AUCTIPUS_IGNORED_SELLERS[seller] = (index == 2) or nil
+    self:HideAuctionMenu()
+
+    local removed = ASet:New()
+    for a, _ in pairs(self.selectedAuctions.elems) do
+        if a.owner == seller then
+            removed:Insert(a)
+        end
+    end
+    for a, _ in pairs(removed) do
+        self.selectedAuctions:Remove(a)
+    end
+
+    self:UpdateAuctions()
 end
 
 function AuctipusBrowseFrame:ClearScan()
@@ -302,6 +359,7 @@ function AuctipusBrowseFrame:SetAuctionSelection(auction)
 end
 
 function AuctipusBrowseFrame:ToggleAuctionSelection(auction)
+    self:HideAuctionMenu()
     local prevFirst = self.selectedAuctions:First()
     if self.selectedAuctions:Contains(auction) then
         self.selectedAuctions:Remove(auction)
@@ -341,12 +399,10 @@ function AuctipusBrowseFrame:UpdateAuctions()
             local auction = auctionGroup.unitPriceAuctions[index]
             row:SetAuction(auction)
 
-            if auction.missing then
-                row:SetAlpha(0.5)
-                row:Disable()
+            if auction.missing or AUCTIPUS_IGNORED_SELLERS[auction.owner] then
+                row:DisableRow()
             else
-                row:SetAlpha(1)
-                row:Enable()
+                row:EnableRow()
                 if self.selectedAuctions:Contains(auction) then
                     row:LockHighlight()
                 end

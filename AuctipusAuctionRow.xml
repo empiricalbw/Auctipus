@@ -68,6 +68,7 @@
                     <Anchor point="RIGHT" x="-6"/>
                 </Anchors>
             </Frame>
+            <Button parentKey="DisabledButton" setAllPoints="true" hidden="true"/>
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad"/>

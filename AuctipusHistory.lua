@@ -4,6 +4,8 @@ AHistory.__index = AHistory
 -- Saved variables.
 AUCTIPUS_ITEM_HISTORY_DB = {}
 AUCTIPUS_ITEM_HISTORY_DB_VERSION = 0
+AUCTIPUS_IGNORED_SELLERS_DB = {}
+AUCTIPUS_IGNORED_SELLERS = nil
 
 local AUCTIPUS_ITEM_HISTORY = nil
 local LOCAL_DB = {}
@@ -13,8 +15,11 @@ function AHistory.ProcessSavedVars()
     AHistory:UpdateDB()
     local rf = GetRealmName()..":"..UnitFactionGroup("player")
     local ih = AUCTIPUS_ITEM_HISTORY_DB[rf] or {}
+    local is = AUCTIPUS_IGNORED_SELLERS_DB[rf] or {}
     AUCTIPUS_ITEM_HISTORY = ih
     AUCTIPUS_ITEM_HISTORY_DB[rf] = ih
+    AUCTIPUS_IGNORED_SELLERS = is
+    AUCTIPUS_IGNORED_SELLERS_DB[rf] = is
     AHistory:ProcessDB()
     Auctipus.info("Saved variables processed.")
 end

@@ -4,7 +4,7 @@
 ## Author: Empirical
 ## DefaultState: enabled
 ## Dependencies:
-## SavedVariables: AUCTIPUS_ITEM_HISTORY_DB, AUCTIPUS_ITEM_HISTORY_DB_VERSION
+## SavedVariables: AUCTIPUS_ITEM_HISTORY_DB, AUCTIPUS_ITEM_HISTORY_DB_VERSION, AUCTIPUS_IGNORED_SELLERS_DB
 
 BetterMoneyFrame.xml
 AuctipusItemButton.xml
