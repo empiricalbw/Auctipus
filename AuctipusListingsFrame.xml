@@ -55,6 +55,17 @@
                 </Anchors>
             </Button>
         </Frames>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <FontString parentKey="StatusText" inherits="GameFontNormalSmall" justifyH="CENTER" justifyV="MIDDLE">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="45" y="-20"/>
+                        <Anchor point="BOTTOM" y="20"/>
+                        <Anchor point="RIGHT" relativeTo="$parentListing1" relativePoint="LEFT" x="-45"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
         <Scripts>
             <OnLoad method="OnLoad"/>
         </Scripts>

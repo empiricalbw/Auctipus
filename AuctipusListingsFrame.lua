@@ -30,6 +30,10 @@ function AuctipusListingsFrame:OnLoad()
     self.ListingsScrollFrame.ScrollBar.scrollStep = 1
     FauxScrollFrame_Update(self.ListingsScrollFrame, 0, #self.ListingRows, 1)
 
+    -- Status text.
+    self.StatusText:SetText("Note: Auctipus currently only displays the "..
+                            "first 50 auctions you have created.")
+
     self:UpdateControls()
 end
 
