@@ -56,7 +56,9 @@ function AuctipusBrowseFrame:OnLoad()
 
     -- Paths dropdown.
     local config = {
-        handler = self,
+        handler = function(index, selected)
+                    self:OnCategoryDropDownClick(index, selected)
+                  end,
         width   = 250,
         rows    = 45,
         anchor  = {point="TOPLEFT",
@@ -79,7 +81,9 @@ function AuctipusBrowseFrame:OnLoad()
 
     -- Ignore dropdown.
     local config2 = {
-        handler = self,
+        handler = function(index)
+                    self:OnAuctionRowDropDownClick(index)
+                  end,
         width   = 150,
         rows    = 3,
         items   = {"",
@@ -143,7 +147,7 @@ function AuctipusBrowseFrame:HandleRarityClick(info)
     UIDropDownMenu_SetSelectedValue(self.RarityDropDown, info.value)
 end
 
-function AuctipusBrowseFrame:OnDropdownItemClick(index, selected)
+function AuctipusBrowseFrame:OnCategoryDropDownClick(index, selected)
     local classID, subClassID, invType = unpack(AUCTIPUS_PATHS[index])
     if subClassID then
         -- If a subclass is selected, then we can only allow selections that
@@ -189,7 +193,7 @@ function AuctipusBrowseFrame:HideAuctionMenu()
     self.AuctionRowDropDown:Hide()
 end
 
-function AuctipusBrowseFrame:OnDropdownItemClick(index)
+function AuctipusBrowseFrame:OnAuctionRowDropDownClick(index)
     local seller = self.AuctionRowDropDown:GetItemText(1)
     AUCTIPUS_IGNORED_SELLERS[seller] = (index == 2) or nil
     self:HideAuctionMenu()

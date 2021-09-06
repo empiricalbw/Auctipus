@@ -105,7 +105,7 @@ end
 function ADropDown:OnItemClick(index)
     local f = self.items[index]
     if self.handler then
-        self.handler:OnDropdownItemClick(index, f.selected)
+        self.handler(index, f.selected)
     end
 end
 
