@@ -70,6 +70,7 @@ function Auctipus.AUCTION_HOUSE_SHOW()
     PanelTemplates_EnableTab(AuctipusFrame, 2)
     PanelTemplates_EnableTab(AuctipusFrame, 3)
     ShowUIPanel(AuctipusFrame)
+    PlaySound(SOUNDKIT.AUCTION_WINDOW_OPEN)
     Auctipus.SelectTab(1)
     Auctipus.DumpSortOrder()
 end
