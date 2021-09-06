@@ -33,6 +33,7 @@ function Auctipus.ADDON_LOADED(addOnName)
     end
 
     -- Saved variables.
+    AuctipusFrame.AuctionsFrame:ProcessSavedVars()
     AHistory.ProcessSavedVars()
 
     -- Slash.

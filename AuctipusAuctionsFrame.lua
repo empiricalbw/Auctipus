@@ -40,11 +40,19 @@
 --  ERR_AUCTION_WRAPPED_ITEM = "You cannot auction a wrapped item."
 AuctipusAuctionsFrame = {}
 
+AUCTIPUS_CREATE_DEFAULTS = {
+    perUnit = true,
+}
+
 local AUCTION_DURATION_STRINGS = {
     AUCTION_DURATION_ONE,
     AUCTION_DURATION_TWO,
     AUCTION_DURATION_THREE,
 }
+
+function AuctipusAuctionsFrame:ProcessSavedVars()
+    self.PerUnitCheck:SetChecked(AUCTIPUS_CREATE_DEFAULTS.perUnit)
+end
 
 function AuctipusAuctionsFrame:OnLoad()
     -- Vars.
@@ -54,7 +62,6 @@ function AuctipusAuctionsFrame:OnLoad()
     self.BidPrice.Text:SetText("Starting Price Per Unit")
     self.BuyoutPrice.Text:SetText("Buyout Price Per Unit |cff808080("..
                                   OPTIONAL..")|r")
-    self.PerUnitCheck:SetChecked(true)
 
     -- Scripts
     self:SetScript("OnShow", function() self:SetAuctionsTabShowing(true) end)
@@ -465,6 +472,7 @@ end
 function AuctipusAuctionsFrame:TogglePerUnitCheck()
     PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
     local perUnit = self.PerUnitCheck:GetChecked()
+    AUCTIPUS_CREATE_DEFAULTS.perUnit = perUnit
     if perUnit then
         local stackBidPrice    = self:GetBidPrice()
         local stackBuyoutPrice = self:GetBuyoutPrice()
