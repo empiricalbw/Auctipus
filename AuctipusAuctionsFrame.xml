@@ -106,7 +106,7 @@
 
             <CheckButton parentKey="DurationButton1" parentArray="DurationButtons" inherits="UIRadioButtonTemplate" id="1">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="$parentDecrementStackCountButton" relativePoint="BOTTOMLEFT" y="-24"/>
+                    <Anchor point="TOPLEFT" relativeTo="$parentIncrementStackSizeButton" relativePoint="TOPRIGHT" x="30" y="0"/>
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
@@ -132,7 +132,7 @@
 
             <Frame name="$parentBidPrice" parentKey="BidPrice" inherits="MoneyInputFrameTemplate">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.DurationButton3" relativePoint="BOTTOMLEFT" y="-24"/>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.DecrementStackCountButton" relativePoint="BOTTOMLEFT" y="-24"/>
                 </Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
