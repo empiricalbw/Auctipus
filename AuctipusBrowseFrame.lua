@@ -137,6 +137,7 @@ end
 function AuctipusBrowseFrame.AUCTION_HOUSE_CLOSED()
     local self = AuctipusFrame.BrowseFrame
     self:ClearSearch()
+    self.CategoryDropdown:ClearSelection()
 end
 
 function AuctipusBrowseFrame:OnHide()

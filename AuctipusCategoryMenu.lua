@@ -30,6 +30,12 @@ function ACategoryMenu:GetSelection()
     return self.selection.orderedElems
 end
 
+function ACategoryMenu:ClearSelection()
+    while not self.selection:Empty() do
+        self:OnItemClick(self.selection:First())
+    end
+end
+
 function ACategoryMenu:DisableItem(index)
     local f        = self.items[index]
     f.disableCount = f.disableCount + 1
