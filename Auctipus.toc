@@ -46,6 +46,7 @@ AuctipusAuctionsFrame.lua
 AuctipusListingsFrame.lua
 AuctipusHistoryFrame.lua
 AuctipusDropDown.lua
+AuctipusCategoryMenu.lua
 Auctipus.lua
 
 Auctipus.xml

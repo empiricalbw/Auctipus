@@ -15,40 +15,49 @@ AUCTIPUS_DROPDOWN_BACKDROP_INFO = {
 
 local ADD_INDEX = 1
 
-function ADropDown:New(config)
+function ADropDown:_New()
     local dd = {}
     setmetatable(dd, self)
+    return dd
+end
 
+function ADropDown:New(config)
+    local dd = self:_New()
+    dd:Init(config)
+    return dd
+end
+
+function ADropDown:Init(config)
     local name = "ADropDownFrame"..ADD_INDEX
     ADD_INDEX  = ADD_INDEX + 1
 
-    dd.frame = CreateFrame("Frame", name, UIParent,
+    self.frame = CreateFrame("Frame", name, UIParent,
                            "AuctipusDropDownListTemplate")
-    dd.frame:SetWidth(12)
-    dd.frame:SetHeight(20)
-    dd.frame:SetPoint(config.anchor.point,
+    self.frame:SetWidth(12)
+    self.frame:SetHeight(20)
+    self.frame:SetPoint(config.anchor.point,
                       config.anchor.relativeTo,
                       config.anchor.relativePoint,
                       config.anchor.dx,
                       config.anchor.dy)
-    dd.frame:Hide()
+    self.frame:Hide()
 
     local y       = -10
     local x       = 12
     local remRows = config.rows
-    dd.items = {}
+    self.items = {}
     for i, item in ipairs(config.items) do
-        local f = CreateFrame("Button", nil, dd.frame,
+        local f = CreateFrame("Button", nil, self.frame,
                               "AuctipusDropDownItemTemplate")
         f:SetPoint("TOPLEFT", x, y)
-        f:SetPoint("TOPRIGHT", dd.frame, "TOPLEFT", x + config.width - 12, y)
+        f:SetPoint("TOPRIGHT", self.frame, "TOPLEFT", x + config.width - 12, y)
         f:SetText(item)
         f.Check:Hide()
-        f.UnCheck:Show()
-        f:SetScript("OnClick", function() dd:OnItemClick(i) end)
+        f.UnCheck:Hide()
+        f:SetScript("OnClick", function() self:OnItemClick(i) end)
         y = y - f:GetHeight()
 
-        table.insert(dd.items, f)
+        table.insert(self.items, f)
 
         remRows = remRows - 1
         if remRows == 0 then
@@ -58,20 +67,17 @@ function ADropDown:New(config)
         end
 
         f.selected     = false
-        f.disableCount = 0
     end
 
     local nrows = min(#config.items, config.rows)
     local ncols = ceil(#config.items / config.rows)
-    dd.frame:SetHeight(dd.frame:GetHeight() + dd.items[1]:GetHeight()*nrows)
-    dd.frame:SetWidth(dd.frame:GetWidth() + config.width*ncols)
+    self.frame:SetHeight(self.frame:GetHeight() +
+                         self.items[1]:GetHeight()*nrows)
+    self.frame:SetWidth(self.frame:GetWidth() + config.width*ncols)
 
-    dd.selection = ASet:New()
-    dd.handler   = config.handler
+    self.handler   = config.handler
 
     table.insert(UIMenus, name)
-
-    return dd
 end
 
 function ADropDown:Show()
@@ -88,21 +94,9 @@ end
 
 function ADropDown:OnItemClick(index)
     local f = self.items[index]
-    f.selected = not f.selected
-    f.Check:SetShown(f.selected)
-    f.UnCheck:SetShown(not f.selected)
-    if f.selected then
-        self.selection:Insert(index)
-    else
-        self.selection:Remove(index)
-    end
     if self.handler then
         self.handler:OnDropdownItemClick(index, f.selected)
     end
-end
-
-function ADropDown:GetSelection()
-    return self.selection.orderedElems
 end
 
 function ADropDown:SetItemEnabled(index, enabled)
@@ -114,15 +108,9 @@ function ADropDown:SetItemEnabled(index, enabled)
 end
 
 function ADropDown:DisableItem(index)
-    local f        = self.items[index]
-    f.disableCount = f.disableCount + 1
-    f:Disable()
+    self.items[index]:Disable()
 end
 
 function ADropDown:EnableItem(index)
-    local f        = self.items[index]
-    f.disableCount = max(f.disableCount - 1, 0)
-    if f.disableCount == 0 then
-        f:Enable()
-    end
+    self.items[index]:Enable()
 end

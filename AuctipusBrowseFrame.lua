@@ -69,7 +69,7 @@ function AuctipusBrowseFrame:OnLoad()
     for i, p in ipairs(AuctipusGenPaths()) do
         table.insert(config.items, p.name)
     end
-    self.CategoryDropdown = ADropDown:New(config)
+    self.CategoryDropdown = ACategoryMenu:New(config)
     self.CategoriesFrame.Button:SetScript("OnClick",
         function()
             self.CategoryDropdown:Toggle()
