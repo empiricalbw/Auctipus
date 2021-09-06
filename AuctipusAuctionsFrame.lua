@@ -38,9 +38,7 @@
 --  ERR_AUCTION_STARTED = "Auction created."
 --  ERR_AUCTION_USED_CHARGES = "You cannot auction an item with used charges"
 --  ERR_AUCTION_WRAPPED_ITEM = "You cannot auction a wrapped item."
-AuctipusAuctionsFrame = CreateFrame("Frame", nil, nil,
-                                    "AuctipusAuctionsFrameMetaTemplate")
-AuctipusAuctionsFrame.__index = AuctipusAuctionsFrame
+AuctipusAuctionsFrame = {}
 
 local AUCTION_DURATION_STRINGS = {
     AUCTION_DURATION_ONE,
@@ -49,8 +47,6 @@ local AUCTION_DURATION_STRINGS = {
 }
 
 function AuctipusAuctionsFrame:OnLoad()
-    setmetatable(self, AuctipusAuctionsFrame)
-
     -- Vars.
     self:ResetVars()
 

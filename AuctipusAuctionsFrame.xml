@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
-    <Frame name="AuctipusAuctionsFrameTemplate" enableMouse="true" virtual="true">
+    <Frame name="AuctipusAuctionsFrameTemplate" enableMouse="true" virtual="true" mixin="AuctipusAuctionsFrame">
         <Size x="832" y="440"/>
         <Frames>
             <Button parentKey="ItemButton" inherits="AuctipusItemButtonTemplate">
@@ -266,15 +266,7 @@
             </Layer>
         </Layers>
         <Scripts>
-            <OnLoad>
-                AuctipusAuctionsFrame.OnLoad(self)
-            </OnLoad>
-        </Scripts>
-    </Frame>
-
-    <Frame name="AuctipusAuctionsFrameMetaTemplate" inherits="AuctipusAuctionsFrameTemplate" virtual="true">
-        <Scripts>
-            <OnLoad/>
+            <OnLoad method="OnLoad"/>
         </Scripts>
     </Frame>
 </Ui>

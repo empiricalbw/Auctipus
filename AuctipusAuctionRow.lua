@@ -1,9 +1,6 @@
-AuctipusAuctionRow = CreateFrame("Button", nil, nil,
-                                 "AuctipusAuctionRowMetaTemplate")
-AuctipusAuctionRow.__index = AuctipusAuctionRow
+AuctipusAuctionRow = {}
 
 function AuctipusAuctionRow:OnLoad()
-    setmetatable(self, AuctipusAuctionRow)
     self:SetScript("OnClick", function(frame, button) self:OnClick(button) end)
     self.auction = nil
 end

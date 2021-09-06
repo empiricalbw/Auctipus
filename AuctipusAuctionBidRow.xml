@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
-    <Button name="AuctipusAuctionBidRowTemplate" virtual="true">
+    <Button name="AuctipusAuctionBidRowTemplate" virtual="true" mixin="AuctipusAuctionBidRow">
         <Size x="396" y="30"/>
         <Layers>
             <Layer level="BACKGROUND">
@@ -83,9 +83,7 @@
             </Frame>
         </Frames>
         <Scripts>
-            <OnLoad>
-                AuctipusAuctionBidRow.OnLoad(self)
-            </OnLoad>
+            <OnLoad method="OnLoad"/>
         </Scripts>
         <HighlightTexture name="$parentHighlight" file="Interface\HelpFrame\HelpFrameButton-Highlight" alphaMode="ADD">
             <Anchors>
@@ -94,11 +92,5 @@
             </Anchors>
             <TexCoords left="0" right="1.0" top="0" bottom="0.578125"/>
         </HighlightTexture>
-    </Button>
-
-    <Button name="AuctipusAuctionBidRowMetaTemplate" inherits="AuctipusAuctionBidRowTemplate" virtual="true">
-        <Scripts>
-            <OnLoad></OnLoad>
-        </Scripts>
     </Button>
 </Ui>

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
-    <Frame name="AuctipusListingsFrameTemplate" enableMouse="true" virtual="true">
+    <Frame name="AuctipusListingsFrameTemplate" enableMouse="true" virtual="true" mixin="AuctipusListingsFrame">
         <Size x="832" y="440"/>
         <Frames>
             <Button name="$parentListing1" parentKey="ListingRow1" parentArray="ListingRows" inherits="AuctipusListingsSellRowTemplate" id="1"/>
@@ -56,15 +56,7 @@
             </Button>
         </Frames>
         <Scripts>
-            <OnLoad>
-                AuctipusListingsFrame.OnLoad(self)
-            </OnLoad>
-        </Scripts>
-    </Frame>
-
-    <Frame name="AuctipusListingsFrameMetaTemplate" inherits="AuctipusListingsFrameTemplate" virtual="true">
-        <Scripts>
-            <OnLoad/>
+            <OnLoad method="OnLoad"/>
         </Scripts>
     </Frame>
 </Ui>

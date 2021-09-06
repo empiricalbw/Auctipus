@@ -1,9 +1,6 @@
-AuctipusAuctionBidRow = CreateFrame("Button", nil, nil,
-                                    "AuctipusAuctionBidRowMetaTemplate")
-AuctipusAuctionBidRow.__index = AuctipusAuctionBidRow
+AuctipusAuctionBidRow = {}
 
 function AuctipusAuctionBidRow:OnLoad()
-    setmetatable(self, AuctipusAuctionBidRow)
     self.auction = nil
 end
 

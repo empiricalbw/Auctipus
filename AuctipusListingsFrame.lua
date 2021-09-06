@@ -1,10 +1,6 @@
-AuctipusListingsFrame = CreateFrame("Frame", nil, nil,
-                                    "AuctipusListingsFrameMetaTemplate")
-AuctipusListingsFrame.__index = AuctipusListingsFrame
+AuctipusListingsFrame = {}
 
 function AuctipusListingsFrame:OnLoad()
-    setmetatable(self, AuctipusListingsFrame)
-
     -- Instantiate all the auction rows.
     for i, row in ipairs(self.ListingRows) do
         if i == 1 then

@@ -1,10 +1,6 @@
-AuctipusBrowseFrame = CreateFrame("Frame", nil, nil,
-                                  "AuctipusBrowseFrameMetaTemplate")
-AuctipusBrowseFrame.__index = AuctipusBrowseFrame
+AuctipusBrowseFrame = {}
 
 function AuctipusBrowseFrame:OnLoad()
-    setmetatable(self, AuctipusBrowseFrame)
-
     -- Variables.
     self.selectedAuctionGroup = nil
     self.selectedAuctions     = ASet:New()

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
-    <Frame name="AuctipusBrowseFrameTemplate" enableMouse="true" virtual="true">
+    <Frame name="AuctipusBrowseFrameTemplate" enableMouse="true" virtual="true" mixin="AuctipusBrowseFrame">
         <Size x="832" y="440"/>
         <Frames>
             <Frame name="$parentSearchBoxLabel" parentKey="SearchBoxLabel">
@@ -106,15 +106,15 @@
                 </Anchors>
             </Button>
 
-            <Button name="$parentAuctionGroup1" parentKey="AuctionGroup1" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRow"/>
-            <Button name="$parentAuctionGroup2" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRow"/>
-            <Button name="$parentAuctionGroup3" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRow"/>
-            <Button name="$parentAuctionGroup4" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRow"/>
-            <Button name="$parentAuctionGroup5" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRow"/>
-            <Button name="$parentAuctionGroup6" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRow"/>
-            <Button name="$parentAuctionGroup7" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRow"/>
-            <Button name="$parentAuctionGroup8" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRow"/>
-            <Button name="$parentAuctionGroup9" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRow"/>
+            <Button name="$parentAuctionGroup1" parentKey="AuctionGroup1" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRowTemplate"/>
+            <Button name="$parentAuctionGroup2" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRowTemplate"/>
+            <Button name="$parentAuctionGroup3" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRowTemplate"/>
+            <Button name="$parentAuctionGroup4" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRowTemplate"/>
+            <Button name="$parentAuctionGroup5" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRowTemplate"/>
+            <Button name="$parentAuctionGroup6" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRowTemplate"/>
+            <Button name="$parentAuctionGroup7" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRowTemplate"/>
+            <Button name="$parentAuctionGroup8" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRowTemplate"/>
+            <Button name="$parentAuctionGroup9" parentArray="AuctionGroupRows" inherits="AuctipusAuctionGroupRowTemplate"/>
             <ScrollFrame name="$parentAuctionGroupScrollFrame" parentKey="AuctionGroupScrollFrame" inherits="AuctipusScrollFrameTemplate">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="$parentAuctionGroup1" y="-5"/>
@@ -143,22 +143,22 @@
                 </Anchors>
 			</Button>
 
-            <Button name="$parentAuction1" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
-            <Button name="$parentAuction2" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
-            <Button name="$parentAuction3" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
-            <Button name="$parentAuction4" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
-            <Button name="$parentAuction5" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
-            <Button name="$parentAuction6" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
-            <Button name="$parentAuction7" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
-            <Button name="$parentAuction8" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
-            <Button name="$parentAuction9" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
-            <Button name="$parentAuction10" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
-            <Button name="$parentAuction11" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
-            <Button name="$parentAuction12" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
-            <Button name="$parentAuction13" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
-            <Button name="$parentAuction14" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
-            <Button name="$parentAuction15" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
-            <Button name="$parentAuction16" parentArray="AuctionRows" inherits="AuctipusAuctionRow"/>
+            <Button name="$parentAuction1" parentArray="AuctionRows" inherits="AuctipusAuctionRowTemplate"/>
+            <Button name="$parentAuction2" parentArray="AuctionRows" inherits="AuctipusAuctionRowTemplate"/>
+            <Button name="$parentAuction3" parentArray="AuctionRows" inherits="AuctipusAuctionRowTemplate"/>
+            <Button name="$parentAuction4" parentArray="AuctionRows" inherits="AuctipusAuctionRowTemplate"/>
+            <Button name="$parentAuction5" parentArray="AuctionRows" inherits="AuctipusAuctionRowTemplate"/>
+            <Button name="$parentAuction6" parentArray="AuctionRows" inherits="AuctipusAuctionRowTemplate"/>
+            <Button name="$parentAuction7" parentArray="AuctionRows" inherits="AuctipusAuctionRowTemplate"/>
+            <Button name="$parentAuction8" parentArray="AuctionRows" inherits="AuctipusAuctionRowTemplate"/>
+            <Button name="$parentAuction9" parentArray="AuctionRows" inherits="AuctipusAuctionRowTemplate"/>
+            <Button name="$parentAuction10" parentArray="AuctionRows" inherits="AuctipusAuctionRowTemplate"/>
+            <Button name="$parentAuction11" parentArray="AuctionRows" inherits="AuctipusAuctionRowTemplate"/>
+            <Button name="$parentAuction12" parentArray="AuctionRows" inherits="AuctipusAuctionRowTemplate"/>
+            <Button name="$parentAuction13" parentArray="AuctionRows" inherits="AuctipusAuctionRowTemplate"/>
+            <Button name="$parentAuction14" parentArray="AuctionRows" inherits="AuctipusAuctionRowTemplate"/>
+            <Button name="$parentAuction15" parentArray="AuctionRows" inherits="AuctipusAuctionRowTemplate"/>
+            <Button name="$parentAuction16" parentArray="AuctionRows" inherits="AuctipusAuctionRowTemplate"/>
             <ScrollFrame name="$parentAuctionScrollFrame" parentKey="AuctionScrollFrame" inherits="AuctipusScrollFrameTemplate">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="$parentAuction1" y="-5"/>
@@ -211,17 +211,8 @@
                 </FontString>
             </Layer>
         </Layers>
-
         <Scripts>
-            <OnLoad>
-                AuctipusBrowseFrame.OnLoad(self)
-            </OnLoad>
-        </Scripts>
-    </Frame>
-
-    <Frame name="AuctipusBrowseFrameMetaTemplate" inherits="AuctipusBrowseFrameTemplate" virtual="true">
-        <Scripts>
-            <OnLoad/>
+            <OnLoad method="OnLoad"/>
         </Scripts>
     </Frame>
 </Ui>
