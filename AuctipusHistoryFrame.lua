@@ -182,4 +182,4 @@ function AuctipusHistoryFrame:UpdateGraph()
     end
 end
 
-TGEventManager.Register(AuctipusHistoryFrame)
+AEventManager.Register(AuctipusHistoryFrame)

@@ -274,4 +274,4 @@ function APage:Dump()
     end
 end
 
-TGEventManager.Register(APage)
+AEventManager.Register(APage)

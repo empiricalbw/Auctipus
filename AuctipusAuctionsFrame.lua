@@ -451,4 +451,4 @@ function AuctipusAuctionsFrame:UpdateComparables()
     end
 end
 
-TGEventManager.Register(AuctipusAuctionsFrame)
+AEventManager.Register(AuctipusAuctionsFrame)

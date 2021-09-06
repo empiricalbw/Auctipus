@@ -396,4 +396,4 @@ function ASearcher:NotifyAuctionLost()
     end
 end
 
-TGEventManager.Register(ASearcher)
+AEventManager.Register(ASearcher)

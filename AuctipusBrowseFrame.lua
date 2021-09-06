@@ -473,4 +473,4 @@ function AuctipusBrowseFrame:AuctionLost(searcher)
     end
 end
 
-TGEventManager.Register(AuctipusBrowseFrame)
+AEventManager.Register(AuctipusBrowseFrame)

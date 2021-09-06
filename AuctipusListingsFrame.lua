@@ -102,4 +102,4 @@ function AuctipusListingsFrame:UpdateListings()
     end
 end
 
-TGEventManager.Register(AuctipusListingsFrame)
+AEventManager.Register(AuctipusListingsFrame)

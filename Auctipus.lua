@@ -1,5 +1,5 @@
 Auctipus = {
-    log       = TGLog:new(1, 2),
+    log       = ALog:new(1, 2),
 }
 
 UIPanelWindows["AuctipusFrame"] = {
@@ -145,4 +145,4 @@ function Auctipus.DumpSortOrder()
     end
 end
 
-TGEventManager.Register(Auctipus)
+AEventManager.Register(Auctipus)
