@@ -35,11 +35,13 @@ function ADropDown:Init(config)
                            "AuctipusDropDownListTemplate")
     self.frame:SetWidth(12)
     self.frame:SetHeight(20)
-    self.frame:SetPoint(config.anchor.point,
-                      config.anchor.relativeTo,
-                      config.anchor.relativePoint,
-                      config.anchor.dx,
-                      config.anchor.dy)
+    if config.anchor then
+        self.frame:SetPoint(config.anchor.point,
+                          config.anchor.relativeTo,
+                          config.anchor.relativePoint,
+                          config.anchor.dx,
+                          config.anchor.dy)
+    end
     self.frame:Hide()
 
     local y       = -10
@@ -75,12 +77,20 @@ function ADropDown:Init(config)
                          self.items[1]:GetHeight()*nrows)
     self.frame:SetWidth(self.frame:GetWidth() + config.width*ncols)
 
-    self.handler   = config.handler
+    self.handler = config.handler
 
     table.insert(UIMenus, name)
 end
 
-function ADropDown:Show()
+function ADropDown:Show(anchor)
+    if anchor then
+        self.frame:ClearAllPoints()
+        self.frame:SetPoint(anchor.point,
+                            anchor.relativeTo,
+                            anchor.relativePoint,
+                            anchor.dx,
+                            anchor.dy)
+    end
     self.frame:Show()
 end
 
@@ -97,6 +107,22 @@ function ADropDown:OnItemClick(index)
     if self.handler then
         self.handler:OnDropdownItemClick(index, f.selected)
     end
+end
+
+function ADropDown:SetItemTitle(index)
+    local f = self.items[index]
+    self:DisableItem(index)
+    f:SetDisabledFontObject(GameFontNormalSmall)
+end
+
+function ADropDown:SetItemText(index, text)
+    local f = self.items[index]
+    f:SetText(text)
+end
+
+function ADropDown:GetItemText(index)
+    local f = self.items[index]
+    return f:GetText()
 end
 
 function ADropDown:SetItemEnabled(index, enabled)
