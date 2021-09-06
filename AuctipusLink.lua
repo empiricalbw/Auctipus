@@ -1,5 +1,5 @@
 ALink = {}
-ALink.__index = AAuction
+ALink.__index = ALink
 
 local function LinkColor(l)
     local _, _, a, r, g, b = l:find("|c(..)(..)(..)(..)|H")
