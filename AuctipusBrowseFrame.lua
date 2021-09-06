@@ -4,6 +4,7 @@ function AuctipusBrowseFrame:OnLoad()
     -- Variables.
     self.selectedAuctionGroup = nil
     self.selectedAuctions     = ASet:New()
+    self.purchasedAuctions    = ASet:New()
     self.scan                 = nil
 
     -- Instantiate all the result rows.
@@ -109,6 +110,7 @@ function AuctipusBrowseFrame:OnLoad()
 
     -- Status text.
     self.StatusText:SetText("Submit a search query.")
+    self.SelectionInfo:Hide()
 
     -- Cleanup upon hiding.
     self:SetScript("OnHide", function() self:OnHide() end)
@@ -156,6 +158,7 @@ end
 
 function AuctipusBrowseFrame:ClearSearch()
     self.selectedAuctions:Clear()
+    self.purchasedAuctions:Clear()
     self.BuyButton:Disable()
     self:UpdateAuctionGroups()
     self:UpdateAuctions()
@@ -191,6 +194,7 @@ function AuctipusBrowseFrame:DoSearch()
 
     self.StatusText:SetText("Searching...")
     self.StatusText:Show()
+    self.SelectionInfo:Hide()
     self.scan = AScan:New({query}, self)
     self.SearchBox:ClearFocus()
     self.SearchButton:Disable()
@@ -251,18 +255,22 @@ function AuctipusBrowseFrame:UpdateAuctionGroups()
         if nauctionGroups > 0 then
             if #self.selectedAuctionGroup.unitPriceAuctions then
                 self.StatusText:Hide()
+                self.SelectionInfo:Show()
             else
                 self.StatusText:SetText("All results are bid-only auctions.")
                 self.StatusText:Show()
+                self.SelectionInfo:Hide()
             end
         else
             self.StatusText:SetText("No auctions found.")
             self.StatusText:Show()
+            self.SelectionInfo:Hide()
         end
     else
         nauctionGroups = 0
         self.StatusText:SetText("Enter a search query.")
         self.StatusText:Show()
+        self.SelectionInfo:Hide()
     end
 
     FauxScrollFrame_Update(self.AuctionGroupScrollFrame, nauctionGroups,
@@ -347,6 +355,51 @@ function AuctipusBrowseFrame:UpdateAuctions()
             row:SetAuction(nil)
         end
     end
+
+    local nselectedAuctions = 0
+    local selectedBuyout    = 0
+    for a, _ in pairs(self.selectedAuctions.elems) do
+        nselectedAuctions = nselectedAuctions + a.count
+        selectedBuyout    = selectedBuyout + a.buyoutPrice
+    end
+
+    local npurchasedAuctions = 0
+    local purchasedBuyout    = 0
+    for a, _ in pairs(self.purchasedAuctions.elems) do
+        npurchasedAuctions = npurchasedAuctions + a.count
+        purchasedBuyout    = purchasedBuyout + a.buyoutPrice
+    end
+
+    self.SelectionInfo.SelectedBuyoutCost:SetMoney(selectedBuyout)
+    self.SelectionInfo.SelectedCountFrame.Text:SetText(
+        "x "..nselectedAuctions.." =")
+    if nselectedAuctions > 0 then
+        self.SelectionInfo.SelectedUnitCost:SetMoney(
+            floor(selectedBuyout / nselectedAuctions))
+    else
+        self.SelectionInfo.SelectedUnitCost:SetMoney(0)
+    end
+
+    self.SelectionInfo.PurchasedBuyoutCost:SetMoney(purchasedBuyout)
+    self.SelectionInfo.PurchasedCountFrame.Text:SetText(
+        "x "..npurchasedAuctions.." =")
+    if npurchasedAuctions > 0 then
+        self.SelectionInfo.PurchasedUnitCost:SetMoney(
+            floor(purchasedBuyout / npurchasedAuctions))
+    else
+        self.SelectionInfo.PurchasedUnitCost:SetMoney(0)
+    end
+    --[[
+    self.SelectionInfo.PurchasedBuyoutCost:SetMoney(selectedBuyout)
+    self.SelectionInfo.PurchasedCountFrame.Text:SetText(
+        "x "..nselectedAuctions.." =")
+    if nselectedAuctions > 0 then
+        self.SelectionInfo.PurchasedUnitCost:SetMoney(
+            floor(selectedBuyout / nselectedAuctions))
+    else
+        self.SelectionInfo.PurchasedUnitCost:SetMoney(0)
+    end
+    ]]
 end
 
 function AuctipusBrowseFrame:SearchPending(search)
@@ -402,6 +455,7 @@ end
 
 function AuctipusBrowseFrame:AuctionWon(searcher)
     local auction = self.selectedAuctions:Pop()
+    self.purchasedAuctions:Insert(auction)
     auction.auctionGroup:RemoveItem(auction)
     self:UpdateAuctions()
 
