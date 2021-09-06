@@ -15,7 +15,7 @@ AUCTIPUS_PATHS = {
     {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Generic},
     {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Dagger},
     {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Thrown},
-    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Crowwbow},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Crossbow},
     {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Wand},
     {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Fishingpole},
 
