@@ -51,7 +51,10 @@ function AuctipusAuctionsFrame:OnLoad()
     self:ResetVars()
 
     -- Text.
-    self.BuyoutPrice.Text:SetText(BUYOUT_PRICE.." |cff808080("..OPTIONAL..")|r")
+    self.BidPrice.Text:SetText("Starting Price Per Unit")
+    self.BuyoutPrice.Text:SetText("Buyout Price Per Unit |cff808080("..
+                                  OPTIONAL..")|r")
+    self.PerUnitCheck:SetChecked(true)
 
     -- Scripts
     self:SetScript("OnShow", function() self:SetAuctionsTabShowing(true) end)
@@ -59,6 +62,8 @@ function AuctipusAuctionsFrame:OnLoad()
 
     -- Edit boxes.
     AuctipusLinkEditBoxes(self)
+    self.StackSizeBox:Disable()
+    self.StackCountBox:Disable()
 
     -- Duration buttons.
     self.selectedDuration = 1
@@ -100,18 +105,24 @@ function AuctipusAuctionsFrame:OnLoad()
         function(f, button) self:OnItemButtonDrag(button) end)
     self.ItemButton:SetScript("OnReceiveDrag",
         function(f, button) self:OnItemButtonClick(button) end)
+        --[[
     self.StackSizeBox:SetScript("OnTextChanged",
         function() self:OnStackSizeBoxChanged() end)
+        ]]
     self.DecrementStackSizeButton:SetScript("OnClick",
         function(f, button) self:DecrementStackSize() end)
     self.IncrementStackSizeButton:SetScript("OnClick",
         function(f, button) self:IncrementStackSize() end)
+    --[[
     self.StackCountBox:SetScript("OnTextChanged",
         function() self:OnStackCountBoxChanged() end)
+        ]]
     self.DecrementStackCountButton:SetScript("OnClick",
         function(f, button) self:DecrementStackCount() end)
     self.IncrementStackCountButton:SetScript("OnClick",
         function(f, button) self:IncrementStackCount() end)
+    self.PerUnitCheck:SetScript("OnClick",
+        function(f, button) self:TogglePerUnitCheck() end)
     MoneyInputFrame_SetOnValueChangedFunc(self.BidPrice,
         function() self:UpdateControls() end)
     MoneyInputFrame_SetOnValueChangedFunc(self.BuyoutPrice,
@@ -251,9 +262,11 @@ function AuctipusAuctionsFrame:UpdateControls()
         if self.DecrementStackSizeButton:IsEnabled() or
            self.IncrementStackSizeButton:IsEnabled()
         then
+            --[[
             self.StackSizeBox:Enable()
             self.StackSizeBox:SetBackdropColor(c.r, c.g, c.b, 1)
             self.StackSizeBox:SetBackdropBorderColor(1, 1, 1, 1)
+            ]]
         else
             self.StackSizeBox:Disable()
             self.StackSizeBox:SetBackdropColor(0, 0, 0, 0)
@@ -275,9 +288,11 @@ function AuctipusAuctionsFrame:UpdateControls()
         if self.IncrementStackCountButton:IsEnabled() or
            self.DecrementStackCountButton:IsEnabled()
         then
+            --[[
             self.StackCountBox:Enable()
             self.StackCountBox:SetBackdropColor(c.r, c.g, c.b, 1)
             self.StackCountBox:SetBackdropBorderColor(1, 1, 1, 1)
+            ]]
         else
             self.StackCountBox:Disable()
             self.StackCountBox:SetBackdropColor(0, 0, 0, 0)
@@ -332,9 +347,11 @@ function AuctipusAuctionsFrame:ValidateAuction()
     return true
 end
 
+--[[
 function AuctipusAuctionsFrame:OnStackSizeBoxChanged()
     local newCount = self.StackSizeBox:GetNumber() or 0
     if newCount > self.maxStackSize then
+        newCount = 
         self.StackSizeBox:SetText(self.maxStackSize)
         return
     end
@@ -347,10 +364,16 @@ function AuctipusAuctionsFrame:OnStackSizeBoxChanged()
     self.count = newCount
     self:UpdateControls()
 end
+]]
 
 function AuctipusAuctionsFrame:DecrementStackSize()
     if self.count > 1 then
         self.count = self.count - 1
+        if not self.PerUnitCheck:GetChecked() then
+            local ratio = self.count / (self.count + 1)
+            self:SetBidPrice(floor(self:GetBidPrice() * ratio))
+            self:SetBuyoutPrice(floor(self:GetBuyoutPrice() * ratio))
+        end
     end
     self:UpdateControls()
 end
@@ -363,9 +386,15 @@ function AuctipusAuctionsFrame:IncrementStackSize()
         return
     end
     self.count = self.count + 1
+    if not self.PerUnitCheck:GetChecked() then
+        local ratio = self.count / (self.count - 1)
+        self:SetBidPrice(floor(self:GetBidPrice() * ratio))
+        self:SetBuyoutPrice(floor(self:GetBuyoutPrice() * ratio))
+    end
     self:UpdateControls()
 end
 
+--[[
 function AuctipusAuctionsFrame:OnStackCountBoxChanged()
     local newStackCount = self.StackCountBox:GetNumber() or 0
     if self.count * newStackCount > self.invCount then
@@ -377,6 +406,7 @@ function AuctipusAuctionsFrame:OnStackCountBoxChanged()
     self.stackCount = newStackCount
     self:UpdateControls()
 end
+]]
 
 function AuctipusAuctionsFrame:DecrementStackCount()
     if self.stackCount > 1 then
@@ -394,8 +424,14 @@ function AuctipusAuctionsFrame:IncrementStackCount()
 end
 
 function AuctipusAuctionsFrame:PostAuction()
-    local bidPrice         = MoneyInputFrame_GetCopper(self.BidPrice)
-    local buyoutPrice      = MoneyInputFrame_GetCopper(self.BuyoutPrice)
+    local bidPrice    = MoneyInputFrame_GetCopper(self.BidPrice)
+    local buyoutPrice = MoneyInputFrame_GetCopper(self.BuyoutPrice)
+    local perUnit     = self.PerUnitCheck:GetChecked()
+    if perUnit then
+        bidPrice    = bidPrice * self.count
+        buyoutPrice = buyoutPrice * self.count
+    end
+
     self.waitForNilAuction = true
     PostAuction(bidPrice, buyoutPrice, self.selectedDuration, self.count,
                 self.stackCount)
@@ -410,12 +446,68 @@ function AuctipusAuctionsFrame:PageClosed(page, forced)
     assert(page == self.aopage)
 end
 
+function AuctipusAuctionsFrame:GetBidPrice()
+    return MoneyInputFrame_GetCopper(self.BidPrice)
+end
+
+function AuctipusAuctionsFrame:GetBuyoutPrice()
+    return MoneyInputFrame_GetCopper(self.BuyoutPrice)
+end
+
+function AuctipusAuctionsFrame:SetBidPrice(copper)
+    MoneyInputFrame_SetCopper(self.BidPrice, copper)
+end
+
+function AuctipusAuctionsFrame:SetBuyoutPrice(copper)
+    MoneyInputFrame_SetCopper(self.BuyoutPrice, copper)
+end
+
+function AuctipusAuctionsFrame:TogglePerUnitCheck()
+    PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+    local perUnit = self.PerUnitCheck:GetChecked()
+    if perUnit then
+        local stackBidPrice    = self:GetBidPrice()
+        local stackBuyoutPrice = self:GetBuyoutPrice()
+        self:SetBidPrice(floor(stackBidPrice / self.count))
+        self:SetBuyoutPrice(floor(stackBuyoutPrice / self.count))
+        self.BidPrice.Text:SetText("Starting Price Per Unit")
+        self.BuyoutPrice.Text:SetText("Buyout Price Per Unit |cff808080("..
+                                      OPTIONAL..")|r")
+    else
+        local unitBidPrice    = self:GetBidPrice()
+        local unitBuyoutPrice = self:GetBuyoutPrice()
+        self:SetBidPrice(unitBidPrice * self.count)
+        self:SetBuyoutPrice(unitBuyoutPrice * self.count)
+        self.BidPrice.Text:SetText("Starting Price Per Stack")
+        self.BuyoutPrice.Text:SetText("Buyout Price Per Stack |cff808080("..
+                                      OPTIONAL..")|r")
+    end
+end
+
 function AuctipusAuctionsFrame:UpdateComparables()
     local nauctions
     if self.aopage then
         if self.aopage.auctions then
             nauctions = #self.aopage.auctions
             if nauctions > 0 then
+                local lowAuction = self.aopage.auctions[1]
+                local perUnit    = self.PerUnitCheck:GetChecked()
+                if MoneyInputFrame_GetCopper(self.BidPrice) == 0 then
+                    if perUnit then
+                        self:SetBidPrice(floor(lowAuction.minUnitBid) - 1)
+                    else
+                        self:SetBidPrice(
+                            floor(lowAuction.minUnitBid * self.count) - 1)
+                    end
+                end
+                if MoneyInputFrame_GetCopper(self.BuyoutPrice) == 0 then
+                    if perUnit then
+                        self:SetBuyoutPrice(floor(lowAuction.unitPrice) - 1)
+                    else
+                        self:SetBuyoutPrice(
+                            floor(lowAuction.unitPrice * self.count) - 1)
+                    end
+                end
                 self.StatusText:Hide()
             else
                 self.StatusText:SetText("No auctions found.")

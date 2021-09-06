@@ -136,7 +136,7 @@
                 </Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
-						<FontString inherits="GameFontHighlightSmall" text="STARTING_PRICE">
+						<FontString parentKey="Text" inherits="GameFontHighlightSmall" text="STARTING_PRICE">
 							<Anchors>
 								<Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="-2" y="1"/>
 							</Anchors>
@@ -159,6 +159,22 @@
 					</Layer>
 				</Layers>
             </Frame>
+
+            <CheckButton parentKey="PerUnitCheck" inherits="UICheckButtonTemplate">
+                <Size x="24" y="24"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.DurationButton3" relativePoint="BOTTOMLEFT" x="-10" y="-4"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="GameFontNormalSmall" text="Pricing Per Unit">
+                            <Anchors>
+                                <Anchor point="LEFT" relativePoint="RIGHT" x="-2"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </CheckButton>
 
             <Frame parentKey="VendorPriceLabel">
                 <Size x="150" y="18"/>
@@ -240,14 +256,14 @@
                     <Anchor point="RIGHT" relativeKey="$parent.AuctionBidRow1.CountFrame" x="5"/>
                 </Anchors>
 			</Button>
-			<Button name="$parentUnitCostSort" parentKey="UnitCostSort" inherits="AuctipusSortButtonTemplate" text="Unit Cost">
+			<Button name="$parentUnitCostSort" parentKey="UnitCostSort" inherits="AuctipusSortButtonTemplate" text="Unit Bid  |  Unit Buyout">
                 <Size y="19"/>
                 <Anchors>
                     <Anchor point="BOTTOMLEFT" relativeTo="$parentSellerSort" relativePoint="BOTTOMRIGHT" x="-2"/>
                     <Anchor point="RIGHT" relativeTo="$parentCountSort" relativePoint="LEFT" x="2"/>
                 </Anchors>
 			</Button>
-			<Button name="$parentBuyoutSort" parentKey="BuyoutSort" inherits="AuctipusSortButtonTemplate" text="Buyout">
+			<Button name="$parentBuyoutSort" parentKey="BuyoutSort" inherits="AuctipusSortButtonTemplate" text="Bid  |  Buyout">
                 <Size y="19"/>
                 <Anchors>
                     <Anchor point="BOTTOMLEFT" relativeTo="$parentCountSort" relativePoint="BOTTOMRIGHT" x="-2"/>
