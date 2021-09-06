@@ -33,13 +33,13 @@ end
 function ACategoryMenu:DisableItem(index)
     local f        = self.items[index]
     f.disableCount = f.disableCount + 1
-    ADropDown.Disable(self, index)
+    ADropDown.DisableItem(self, index)
 end
 
 function ACategoryMenu:EnableItem(index)
     local f        = self.items[index]
     f.disableCount = max(f.disableCount - 1, 0)
     if f.disableCount == 0 then
-        ADropDown.Enable(self, index)
+        ADropDown.EnableItem(self, index)
     end
 end
