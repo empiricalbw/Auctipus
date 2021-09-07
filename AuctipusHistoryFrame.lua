@@ -19,6 +19,8 @@ function AuctipusHistoryFrame:OnLoad()
     AuctipusLinkEditBoxes(self)
     self.SearchBox:SetScript("OnTextChanged",
         function() self:OnSearchTextChanged() end)
+    hooksecurefunc("ContainerFrameItemButton_OnModifiedClick",
+        function(f, button) self:OnContainerModifiedClick(f) end)
 
     -- Full scan button.
     self.FullScanButton:SetScript("OnClick", function() AHistory:FullScan() end)
@@ -81,6 +83,24 @@ end
 
 function AuctipusHistoryFrame:OnSearchTextChanged()
     self:FilterResults(self.SearchBox:GetText())
+end
+
+function AuctipusHistoryFrame:OnContainerModifiedClick(f)
+    -- Handle shift-clicking an inventory item into the search field.  We can't
+    -- modify the return value of ChatEdit_InsertLink() which is what we would
+    -- normally hook; without modifying the return value you can't say you
+    -- handled the event and therefore shift-clicking a stack tries to also
+    -- split the stack.  Instead we hook
+    -- ContainerFrameItemButton_OnModifiedClick and close the stack-splitting
+    -- window if it opens up.
+    if self:IsVisible() then
+        local link = GetContainerItemLink(f:GetParent():GetID(), f:GetID())
+        local name = ALink.GetLinkName(link)
+        self.SearchBox:SetText(name)
+        self.SearchBox:ClearFocus()
+        self:FilterResults(name)
+        StackSplitFrame:Hide()
+    end
 end
 
 function AuctipusHistoryFrame:FilterResults(substring)

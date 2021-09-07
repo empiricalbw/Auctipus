@@ -35,12 +35,17 @@ function AuctipusBrowseFrame:OnLoad()
         e:SetScript("OnEnterPressed", function() self:DoSearch() end)
     end
 
+    -- Allow shift-clicking links into search.
+    hooksecurefunc("ContainerFrameItemButton_OnModifiedClick",
+        function(f, button) self:OnContainerModifiedClick(f) end)
+
     -- Rarity dropdown.
     UIDropDownMenu_Initialize(self.RarityDropDown, function()
         local info         = UIDropDownMenu_CreateInfo()
         info.text          = ALL
         info.value         = -1
         info.func          = function(arg) self:HandleRarityClick(arg) end
+        info.checked       = nil
         info.classicChecks = true
         UIDropDownMenu_AddButton(info)
         for i=0, #ITEM_QUALITY_COLORS - 4 do
@@ -142,6 +147,28 @@ end
 
 function AuctipusBrowseFrame:OnHide()
     self.CategoryDropdown:Hide()
+end
+
+function AuctipusBrowseFrame:OnContainerModifiedClick(f)
+    -- Handle shift-clicking an inventory item into the search field.  We can't
+    -- modify the return value of ChatEdit_InsertLink() which is what we would
+    -- normally hook; without modifying the return value you can't say you
+    -- handled the event and therefore shift-clicking a stack tries to also
+    -- split the stack.  Instead we hook
+    -- ContainerFrameItemButton_OnModifiedClick and close the stack-splitting
+    -- window if it opens up.
+    if self:IsVisible() then
+        local link = GetContainerItemLink(f:GetParent():GetID(), f:GetID())
+        local name = ALink.GetLinkName(link)
+        self.SearchBox:SetText(name)
+        self.CategoryDropdown:ClearSelection()
+        self.MinLvlBox:SetText("")
+        self.MaxLvlBox:SetText("")
+        UIDropDownMenu_SetSelectedValue(self.RarityDropDown, -1)
+        UIDropDownMenu_SetText(self.RarityDropDown, ALL)
+        self:DoSearch()
+        StackSplitFrame:Hide()
+    end
 end
 
 function AuctipusBrowseFrame:HandleRarityClick(info)
