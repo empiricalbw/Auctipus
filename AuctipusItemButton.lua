@@ -8,6 +8,7 @@ function AuctipusItemButton:OnLoad()
     self.auctionGroup = nil
     self.link         = nil
     self.sellInfo     = nil
+    self._is_auctipus = true
 end
 
 function AuctipusItemButton:SetAuctionGroup(auctionGroup)
@@ -118,3 +119,10 @@ function AuctipusItemButton:OnEvent()
         self:OnEnter()
     end
 end
+
+-- Support for VendorPrice.
+GameTooltip:HookScript("OnTooltipSetItem", function(tt)
+    if VendorPrice and tt:GetOwner()._is_auctipus then
+        VendorPrice:SetPrice(tt)
+    end
+end)
