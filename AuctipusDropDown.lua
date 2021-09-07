@@ -51,6 +51,8 @@ function ADropDown:Init(config)
     for i, item in ipairs(config.items) do
         local f = CreateFrame("Button", nil, self.frame,
                               "AuctipusDropDownItemTemplate")
+        table.insert(self.items, f)
+
         f:SetWidth(config.width)
         if i == 1 then
             f:SetPoint("TOPLEFT", x, y)
@@ -59,13 +61,13 @@ function ADropDown:Init(config)
         else
             f:SetPoint("TOPLEFT", self.items[i - 1], "BOTTOMLEFT")
         end
-        f:SetText(item)
+        self:SetItemText(i, item)
+        f.LabelDisabled:Hide()
         f.Check:Hide()
         f.UnCheck:Hide()
         f:SetScript("OnClick", function() self:OnItemClick(i) end)
         y = y - f:GetHeight()
 
-        table.insert(self.items, f)
 
         remRows = remRows - 1
         if remRows == 0 then
@@ -123,12 +125,13 @@ end
 
 function ADropDown:SetItemText(index, text)
     local f = self.items[index]
-    f:SetText(text)
+    f.LabelEnabled:SetText(text)
+    f.LabelDisabled:SetText(text)
 end
 
 function ADropDown:GetItemText(index)
     local f = self.items[index]
-    return f:GetText()
+    return f.LabelEnabled:GetText()
 end
 
 function ADropDown:SetItemEnabled(index, enabled)
@@ -141,8 +144,12 @@ end
 
 function ADropDown:DisableItem(index)
     self.items[index]:Disable()
+    self.items[index].LabelEnabled:Hide()
+    self.items[index].LabelDisabled:Show()
 end
 
 function ADropDown:EnableItem(index)
     self.items[index]:Enable()
+    self.items[index].LabelEnabled:Show()
+    self.items[index].LabelDisabled:Hide()
 end
