@@ -51,8 +51,14 @@ function ADropDown:Init(config)
     for i, item in ipairs(config.items) do
         local f = CreateFrame("Button", nil, self.frame,
                               "AuctipusDropDownItemTemplate")
-        f:SetPoint("TOPLEFT", x, y)
-        f:SetPoint("TOPRIGHT", self.frame, "TOPLEFT", x + config.width - 12, y)
+        f:SetWidth(config.width)
+        if i == 1 then
+            f:SetPoint("TOPLEFT", x, y)
+        elseif (i % config.rows) == 1 then
+            f:SetPoint("TOPLEFT", self.items[i - config.rows], "TOPRIGHT")
+        else
+            f:SetPoint("TOPLEFT", self.items[i - 1], "BOTTOMLEFT")
+        end
         f:SetText(item)
         f.Check:Hide()
         f.UnCheck:Hide()
