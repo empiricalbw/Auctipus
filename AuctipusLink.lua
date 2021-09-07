@@ -17,23 +17,23 @@ local function LinkTexture(l)
     return texture
 end
 
-local function LinkName(l)
-    local _, _, name = l:find("|h%[(.*)%]|h")
-    return name
-end
-
 function ALink:New(l)
     local al = {
         link    = ALink.SaneLink(l),
         color   = LinkColor(l),
         texture = LinkTexture(l),
-        name    = LinkName(l),
+        name    = ALink.GetLinkName(l),
         uname   = nil,
     }
     al.uname = al.name:upper()
     setmetatable(al, self)
 
     return al
+end
+
+function ALink.GetLinkName(l)
+    local _, _, name = l:find("|h%[(.*)%]|h")
+    return name
 end
 
 function ALink.SaneLink(l)
