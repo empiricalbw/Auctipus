@@ -190,7 +190,7 @@ function AuctipusAuctionsFrame:OnDurationButtonClick(index, button)
 end
 
 function AuctipusAuctionsFrame.AUCTION_MULTISELL_START(numAuctions)
-    Auctipus.dbg("AUCTION_MULTISELL_START: ",numAuctions)
+    Auctipus.dbg("AUCTION_MULTISELL_START: ", numAuctions)
 end
 
 function AuctipusAuctionsFrame.AUCTION_MULTISELL_UPDATE(numCreated, numAuctions)
@@ -237,7 +237,7 @@ end
 
 function AuctipusAuctionsFrame.CHAT_MSG_SYSTEM(msg)
     if msg == ERR_AUCTION_STARTED then
-        Auctipus.info("Got auction created event.")
+        Auctipus.dbg("Got auction created event.")
     end
 end
 
