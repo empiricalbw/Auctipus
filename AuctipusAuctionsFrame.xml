@@ -221,7 +221,7 @@
             <Button name="$parentCreateButton" parentKey="CreateButton" inherits="UIPanelButtonTemplate" text="CREATE_AUCTION">
                 <Size x="150" y="24"/>
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.DepositPriceLabel" relativePoint="BOTTOMLEFT" y="-10"/>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.DepositPriceLabel" relativePoint="BOTTOMLEFT" x="25" y="-60"/>
                 </Anchors>
             </Button>
 
