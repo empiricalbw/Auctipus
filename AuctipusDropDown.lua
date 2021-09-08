@@ -120,7 +120,7 @@ end
 function ADropDown:SetItemTitle(index)
     local f = self.items[index]
     self:DisableItem(index)
-    f:SetDisabledFontObject(GameFontNormalSmall)
+    f.LabelDisabled:SetFontObject(GameFontNormalSmall)
 end
 
 function ADropDown:SetItemText(index, text)
