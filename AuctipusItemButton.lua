@@ -3,9 +3,12 @@ AuctipusItemButton = {}
 function AuctipusItemButton:OnLoad()
     self:SetScript("OnEnter", function() self:OnEnter() end)
     self:SetScript("OnLeave", function() self:OnLeave() end)
+    self:SetScript("OnEvent", function() self:OnEvent() end)
+    self:RegisterEvent("MODIFIER_STATE_CHANGED")
     self.auctionGroup = nil
     self.link         = nil
     self.sellInfo     = nil
+    self._is_auctipus = true
 end
 
 function AuctipusItemButton:SetAuctionGroup(auctionGroup)
@@ -34,7 +37,9 @@ function AuctipusItemButton:SetAuctionSellItem()
 
         local color = ITEM_QUALITY_COLORS[quality]
         self.Name:SetText(name)
-        self.Name:SetVertexColor(color.r, color.g, color.b)
+        if color then
+            self.Name:SetVertexColor(color.r, color.g, color.b)
+        end
         self.Name:Show()
     else
         self:Clear()
@@ -50,6 +55,23 @@ function AuctipusItemButton:SetAuction(auction)
     self.Name:SetText(auction.name)
     self.Name:SetVertexColor(color.r, color.g, color.b)
     self.Name:Show()
+end
+
+function AuctipusItemButton:SetHistoryGroup(historyGroup)
+    self.historyGroup = historyGroup
+
+    self.Count:Hide()
+    if historyGroup then
+        self.link = historyGroup.link
+        self:SetNormalTexture(historyGroup.texture)
+
+        local color = historyGroup.color
+        self.Name:SetText(historyGroup.name)
+        self.Name:SetVertexColor(color.r, color.g, color.b)
+        self.Name:Show()
+    else
+        self:Clear()
+    end
 end
 
 function AuctipusItemButton:Clear()
@@ -74,12 +96,33 @@ function AuctipusItemButton:OnEnter()
     if self.link then
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
         GameTooltip:SetHyperlink(self.link)
+        if IsModifiedClick("DRESSUP") then
+            ShowInspectCursor()
+        else
+            ResetCursor()
+        end
     elseif self.sellInfo then
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
         GameTooltip:SetAuctionSellItem()
+        ResetCursor()
+    else
+        ResetCursor()
     end
 end
 
 function AuctipusItemButton:OnLeave()
     GameTooltip_Hide()
 end
+
+function AuctipusItemButton:OnEvent()
+    if GameTooltip:GetOwner() == self then
+        self:OnEnter()
+    end
+end
+
+-- Support for VendorPrice.
+GameTooltip:HookScript("OnTooltipSetItem", function(tt)
+    if VendorPrice and tt:GetOwner()._is_auctipus then
+        VendorPrice:SetPrice(tt)
+    end
+end)

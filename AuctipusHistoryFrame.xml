@@ -1,0 +1,196 @@
+<?xml version="1.0"?>
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+    <Frame name="AuctipusHistoryBarTemplate" enableMouse="false" virtual="true">
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture parentKey="Top" file="Interface\Addons\Auctipus\Bar.tga">
+                    <Size y="5"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT"/>
+                        <Anchor point="TOPRIGHT"/>
+                    </Anchors>
+                    <TexCoords left="0" right="1" top="0" bottom="0.25"/>
+                </Texture>
+                <Texture parentKey="Bottom" file="Interface\Addons\Auctipus\Bar.tga">
+                    <Size y="5"/>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT"/>
+                        <Anchor point="BOTTOMRIGHT"/>
+                    </Anchors>
+                    <TexCoords left="0" right="1" top="0.75" bottom="1"/>
+                </Texture>
+                <Texture parentKey="Middle" file="Interface\Addons\Auctipus\Bar.tga">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.Top" relativePoint="BOTTOMLEFT"/>
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.Bottom" relativePoint="TOPRIGHT"/>
+                    </Anchors>
+                    <TexCoords left="0" right="1" top="0.25" bottom="0.75"/>
+                </Texture>
+            </Layer>
+        </Layers>
+    </Frame>
+
+    <Button name="AuctipusHistoryHighlightTemplate" enableMouse="true" virtual="true">
+        <HighlightTexture name="$parentHighlight" file="Interface\Addons\Auctipus\Bar.tga" setAllPoints="true">
+            <Color r="0.949" g="0.910" b="0.455"/>
+            <TexCoords left="0" right="1" top="0.75" bottom="1"/>
+        </HighlightTexture>
+    </Button>
+
+    <Frame name="AuctipusHistoryFrameTemplate" enableMouse="true" virtual="true" mixin="AuctipusHistoryFrame">
+        <Size x="832" y="440"/>
+        <Frames>
+            <Frame name="$parentSearchBoxLabel" parentKey="SearchBoxLabel">
+                <Size x="50" y="24"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="0" y="-7"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <FontString name="$parentFont" inherits="GameFontNormalSmall" justifyH="RIGHT" justifyV="MIDDLE" text="Search:"/>
+                    </Layer>
+                </Layers>
+            </Frame>
+            <EditBox name="$parentSearchBox" parentKey="SearchBox" parentArray="EditBoxes" autoFocus="false" letters="63" inherits="InputBoxTemplate">
+                <Size x="150" y="24"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentSearchBoxLabel" relativePoint="RIGHT" x="5"/>
+                </Anchors>
+            </EditBox>
+
+            <Button name="$parentFullScanButton" parentKey="FullScanButton" inherits="UIPanelButtonTemplate" text="Full Scan">
+                <Size x="100" y="23"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.SearchBox" relativePoint="RIGHT" x="10"/>
+                </Anchors>
+            </Button>
+
+            <Frame name="$parentMaxPrice" parentKey="MaxPrice" inherits="BetterMoneyFrameFixedTemplate">
+                <Anchors><Anchor point="TOPRIGHT" y="-10" x="-30"/></Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <FontString name="$parentFont" inherits="GameFontNormalSmall" justifyH="RIGHT" justifyV="MIDDLE" text="Minimum buyout range:">
+                            <Anchors><Anchor point="RIGHT" relativePoint="BOTTOMLEFT"/></Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+            <Frame name="$parentMinPrice" parentKey="MinPrice" inherits="BetterMoneyFrameFixedTemplate">
+                <Anchors><Anchor point="TOPRIGHT" relativeKey="$parent.MaxPrice" relativePoint="BOTTOMRIGHT" y="-6"/></Anchors>
+            </Frame>
+
+            <Button name="$parentHistoryGroup1" parentKey="HistoryGroup1" parentArray="HistoryGroupRows" inherits="AuctipusHistoryGroupRowTemplate"/>
+            <Button name="$parentHistoryGroup2" parentArray="HistoryGroupRows" inherits="AuctipusHistoryGroupRowTemplate"/>
+            <Button name="$parentHistoryGroup3" parentArray="HistoryGroupRows" inherits="AuctipusHistoryGroupRowTemplate"/>
+            <Button name="$parentHistoryGroup4" parentArray="HistoryGroupRows" inherits="AuctipusHistoryGroupRowTemplate"/>
+            <Button name="$parentHistoryGroup5" parentArray="HistoryGroupRows" inherits="AuctipusHistoryGroupRowTemplate"/>
+            <Button name="$parentHistoryGroup6" parentArray="HistoryGroupRows" inherits="AuctipusHistoryGroupRowTemplate"/>
+            <Button name="$parentHistoryGroup7" parentArray="HistoryGroupRows" inherits="AuctipusHistoryGroupRowTemplate"/>
+            <Button name="$parentHistoryGroup8" parentArray="HistoryGroupRows" inherits="AuctipusHistoryGroupRowTemplate"/>
+            <Button name="$parentHistoryGroup9" parentArray="HistoryGroupRows" inherits="AuctipusHistoryGroupRowTemplate"/>
+            <ScrollFrame name="$parentHistoryGroupScrollFrame" parentKey="HistoryGroupScrollFrame" inherits="AuctipusScrollFrameTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parentHistoryGroup1" y="-5"/>
+                    <Anchor point="BOTTOMRIGHT" relativeTo="$parentHistoryGroup9" y="2"/>
+                </Anchors>
+            </ScrollFrame>
+			<Button name="$parentNameSort" inherits="AuctipusSortButtonTemplate" text="Name">
+                <Size y="19"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.HistoryGroup1.ItemButton.Name" relativePoint="TOPLEFT" y="2"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.HistoryGroup1.ItemButton.Name" x="2"/>
+                </Anchors>
+			</Button>
+
+            <Frame name="$parentGraph" parentKey="Graph" inherits="BackdropTemplate">
+                <KeyValues>
+                    <KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+                    <KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
+                </KeyValues>
+                <Size x="512" y="380"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.FullScanButton" relativePoint="BOTTOMLEFT" x="96" y="-16"/>
+                </Anchors>
+                <Frames>
+                    <Button name="$parentHistoryHighlight1" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight2" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight3" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight4" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight5" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight6" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight7" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight8" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight9" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight10" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight11" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight12" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight13" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight14" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight15" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight16" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight17" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight18" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight19" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight20" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight21" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight22" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight23" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight24" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight25" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight26" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight27" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Button name="$parentHistoryHighlight28" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory1" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory2" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory3" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory4" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory5" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory6" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory7" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory8" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory9" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory10" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory11" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory12" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory13" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory14" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory15" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory16" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory17" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory18" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory19" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory20" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory21" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory22" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory23" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory24" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory25" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory26" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory27" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory28" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+
+                    <Frame name="$parentMinPrice" parentKey="MinPrice" inherits="BetterMoneyFrameNormalTemplate">
+                        <Anchors><Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMLEFT" x="-0"/></Anchors>
+                    </Frame>
+                    <Frame name="$parentMaxPrice" parentKey="MaxPrice" inherits="BetterMoneyFrameNormalTemplate">
+                        <Anchors><Anchor point="TOPRIGHT" relativePoint="TOPLEFT" x="-0"/></Anchors>
+                    </Frame>
+                </Frames>
+            </Frame>
+
+            <Button name="$parentCloseButton" inherits="UIPanelCloseButton">
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="2" y="3"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        HideUIPanel(AuctipusFrame)
+                    </OnClick>
+                </Scripts>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+        </Scripts>
+    </Frame>
+</Ui>

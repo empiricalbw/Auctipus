@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
-    <Frame name="AuctipusAuctionsFrameTemplate" enableMouse="true" virtual="true">
+    <Frame name="AuctipusAuctionsFrameTemplate" enableMouse="true" virtual="true" mixin="AuctipusAuctionsFrame">
         <Size x="832" y="440"/>
         <Frames>
             <Button parentKey="ItemButton" inherits="AuctipusItemButtonTemplate">
@@ -106,7 +106,7 @@
 
             <CheckButton parentKey="DurationButton1" parentArray="DurationButtons" inherits="UIRadioButtonTemplate" id="1">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="$parentDecrementStackCountButton" relativePoint="BOTTOMLEFT" y="-24"/>
+                    <Anchor point="TOPLEFT" relativeTo="$parentIncrementStackSizeButton" relativePoint="TOPRIGHT" x="30" y="0"/>
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
@@ -132,11 +132,11 @@
 
             <Frame name="$parentBidPrice" parentKey="BidPrice" inherits="MoneyInputFrameTemplate">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.DurationButton3" relativePoint="BOTTOMLEFT" y="-24"/>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.DecrementStackCountButton" relativePoint="BOTTOMLEFT" y="-24"/>
                 </Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
-						<FontString inherits="GameFontHighlightSmall" text="STARTING_PRICE">
+						<FontString parentKey="Text" inherits="GameFontHighlightSmall" text="STARTING_PRICE">
 							<Anchors>
 								<Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="-2" y="1"/>
 							</Anchors>
@@ -160,6 +160,22 @@
 				</Layers>
             </Frame>
 
+            <CheckButton parentKey="PerUnitCheck" inherits="UICheckButtonTemplate">
+                <Size x="24" y="24"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.DurationButton3" relativePoint="BOTTOMLEFT" x="-10" y="-4"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="GameFontNormalSmall" text="Pricing Per Unit">
+                            <Anchors>
+                                <Anchor point="LEFT" relativePoint="RIGHT" x="-2"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </CheckButton>
+
             <Frame parentKey="VendorPriceLabel">
                 <Size x="150" y="18"/>
                 <Anchors>
@@ -175,8 +191,7 @@
 					</Layer>
 				</Layers>
             </Frame>
-            <Frame name="$parentVendorPrice" parentKey="VendorPrice" inherits="AuctipusMoneyFrameTemplate">
-                <Size x="200" y="10"/>
+            <Frame name="$parentVendorPrice" parentKey="VendorPrice" inherits="BetterMoneyFrameFixedTemplate">
                 <Anchors>
                     <Anchor point="TOPRIGHT" relativeKey="$parent.VendorPriceLabel" relativePoint="BOTTOMRIGHT" y="13"/>
                 </Anchors>
@@ -197,8 +212,7 @@
 					</Layer>
 				</Layers>
             </Frame>
-            <Frame name="$parentDepositPrice" parentKey="DepositPrice" inherits="AuctipusMoneyFrameTemplate">
-                <Size x="200" y="10"/>
+            <Frame name="$parentDepositPrice" parentKey="DepositPrice" inherits="BetterMoneyFrameFixedTemplate">
                 <Anchors>
                     <Anchor point="TOPRIGHT" relativeKey="$parent.DepositPriceLabel" relativePoint="BOTTOMRIGHT" y="13"/>
                 </Anchors>
@@ -207,72 +221,79 @@
             <Button name="$parentCreateButton" parentKey="CreateButton" inherits="UIPanelButtonTemplate" text="CREATE_AUCTION">
                 <Size x="150" y="24"/>
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.DepositPriceLabel" relativePoint="BOTTOMLEFT" y="-10"/>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.DepositPriceLabel" relativePoint="BOTTOMLEFT" x="25" y="-60"/>
                 </Anchors>
             </Button>
 
-            <Button name="$parentAuction1" parentKey="AuctionRow1" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="1"/>
-            <Button name="$parentAuction2" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="2"/>
-            <Button name="$parentAuction3" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="3"/>
-            <Button name="$parentAuction4" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="4"/>
-            <Button name="$parentAuction5" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="5"/>
-            <Button name="$parentAuction6" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="6"/>
-            <Button name="$parentAuction7" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="7"/>
-            <Button name="$parentAuction8" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="8"/>
-            <Button name="$parentAuction9" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="9"/>
-            <Button name="$parentAuction10" parentArray="AuctionRows" inherits="AuctipusAuctionSellRowTemplate" id="10"/>
-            <ScrollFrame name="$parentAuctionScrollFrame" parentKey="AuctionScrollFrame" inherits="AuctipusScrollFrameTemplate">
+            <Button name="$parentAuctionBid1" parentKey="AuctionBidRow1" parentArray="AuctionBidRows" inherits="AuctipusAuctionBidRowTemplate" id="1"/>
+            <Button name="$parentAuctionBid2" parentArray="AuctionBidRows" inherits="AuctipusAuctionBidRowTemplate" id="2"/>
+            <Button name="$parentAuctionBid3" parentArray="AuctionBidRows" inherits="AuctipusAuctionBidRowTemplate" id="3"/>
+            <Button name="$parentAuctionBid4" parentArray="AuctionBidRows" inherits="AuctipusAuctionBidRowTemplate" id="4"/>
+            <Button name="$parentAuctionBid5" parentArray="AuctionBidRows" inherits="AuctipusAuctionBidRowTemplate" id="5"/>
+            <Button name="$parentAuctionBid6" parentArray="AuctionBidRows" inherits="AuctipusAuctionBidRowTemplate" id="6"/>
+            <Button name="$parentAuctionBid7" parentArray="AuctionBidRows" inherits="AuctipusAuctionBidRowTemplate" id="7"/>
+            <Button name="$parentAuctionBid8" parentArray="AuctionBidRows" inherits="AuctipusAuctionBidRowTemplate" id="8"/>
+            <Button name="$parentAuctionBid9" parentArray="AuctionBidRows" inherits="AuctipusAuctionBidRowTemplate" id="9"/>
+            <Button name="$parentAuctionBid10" parentArray="AuctionBidRows" inherits="AuctipusAuctionBidRowTemplate" id="10"/>
+            <Button name="$parentAuctionBid11" parentArray="AuctionBidRows" inherits="AuctipusAuctionBidRowTemplate" id="11"/>
+            <ScrollFrame name="$parentAuctionBidsScrollFrame" parentKey="AuctionBidsScrollFrame" inherits="AuctipusScrollFrameTemplate">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="$parentAuction1" y="-5"/>
-                    <Anchor point="BOTTOMRIGHT" relativeTo="$parentAuction10" x="0" y="2"/>
+                    <Anchor point="TOPLEFT" relativeTo="$parentAuctionBid1" y="-5"/>
+                    <Anchor point="BOTTOMRIGHT" relativeTo="$parentAuctionBid11" x="0" y="2"/>
                 </Anchors>
             </ScrollFrame>
-			<Button name="$parentNameSort" inherits="AuctipusSortButtonTemplate" text="Name">
+			<Button name="$parentSellerSort" inherits="AuctipusSortButtonTemplate" text="Seller">
                 <Size y="19"/>
                 <Anchors>
-                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.AuctionRow1.ItemButton.Name" relativePoint="TOPLEFT" y="-1"/>
-                    <Anchor point="RIGHT" relativeKey="$parent.AuctionRow1.ItemButton.Name" x="2"/>
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.AuctionBidRow1.Owner" relativePoint="TOPLEFT" x="-4" y="3"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.AuctionBidRow1.Owner" x="8"/>
                 </Anchors>
 			</Button>
-			<Button name="$parentDurationSort" inherits="AuctipusSortButtonTemplate" text="CLOSES_IN">
+			<Button name="$parentCountSort" inherits="AuctipusSortButtonTemplate" text="Units">
                 <Size y="19"/>
                 <Anchors>
-                    <Anchor point="BOTTOMLEFT" relativeTo="$parentNameSort" relativePoint="BOTTOMRIGHT" x="-2"/>
-                    <Anchor point="RIGHT" relativeKey="$parent.AuctionRow1.Duration" x="6"/>
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.AuctionBidRow1.CountFrame" relativePoint="TOPLEFT" x="-2" y="3"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.AuctionBidRow1.CountFrame" x="5"/>
                 </Anchors>
 			</Button>
-			<Button name="$parentHighBidderSort" inherits="AuctipusSortButtonTemplate" text="HIGH_BIDDER">
+			<Button name="$parentUnitCostSort" parentKey="UnitCostSort" inherits="AuctipusSortButtonTemplate" text="Unit Bid  |  Unit Buyout">
                 <Size y="19"/>
                 <Anchors>
-                    <Anchor point="BOTTOMLEFT" relativeTo="$parentDurationSort" relativePoint="BOTTOMRIGHT" x="-2"/>
-                    <Anchor point="RIGHT" relativeKey="$parent.AuctionRow1.HighBidder" x="6"/>
+                    <Anchor point="BOTTOMLEFT" relativeTo="$parentSellerSort" relativePoint="BOTTOMRIGHT" x="-2"/>
+                    <Anchor point="RIGHT" relativeTo="$parentCountSort" relativePoint="LEFT" x="2"/>
                 </Anchors>
 			</Button>
-			<Button name="$parentCurrentBidSort" inherits="AuctipusSortButtonTemplate" text="CURRENT_BID">
+			<Button name="$parentBuyoutSort" parentKey="BuyoutSort" inherits="AuctipusSortButtonTemplate" text="Bid  |  Buyout">
                 <Size y="19"/>
                 <Anchors>
-                    <Anchor point="BOTTOMLEFT" relativeTo="$parentHighBidderSort" relativePoint="BOTTOMRIGHT" x="-2"/>
-                    <Anchor point="RIGHT" relativeKey="$parent.AuctionRow1" x="-4"/>
+                    <Anchor point="BOTTOMLEFT" relativeTo="$parentCountSort" relativePoint="BOTTOMRIGHT" x="-2"/>
+                    <Anchor point="RIGHT" relativeTo="$parentAuctionBid1" x="-4"/>
                 </Anchors>
 			</Button>
 
-            <Button name="$parentCancelButton" parentKey="CancelButton" inherits="UIPanelButtonTemplate" text="CANCEL_AUCTION">
-                <Size x="150" y="24"/>
+            <Button name="$parentCloseButton" inherits="UIPanelCloseButton">
                 <Anchors>
-                    <Anchor point="TOPRIGHT" relativeTo="$parentAuctionScrollFrame" relativePoint="BOTTOMRIGHT" y="-10"/>
+                    <Anchor point="TOPRIGHT" x="2" y="3"/>
                 </Anchors>
+                <Scripts>
+                    <OnClick>
+                        HideUIPanel(AuctipusFrame)
+                    </OnClick>
+                </Scripts>
             </Button>
         </Frames>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <FontString parentKey="StatusText" inherits="GameFontNormalSmall" justifyH="CENTER" justifyV="MIDDLE">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.AuctionBidsScrollFrame"/>
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.AuctionBidsScrollFrame"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
         <Scripts>
-            <OnLoad>
-                AuctipusAuctionsFrame.OnLoad(self)
-            </OnLoad>
-        </Scripts>
-    </Frame>
-
-    <Frame name="AuctipusAuctionsFrameMetaTemplate" inherits="AuctipusAuctionsFrameTemplate" virtual="true">
-        <Scripts>
-            <OnLoad/>
+            <OnLoad method="OnLoad"/>
         </Scripts>
     </Frame>
 </Ui>

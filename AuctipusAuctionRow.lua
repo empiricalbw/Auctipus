@@ -1,10 +1,11 @@
-AuctipusAuctionRow = CreateFrame("Button", nil, nil,
-                                 "AuctipusAuctionRowMetaTemplate")
-AuctipusAuctionRow.__index = AuctipusAuctionRow
+AuctipusAuctionRow = {}
 
 function AuctipusAuctionRow:OnLoad()
-    setmetatable(self, AuctipusAuctionRow)
     self:SetScript("OnClick", function(frame, button) self:OnClick(button) end)
+    self:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+    self.DisabledButton:SetScript("OnClick",
+        function(frame, button) self:OnDisabledClick(button) end)
+    self.DisabledButton:RegisterForClicks("RightButtonUp")
     self.auction = nil
 end
 
@@ -36,5 +37,24 @@ function AuctipusAuctionRow:OnClick(button)
         else
             AuctipusFrame.BrowseFrame:SetAuctionSelection(self.auction)
         end
+    elseif button == "RightButton" then
+        AuctipusFrame.BrowseFrame:ShowAuctionMenu(self)
     end
+end
+
+function AuctipusAuctionRow:OnDisabledClick(button)
+    assert(button == "RightButton")
+    AuctipusFrame.BrowseFrame:ShowAuctionMenu(self)
+end
+
+function AuctipusAuctionRow:DisableRow()
+    self:SetAlpha(0.5)
+    self:Disable()
+    self.DisabledButton:Show()
+end
+
+function AuctipusAuctionRow:EnableRow()
+    self.DisabledButton:Hide()
+    self:SetAlpha(1)
+    self:Enable()
 end

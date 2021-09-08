@@ -1,14 +1,16 @@
-AuctipusAuctionGroupRow = CreateFrame("Button", nil, nil,
-                                      "AuctipusAuctionGroupRowMetaTemplate")
-AuctipusAuctionGroupRow.__index = AuctipusAuctionGroupRow
+AuctipusAuctionGroupRow = {}
 
 function AuctipusAuctionGroupRow:OnLoad()
-    setmetatable(self, AuctipusAuctionGroupRow)
     self.ItemButton:SetScript("OnClick", function() self:OnClick() end)
     self.ItemButton:SetScript("OnEnter", function() self:OnEnterItem() end)
     self.ItemButton:SetScript("OnLeave", function() self:OnLeaveItem() end)
     self:SetScript("OnClick", function() self:OnClick() end)
+    self:SetScript("OnEnter", function() self:OnEnter() end)
+    self:SetScript("OnLeave", function() self:OnLeave() end)
+    self:SetScript("OnEvent", function() self:OnEvent() end)
+    self:RegisterEvent("MODIFIER_STATE_CHANGED")
     self.auctionGroup = nil
+    self.hovering     = false
 end
 
 function AuctipusAuctionGroupRow:SetAuctionGroup(auctionGroup)
@@ -42,7 +44,31 @@ function AuctipusAuctionGroupRow:SetAuctionGroup(auctionGroup)
 end
 
 function AuctipusAuctionGroupRow:OnClick()
-    AuctipusFrame.BrowseFrame:SelectAuctionGroup(self.auctionGroup)
+    if IsModifiedClick("DRESSUP") then
+        AuctipusFrame.BrowseFrame:DressupAuctionGroup(self.auctionGroup)
+    else
+        AuctipusFrame.BrowseFrame:SelectAuctionGroup(self.auctionGroup)
+    end
+end
+
+function AuctipusAuctionGroupRow:OnEnter()
+    self.hovering = true
+    if IsModifiedClick("DRESSUP") then
+        ShowInspectCursor()
+    else
+        ResetCursor()
+    end
+end
+
+function AuctipusAuctionGroupRow:OnLeave()
+    ResetCursor()
+    self.hovering = false
+end
+
+function AuctipusAuctionGroupRow:OnEvent()
+    if self.hovering then
+        self:OnEnter()
+    end
 end
 
 function AuctipusAuctionGroupRow:OnEnterItem()

@@ -1,19 +1,6 @@
 AAuction = {}
 AAuction.__index = AAuction
 
-local function SaneLink(l)
-    -- Remove the uniqueID, linkLevel and specializationID fields from the link
-    -- since they contain no information usable by the client but can vary for
-    -- items that otherwise seem identical.  An example is "Dreadhawk's
-    -- Schynbald of the Hunt" which has different uniqueIDs.
-    if not l then
-        return nil
-    end
-    return l:gsub(
-        "(|Hitem:[^:]+:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*):[^:]*:%d+:%d*",
-        "%1::70:")
-end
-
 local function GoldString(c)
     local cost = ""
     if c >=10000 then
@@ -42,6 +29,7 @@ function AAuction:FromGetAuctionItemInfo(index, list)
                 level           = level,
                 levelColHeader  = levelColHeader,
                 minBid          = minBid,
+                minUnitBid      = minBid / count,
                 minIncrement    = minIncrement,
                 buyoutPrice     = buyoutPrice,
                 unitPrice       = buyoutPrice / count,
@@ -53,8 +41,10 @@ function AAuction:FromGetAuctionItemInfo(index, list)
                 saleStatus      = saleStatus,
                 itemId          = itemId,
                 hasAllInfo      = hasAllInfo,
-                link            = SaneLink(GetAuctionItemLink(list, index)),
+                link            = ALink.SaneLink(GetAuctionItemLink(list,
+                                                                    index)),
                 duration        = GetAuctionItemTimeLeft(list, index),
+                pageIndex       = index,
                 missing         = false,
                 }
     setmetatable(aa, self)
@@ -67,13 +57,21 @@ function AAuction:ToString()
     if owner == nil then
         owner = "<NIL SELLER>"
     end
-    return "Link: "..self.link.." Seller: "..owner.." Cost: "..
+    local link = self.link
+    if link == nil then
+        link = "<NIL LINK>"
+    end
+    return "Link: "..link.." Seller: "..owner.." Cost: "..
            GoldString(self.buyoutPrice)--[[.." Link: "..
            self.link:gsub("|","||")]]
 end
 
 function AAuction:Print()
     Auctipus.info(self:ToString())
+end
+
+function AAuction:DbgPrint()
+    Auctipus.dbg(self:ToString())
 end
 
 function AAuction.CompareByBuyout(l, r)
@@ -97,7 +95,11 @@ function AAuction.CompareByBuyout(l, r)
     end
 
     if l.owner ~= r.owner then
-        if l.owner < r.owner then
+        if not l.owner then
+            return -1
+        elseif not r.owner then
+            return 1
+        elseif l.owner < r.owner then
             return -1
         else
             return 1
@@ -132,7 +134,11 @@ function AAuction.CompareByUnitPrice(l, r)
     end
 
     if l.owner ~= r.owner then
-        if l.owner < r.owner then
+        if not l.owner then
+            return -1
+        elseif not r.owner then
+            return 1
+        elseif l.owner < r.owner then
             return -1
         else
             return 1

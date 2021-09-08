@@ -69,17 +69,20 @@
                     </Anchors>
                     <TexCoords left="0.5" right="1.0" top="0.5" bottom="1.0"/>
                 </Texture>
+                <FontString parentKey="LabelEnabled" font="GameFontWhiteSmall" justifyH="LEFT">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="16"/>
+                        <Anchor point="BOTTOMRIGHT"/>
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="LabelDisabled" font="GameFontDisableSmallLeft" justifyH="LEFT">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="16"/>
+                        <Anchor point="BOTTOMRIGHT"/>
+                    </Anchors>
+                </FontString>
             </Layer>
         </Layers>
-        <ButtonText justifyH="LEFT">
-            <Anchors>
-                <Anchor point="LEFT" x="16"/>
-                <Anchor point="RIGHT"/>
-            </Anchors>
-        </ButtonText>
-        <NormalFont style="GameFontWhiteSmall"/>
-        <HighlightFont style="GameFontWhiteSmall"/>
-        <DisabledFont style="GameFontDisableSmallLeft"/>
         <HighlightTexture file="Interface\QuestFrame\UI-QuestTitleHighlight" alphaMode="ADD" setAllPoints="true"/>
     </Button>
 </Ui>

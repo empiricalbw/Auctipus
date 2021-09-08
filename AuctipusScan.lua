@@ -22,33 +22,36 @@ end
 
 function AScan:StartNextQuery()
     self.query = table.remove(self.queries)
-    self.apage = nil
-    self:LoadNextPage()
+    self.apage = APage.OpenListPage(self.query, 0, "QUALITY", self)
 end
 
 function AScan:LoadNextPage()
-    local page = 0
-    if self.apage then
-        page = self.apage.page + 1
-    end
-    APage:OpenPage(self.query, page, "QUALITY", self)
-end
-
-function AScan:PageOpened(p)
-    self.apage = p
+    self.apage = APage.OpenListPage(self.query, self.apage.page + 1, "QUALITY",
+                                    self)
 end
 
 function AScan:PageUpdated(p)
     assert(self.apage == p)
 
+    -- TODO: There can be auctions with nil owners if the auctions belong to
+    --       characters that have been deleted.
     if #self.apage.nilAuctions > 0 then
         return
     end
 
     self.apage:ClosePage()
 
-    local totalPages = ceil(self.apage.totalAuctions / 50)
-    Auctipus.info("Got page "..self.apage.page.." / "..totalPages)
+    local totalPages
+    if self.query.getAll then
+        totalPages = 0
+        Auctipus.dbg("Got ALL page.")
+    else
+        totalPages = ceil(self.apage.totalAuctions / 50)
+        Auctipus.dbg("Got page "..self.apage.page.." / "..totalPages)
+        if self.handler then
+            self.handler:ScanProgress(self, self.apage.page, totalPages)
+        end
+    end
 
     for i, auction in ipairs(self.apage.auctions) do
         if auction.hasAllInfo then
@@ -56,12 +59,18 @@ function AScan:PageUpdated(p)
         end
     end
 
-    if #self.apage.auctions > 0 then
+    if #self.apage.auctions > 0 and not self.query.getAll then
         self:LoadNextPage()
     elseif #self.queries > 0 then
         self:StartNextQuery()
     else
         self:ScanComplete()
+    end
+end
+
+function AScan:PageClosed(p, forced)
+    if forced and self.handler then
+        self.handler:ScanAborted(self)
     end
 end
 

@@ -1,40 +1,52 @@
-## Interface: 20501
+## Interface: 20502
 ## Title: Auctipus
-## Version: 0.9
+## Version: 2.5.2-v1
 ## Author: Empirical
 ## DefaultState: enabled
-## Dependencies: TGEventManager TGLog
-## SavedVariables:
+## Dependencies:
+## SavedVariables: AUCTIPUS_ITEM_HISTORY_DB, AUCTIPUS_ITEM_HISTORY_DB_VERSION, AUCTIPUS_IGNORED_SELLERS_DB, AUCTIPUS_CREATE_DEFAULTS
 
-AuctipusMoneyFrame.xml
+BetterMoneyFrame.xml
 AuctipusItemButton.xml
 AuctipusAuctionGroupRow.xml
 AuctipusAuctionRow.xml
-AuctipusAuctionSellRow.xml
+AuctipusAuctionBidRow.xml
+AuctipusListingsSellRow.xml
+AuctipusHistoryGroupRow.xml
 AuctipusScrollFrame.xml
 AuctipusSortButton.xml
 AuctipusBrowseFrame.xml
 AuctipusAuctionsFrame.xml
+AuctipusListingsFrame.xml
+AuctipusHistoryFrame.xml
 AuctipusDropDown.xml
 
+AuctipusEventManager.lua
+AuctipusLog.lua
+BetterMoneyFrame.lua
 AuctipusCommonUI.lua
+AuctipusLink.lua
+AuctipusHistory.lua
 AuctipusSortButton.lua
 AuctipusPaths.lua
 AuctipusSet.lua
 AuctipusAuction.lua
 AuctipusPage.lua
-AuctipusOwnerPage.lua
 AuctipusScan.lua
 AuctipusSearch.lua
-AuctipusMoneyFrame.lua
 AuctipusItemButton.lua
 AuctipusAuctionGroup.lua
 AuctipusAuctionGroupRow.lua
-AuctipusAuctionSellRow.lua
+AuctipusListingsSellRow.lua
 AuctipusAuctionRow.lua
+AuctipusAuctionBidRow.lua
+AuctipusHistoryGroupRow.lua
 AuctipusBrowseFrame.lua
 AuctipusAuctionsFrame.lua
+AuctipusListingsFrame.lua
+AuctipusHistoryFrame.lua
 AuctipusDropDown.lua
+AuctipusCategoryMenu.lua
 Auctipus.lua
 
 Auctipus.xml

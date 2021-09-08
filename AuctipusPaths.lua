@@ -1,79 +1,79 @@
 AUCTIPUS_TREE = {}
 AUCTIPUS_PATHS = {
-    {LE_ITEM_CLASS_WEAPON},
-    {LE_ITEM_CLASS_WEAPON, LE_ITEM_WEAPON_AXE1H},
-    {LE_ITEM_CLASS_WEAPON, LE_ITEM_WEAPON_AXE2H},
-    {LE_ITEM_CLASS_WEAPON, LE_ITEM_WEAPON_BOWS},
-    {LE_ITEM_CLASS_WEAPON, LE_ITEM_WEAPON_GUNS},
-    {LE_ITEM_CLASS_WEAPON, LE_ITEM_WEAPON_MACE1H},
-    {LE_ITEM_CLASS_WEAPON, LE_ITEM_WEAPON_MACE2H},
-    {LE_ITEM_CLASS_WEAPON, LE_ITEM_WEAPON_POLEARM},
-    {LE_ITEM_CLASS_WEAPON, LE_ITEM_WEAPON_SWORD1H},
-    {LE_ITEM_CLASS_WEAPON, LE_ITEM_WEAPON_SWORD2H},
-    {LE_ITEM_CLASS_WEAPON, LE_ITEM_WEAPON_STAFF},
-    {LE_ITEM_CLASS_WEAPON, LE_ITEM_WEAPON_UNARMED},
-    {LE_ITEM_CLASS_WEAPON, LE_ITEM_WEAPON_GENERIC},
-    {LE_ITEM_CLASS_WEAPON, LE_ITEM_WEAPON_DAGGER},
-    {LE_ITEM_CLASS_WEAPON, LE_ITEM_WEAPON_THROWN},
-    {LE_ITEM_CLASS_WEAPON, LE_ITEM_WEAPON_CROSSBOW},
-    {LE_ITEM_CLASS_WEAPON, LE_ITEM_WEAPON_WAND},
-    {LE_ITEM_CLASS_WEAPON, LE_ITEM_WEAPON_FISHINGPOLE},
+    {Enum.ItemClass.Weapon},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Axe1H},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Axe2H},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Bows},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Guns},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Mace1H},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Mace2H},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Polearm},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Sword1H},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Sword2H},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Staff},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Unarmed},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Generic},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Dagger},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Thrown},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Crossbow},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Wand},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Fishingpole},
 
-    {LE_ITEM_CLASS_ARMOR},
+    {Enum.ItemClass.Armor},
 
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_GENERIC},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_GENERIC, LE_INVENTORY_TYPE_HEAD_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_GENERIC, LE_INVENTORY_TYPE_NECK_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_GENERIC, LE_INVENTORY_TYPE_BODY_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_GENERIC, LE_INVENTORY_TYPE_FINGER_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_GENERIC, LE_INVENTORY_TYPE_TRINKET_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_GENERIC, LE_INVENTORY_TYPE_HOLDABLE_TYPE},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Generic},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Generic, Enum.InventoryType.IndexHeadType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Generic, Enum.InventoryType.IndexNeckType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Generic, Enum.InventoryType.IndexBodyType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Generic, Enum.InventoryType.IndexFingerType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Generic, Enum.InventoryType.IndexTrinketType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Generic, Enum.InventoryType.IndexHoldableType},
 
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_CLOTH},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_CLOTH, LE_INVENTORY_TYPE_HEAD_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_CLOTH, LE_INVENTORY_TYPE_SHOULDER_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_CLOTH, LE_INVENTORY_TYPE_CHEST_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_CLOTH, LE_INVENTORY_TYPE_WAIST_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_CLOTH, LE_INVENTORY_TYPE_LEGS_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_CLOTH, LE_INVENTORY_TYPE_FEET_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_CLOTH, LE_INVENTORY_TYPE_WRIST_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_CLOTH, LE_INVENTORY_TYPE_HAND_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_CLOTH, LE_INVENTORY_TYPE_CLOAK_TYPE},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Cloth},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Cloth, Enum.InventoryType.IndexHeadType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Cloth, Enum.InventoryType.IndexShoulderType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Cloth, Enum.InventoryType.IndexChestType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Cloth, Enum.InventoryType.IndexWaistType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Cloth, Enum.InventoryType.IndexLegsType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Cloth, Enum.InventoryType.IndexFeetType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Cloth, Enum.InventoryType.IndexWristType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Cloth, Enum.InventoryType.IndexHandType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Cloth, Enum.InventoryType.IndexCloakType},
 
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_LEATHER},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_LEATHER, LE_INVENTORY_TYPE_HEAD_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_LEATHER, LE_INVENTORY_TYPE_SHOULDER_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_LEATHER, LE_INVENTORY_TYPE_CHEST_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_LEATHER, LE_INVENTORY_TYPE_WAIST_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_LEATHER, LE_INVENTORY_TYPE_LEGS_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_LEATHER, LE_INVENTORY_TYPE_FEET_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_LEATHER, LE_INVENTORY_TYPE_WRIST_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_LEATHER, LE_INVENTORY_TYPE_HAND_TYPE},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Leather},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Leather, Enum.InventoryType.IndexHeadType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Leather, Enum.InventoryType.IndexShoulderType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Leather, Enum.InventoryType.IndexChestType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Leather, Enum.InventoryType.IndexWaistType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Leather, Enum.InventoryType.IndexLegsType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Leather, Enum.InventoryType.IndexFeetType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Leather, Enum.InventoryType.IndexWristType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Leather, Enum.InventoryType.IndexHandType},
 
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_MAIL},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_MAIL, LE_INVENTORY_TYPE_HEAD_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_MAIL, LE_INVENTORY_TYPE_SHOULDER_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_MAIL, LE_INVENTORY_TYPE_CHEST_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_MAIL, LE_INVENTORY_TYPE_WAIST_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_MAIL, LE_INVENTORY_TYPE_LEGS_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_MAIL, LE_INVENTORY_TYPE_FEET_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_MAIL, LE_INVENTORY_TYPE_WRIST_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_MAIL, LE_INVENTORY_TYPE_HAND_TYPE},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Mail},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Mail, Enum.InventoryType.IndexHeadType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Mail, Enum.InventoryType.IndexShoulderType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Mail, Enum.InventoryType.IndexChestType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Mail, Enum.InventoryType.IndexWaistType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Mail, Enum.InventoryType.IndexLegsType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Mail, Enum.InventoryType.IndexFeetType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Mail, Enum.InventoryType.IndexWristType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Mail, Enum.InventoryType.IndexHandType},
 
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_PLATE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_PLATE, LE_INVENTORY_TYPE_HEAD_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_PLATE, LE_INVENTORY_TYPE_SHOULDER_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_PLATE, LE_INVENTORY_TYPE_CHEST_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_PLATE, LE_INVENTORY_TYPE_WAIST_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_PLATE, LE_INVENTORY_TYPE_LEGS_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_PLATE, LE_INVENTORY_TYPE_FEET_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_PLATE, LE_INVENTORY_TYPE_WRIST_TYPE},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_PLATE, LE_INVENTORY_TYPE_HAND_TYPE},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Plate},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Plate, Enum.InventoryType.IndexHeadType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Plate, Enum.InventoryType.IndexShoulderType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Plate, Enum.InventoryType.IndexChestType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Plate, Enum.InventoryType.IndexWaistType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Plate, Enum.InventoryType.IndexLegsType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Plate, Enum.InventoryType.IndexFeetType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Plate, Enum.InventoryType.IndexWristType},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Plate, Enum.InventoryType.IndexHandType},
 
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_SHIELD},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_LIBRAM},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_IDOL},
-    {LE_ITEM_CLASS_ARMOR, LE_ITEM_ARMOR_TOTEM},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Shield},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Libram},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Idol},
+    {Enum.ItemClass.Armor, Enum.ItemArmorSubclass.Totem},
 }
 
 local function GenerateAuctionPaths(classID)
@@ -86,15 +86,15 @@ local function GenerateAuctionPaths(classID)
     end
 end
 
-GenerateAuctionPaths(LE_ITEM_CLASS_CONTAINER)
-GenerateAuctionPaths(LE_ITEM_CLASS_CONSUMABLE)
-GenerateAuctionPaths(LE_ITEM_CLASS_TRADEGOODS)
-GenerateAuctionPaths(LE_ITEM_CLASS_PROJECTILE)
-GenerateAuctionPaths(LE_ITEM_CLASS_QUIVER)
-GenerateAuctionPaths(LE_ITEM_CLASS_RECIPE)
-GenerateAuctionPaths(LE_ITEM_CLASS_GEM)
-GenerateAuctionPaths(LE_ITEM_CLASS_MISCELLANEOUS)
-GenerateAuctionPaths(LE_ITEM_CLASS_QUESTITEM)
+GenerateAuctionPaths(Enum.ItemClass.Container)
+GenerateAuctionPaths(Enum.ItemClass.Consumable)
+GenerateAuctionPaths(Enum.ItemClass.Tradegoods)
+GenerateAuctionPaths(Enum.ItemClass.Projectile)
+GenerateAuctionPaths(Enum.ItemClass.Quiver)
+GenerateAuctionPaths(Enum.ItemClass.Recipe)
+GenerateAuctionPaths(Enum.ItemClass.Gem)
+GenerateAuctionPaths(Enum.ItemClass.Miscellaneous)
+GenerateAuctionPaths(Enum.ItemClass.Questitem)
 
 local RENAME_TABLE = {
     ["Gem > Purple"] = "Gem > Purple [Red/Blue]",

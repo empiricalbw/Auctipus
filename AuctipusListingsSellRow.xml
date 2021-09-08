@@ -1,45 +1,50 @@
 <?xml version="1.0"?>
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
-    <Button name="AuctipusAuctionGroupRowTemplate" virtual="true" mixin="AuctipusAuctionGroupRow">
-        <Size x="350" y="36"/>
+    <Button name="AuctipusListingsSellRowTemplate" mixin="AuctipusListingsSellRow" virtual="true">
+        <Size x="350" y="30"/>
         <Frames>
             <Button parentKey="ItemButton" inherits="AuctipusItemButtonTemplate">
-                <Anchors><Anchor point="TOPLEFT"/></Anchors>
+                <Anchors><Anchor point="LEFT"/></Anchors>
             </Button>
-            <Frame name="$parentMinBuyoutPerItem" parentKey="MinBuyoutPerItem" inherits="BetterMoneyFrameFixedTemplate">
-                <Anchors>
-                    <Anchor point="RIGHT" x="-6"/>
-                </Anchors>
-            </Frame>
         </Frames>
         <Layers>
             <Layer level="BACKGROUND">
-                <FontString name="$parentLevel" parentKey="Level" inherits="GameFontHighlightSmall">
-                    <Size x="32" y="32"/>
+                <FontString name="$parentDuration" parentKey="Duration" inherits="GameFontHighlightSmall">
+                    <Size x="70"/>
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.ItemButton.Name" relativePoint="TOPRIGHT" x="5"/>
                         <Anchor point="BOTTOM" relativeKey="$parent.ItemButton.Name"/>
                     </Anchors>
                 </FontString>
-                <Texture name="$parentLeft" file="Interface\AuctionFrame\UI-AuctionItemNameFrame">
-                    <Size x="10" y="36"/>
+                <FontString name="$parentHighBidder" parentKey="HighBidder" inherits="GameFontHighlightSmall">
+                    <Size x="170"/>
                     <Anchors>
-                        <Anchor point="LEFT" x="38" y="0"/>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.Duration" relativePoint="TOPRIGHT" x="5"/>
+                        <Anchor point="BOTTOM" relativeKey="$parent.Duration"/>
+                    </Anchors>
+                </FontString>
+                <Texture name="$parentLeft" file="Interface\AuctionFrame\UI-AuctionItemNameFrame">
+                    <Size x="10"/>
+                    <Anchors>
+                        <Anchor point="TOP"/>
+                        <Anchor point="LEFT" relativeKey="$parent.ItemButton" relativePoint="RIGHT" x="2" y="0"/>
+                        <Anchor point="BOTTOM"/>
                     </Anchors>
                     <TexCoords left="0" right="0.078125" top="0" bottom="1.0"/>
                 </Texture>
                 <Texture name="$parentRight" file="Interface\AuctionFrame\UI-AuctionItemNameFrame">
-                    <Size x="10" y="36"/>
+                    <Size x="10"/>
                     <Anchors>
+                        <Anchor point="TOP"/>
                         <Anchor point="RIGHT" x="0" y="0"/>
+                        <Anchor point="BOTTOM"/>
                     </Anchors>
                     <TexCoords left="0.75" right="0.828125" top="0" bottom="1.0"/>
                 </Texture>
                 <Texture file="Interface\AuctionFrame\UI-AuctionItemNameFrame">
-                    <Size x="10" y="36"/>
                     <Anchors>
-                        <Anchor point="LEFT" relativeTo="$parentLeft" relativePoint="RIGHT" x="0" y="0"/>
-                        <Anchor point="RIGHT" relativeTo="$parentRight" relativePoint="LEFT" x="0" y="0"/>
+                        <Anchor point="TOPLEFT" relativeTo="$parentLeft" relativePoint="TOPRIGHT" x="0" y="0"/>
+                        <Anchor point="BOTTOMRIGHT" relativeTo="$parentRight" relativePoint="BOTTOMLEFT" x="0" y="0"/>
                     </Anchors>
                     <TexCoords left="0.078125" right="0.75" top="0" bottom="1.0"/>
                 </Texture>
@@ -52,12 +57,25 @@
                 </Texture>
             </Layer>
         </Layers>
+        <Frames>
+            <Frame name="$parentCurrentBid" parentKey="CurrentBid" inherits="BetterMoneyFrameFixedTemplate">
+                <Anchors>
+                    <Anchor point="RIGHT" x="-6" y="7"/>
+                </Anchors>
+            </Frame>
+            <Frame name="$parentBuyout" parentKey="Buyout" inherits="BetterMoneyFrameFixedTemplate">
+                <Anchors>
+                    <Anchor point="RIGHT" x="-6" y="-7"/>
+                </Anchors>
+            </Frame>
+        </Frames>
         <Scripts>
             <OnLoad method="OnLoad"/>
+            <OnClick method="OnClick"/>
         </Scripts>
         <HighlightTexture name="$parentHighlight" file="Interface\HelpFrame\HelpFrameButton-Highlight" alphaMode="ADD">
             <Anchors>
-                <Anchor point="TOPLEFT" x="40" y="-2"/>
+                <Anchor point="TOPLEFT" x="28" y="-2"/>
                 <Anchor point="BOTTOMRIGHT" x="-2" y="1"/>
             </Anchors>
             <TexCoords left="0" right="1.0" top="0" bottom="0.578125"/>
