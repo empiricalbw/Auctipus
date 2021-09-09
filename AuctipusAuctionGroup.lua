@@ -11,6 +11,7 @@ function AuctipusAuctionGroup:New(auction)
                itemId            = auction.itemId,
                link              = auction.link,
                maxCount          = 0,
+               buyableCount      = 0,
                auctions          = {},
                unitPriceAuctions = {},
                buyoutAuctions    = {},
@@ -35,6 +36,9 @@ function AuctipusAuctionGroup:AddAuction(auction)
     if auction.buyoutPrice > 0 then
         table.insert(self.buyoutAuctions, auction)
         table.insert(self.unitPriceAuctions, auction)
+        if auction:IsBuyable() then
+            self.buyableCount = self.buyableCount + auction.count
+        end
     end
     self.maxCount     = max(self.maxCount, auction.count)
     auction.auctionGroup = self
