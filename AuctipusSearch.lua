@@ -316,15 +316,17 @@ function ASearcher.CHAT_MSG_SYSTEM(msg)
         return
     end
 
-    assert(self.state == STATE_WAIT_BUYOUT_RESULT or
-           self.state == STATE_WAIT_BUYOUT_RESULT_CLOSED)
+    local stateGood = (self.state == STATE_WAIT_BUYOUT_RESULT or
+                       self.state == STATE_WAIT_BUYOUT_RESULT_CLOSED)
 
     if msg == ERR_AUCTION_BID_PLACED then
         Auctipus.dbg("Got bid accepted event.")
+        assert(stateGood)
         self.gotBidAcceptedMsg = true
         self:CheckBuyoutState()
     elseif msg == self.ERR_AUCTION_WON then
         Auctipus.dbg("Got auction won event.")
+        assert(stateGood)
         self.gotAuctionWonMsg = true
         self:CheckBuyoutState()
     elseif msg == ERR_AUCTION_ALREADY_BID or
