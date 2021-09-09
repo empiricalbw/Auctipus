@@ -168,3 +168,15 @@ function AAuction:Matches(a)
             self.owner       == a.owner and
             self.link        == a.link)
 end
+
+function AAuction:IsMine()
+    return self.owner == UnitName("player")
+end
+
+function AAuction:IsIgnored()
+    return (AUCTIPUS_IGNORED_SELLERS[self.owner] ~= nil)
+end
+
+function AAuction:IsBuyable()
+    return not self.missing and not self:IsMine() and not self:IsIgnored()
+end

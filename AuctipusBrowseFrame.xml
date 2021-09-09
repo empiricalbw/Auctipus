@@ -205,52 +205,13 @@
                 </Anchors>
 			</Button>
 
-            <Button name="$parentBuyButton" parentKey="BuyButton" inherits="UIPanelButtonTemplate" text="Buy">
-                <Size x="100" y="24"/>
-                <Anchors>
-                    <Anchor point="TOPRIGHT" relativeTo="$parentAuctionScrollFrame" relativePoint="BOTTOMRIGHT" x="10" y="-20"/>
-                </Anchors>
-            </Button>
-
-            <Frame parentKey="SelectionInfo">
+            <Frame parentKey="SelectionInfo" inherits="AuctipusWell">
+                <Size x="286"/>
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="$parentAuction16" relativePoint="BOTTOMLEFT" y="-1"/>
-                    <Anchor point="RIGHT" relativeTo="$parentBuyButton" relativePoint="LEFT" x="-20"/>
-                    <Anchor point="BOTTOM" y="8"/>
+                    <Anchor point="BOTTOM" y="4"/>
                 </Anchors>
                 <Layers>
-                    <Layer level="BACKGROUND">
-                        <Texture name="$parentLeft" file="Interface\AuctionFrame\UI-AuctionItemNameFrame">
-                            <Size x="10"/>
-                            <Anchors>
-                                <Anchor point="TOPLEFT"/>
-                                <Anchor point="BOTTOMLEFT"/>
-                            </Anchors>
-                            <TexCoords left="0" right="0.078125" top="0" bottom="1.0"/>
-                        </Texture>
-                        <Texture name="$parentRight" file="Interface\AuctionFrame\UI-AuctionItemNameFrame">
-                            <Size x="10"/>
-                            <Anchors>
-                                <Anchor point="TOPRIGHT"/>
-                                <Anchor point="BOTTOMRIGHT"/>
-                            </Anchors>
-                            <TexCoords left="0.75" right="0.828125" top="0" bottom="1.0"/>
-                        </Texture>
-                        <Texture file="Interface\AuctionFrame\UI-AuctionItemNameFrame">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" relativeTo="$parentLeft" relativePoint="TOPRIGHT"/>
-                                <Anchor point="BOTTOMRIGHT" relativeTo="$parentRight" relativePoint="BOTTOMLEFT"/>
-                            </Anchors>
-                            <TexCoords left="0.078125" right="0.75" top="0" bottom="1.0"/>
-                        </Texture>
-                        <Texture>
-                            <Anchors>
-                                <Anchor point="TOPLEFT" relativeTo="$parentLeft" x="1" y="-1"/>
-                                <Anchor point="BOTTOMRIGHT" relativeTo="$parentRight" x="-1" y="1"/>
-                            </Anchors>
-                            <Color r="0" g="0" b="0" a="0.5"/>
-                        </Texture>
-                    </Layer>
                     <Layer level="ARTWORK">
                         <FontString name="$parentSelectedLabel" inherits="GameFontNormalSmall" justifyH="LEFT" text="Selected:">
                             <Size x="60" y="24"/>
@@ -312,6 +273,40 @@
                     </Frame>
                 </Frames>
             </Frame>
+
+            <Frame parentKey="SmartSelect" inherits="AuctipusWell">
+                <Size y="38"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.SelectionInfo" relativePoint="TOPRIGHT" x="2"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.AuctionScrollFrame" relativePoint="RIGHT" x="27"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="GameFontNormalSmall" justifyH="LEFT" text="Smart Select:">
+                            <Size x="100" y="24"/>
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="5" y="2"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <Frame parentKey="Input" inherits="BetterNumberFrameTemplate">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="25" y="-15"/>
+                            <Anchor point="BOTTOMRIGHT" x="-25" y="5"/>
+                        </Anchors>
+                    </Frame>
+                </Frames>
+            </Frame>
+
+            <Button name="$parentBuyButton" parentKey="BuyButton" inherits="UIPanelButtonTemplate" text="Buy">
+                <Size y="24"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.SmartSelect" relativePoint="BOTTOMLEFT" y="0"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.SmartSelect" relativePoint="RIGHT"/>
+                </Anchors>
+            </Button>
         </Frames>
         <Layers>
             <Layer level="BACKGROUND">

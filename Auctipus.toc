@@ -1,12 +1,14 @@
 ## Interface: 20502
 ## Title: Auctipus
-## Version: 2.5.2-v1
+## Version: 2.5.2-v2
 ## Author: Empirical
 ## DefaultState: enabled
 ## Dependencies:
 ## SavedVariables: AUCTIPUS_ITEM_HISTORY_DB, AUCTIPUS_ITEM_HISTORY_DB_VERSION, AUCTIPUS_IGNORED_SELLERS_DB, AUCTIPUS_CREATE_DEFAULTS
 
 BetterMoneyFrame.xml
+BetterNumberFrame.xml
+AuctipusWell.xml
 AuctipusItemButton.xml
 AuctipusAuctionGroupRow.xml
 AuctipusAuctionRow.xml
@@ -21,9 +23,11 @@ AuctipusListingsFrame.xml
 AuctipusHistoryFrame.xml
 AuctipusDropDown.xml
 
+Matrix.lua
 AuctipusEventManager.lua
 AuctipusLog.lua
 BetterMoneyFrame.lua
+BetterNumberFrame.lua
 AuctipusCommonUI.lua
 AuctipusLink.lua
 AuctipusHistory.lua

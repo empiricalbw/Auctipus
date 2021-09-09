@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+    <Frame name="AuctipusWell" virtual="true">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="WellLeft" file="Interface\AuctionFrame\UI-AuctionItemNameFrame">
+                    <Size x="10"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT"/>
+                        <Anchor point="BOTTOMLEFT"/>
+                    </Anchors>
+                    <TexCoords left="0" right="0.078125" top="0" bottom="1.0"/>
+                </Texture>
+                <Texture parentKey="WellRight" file="Interface\AuctionFrame\UI-AuctionItemNameFrame">
+                    <Size x="10"/>
+                    <Anchors>
+                        <Anchor point="TOPRIGHT"/>
+                        <Anchor point="BOTTOMRIGHT"/>
+                    </Anchors>
+                    <TexCoords left="0.75" right="0.828125" top="0" bottom="1.0"/>
+                </Texture>
+                <Texture file="Interface\AuctionFrame\UI-AuctionItemNameFrame">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.WellLeft" relativePoint="TOPRIGHT"/>
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.WellRight" relativePoint="BOTTOMLEFT"/>
+                    </Anchors>
+                    <TexCoords left="0.078125" right="0.75" top="0" bottom="1.0"/>
+                </Texture>
+                <Texture>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.WellLeft" x="1" y="-1"/>
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.WellRight" x="-1" y="1"/>
+                    </Anchors>
+                    <Color r="0" g="0" b="0" a="0.5"/>
+                </Texture>
+            </Layer>
+        </Layers>
+    </Frame>
+</Ui>

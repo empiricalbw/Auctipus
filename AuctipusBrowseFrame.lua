@@ -102,6 +102,10 @@ function AuctipusBrowseFrame:OnLoad()
     -- Search button.
     self.SearchButton:SetScript("OnClick", function() self:DoSearch() end)
 
+    -- Smart select field.
+    self.SmartSelect.Input:Init(0, 0,
+        function(v) self:SelectOptimalAuctions(v) end)
+
     -- Buy button.
     local b = self.BuyButton
     b:SetScript("OnClick", function() self:DoBuy() end)
@@ -133,10 +137,22 @@ function AuctipusBrowseFrame:OnLoad()
 
     -- Status text.
     self.StatusText:SetText("Submit a search query.")
-    self.SelectionInfo:Hide()
+    self:HideBuyControls()
 
     -- Cleanup upon hiding.
     self:SetScript("OnHide", function() self:OnHide() end)
+end
+
+function AuctipusBrowseFrame:HideBuyControls()
+    self.SelectionInfo:Hide()
+    self.SmartSelect:Hide()
+    self.BuyButton:Hide()
+end
+
+function AuctipusBrowseFrame:ShowBuyControls()
+    self.SelectionInfo:Show()
+    self.SmartSelect:Show()
+    self.BuyButton:Show()
 end
 
 function AuctipusBrowseFrame.AUCTION_HOUSE_CLOSED()
@@ -203,7 +219,7 @@ function AuctipusBrowseFrame:ShowAuctionMenu(auctionRow)
     end
 
     local seller  = auctionRow.auction.owner
-    local ignored = (AUCTIPUS_IGNORED_SELLERS[seller] ~= nil)
+    local ignored = auctionRow.auction:IsIgnored()
     self.AuctionRowDropDown:SetItemText(1, seller)
     self.AuctionRowDropDown:SetItemEnabled(2, not ignored)
     self.AuctionRowDropDown:SetItemEnabled(3, ignored)
@@ -226,17 +242,25 @@ function AuctipusBrowseFrame:OnAuctionRowDropDownClick(index)
     AUCTIPUS_IGNORED_SELLERS[seller] = (index == 2) or nil
     self:HideAuctionMenu()
 
-    local removed = ASet:New()
+    local prevFirst = self.selectedAuctions:First()
+    local removed   = {}
     for a, _ in pairs(self.selectedAuctions.elems) do
         if a.owner == seller then
-            removed:Insert(a)
+            table.insert(removed, a)
         end
     end
-    for a, _ in pairs(removed) do
+    for i, a in pairs(removed) do
         self.selectedAuctions:Remove(a)
     end
-
     self:UpdateAuctions()
+
+    local first = self.selectedAuctions:First()
+    if prevFirst ~= first then
+        self.BuyButton:Disable()
+        if first ~= nil then
+            first.auctionGroup.searcher:FindAuction(first, self)
+        end
+    end
 end
 
 function AuctipusBrowseFrame:ClearScan()
@@ -283,7 +307,7 @@ function AuctipusBrowseFrame:DoSearch()
 
     self.StatusText:SetText("Searching...")
     self.StatusText:Show()
-    self.SelectionInfo:Hide()
+    self:HideBuyControls()
     self.scan = AScan:New({query}, self)
     self.SearchBox:ClearFocus()
     self.SearchButton:Disable()
@@ -334,6 +358,8 @@ function AuctipusBrowseFrame:SelectAuctionGroup(auctionGroup)
         self.selectedAuctionGroup.searcher:Reset()
     end
     self.selectedAuctionGroup = auctionGroup
+    self.SmartSelect.Input:SetMax(auctionGroup.buyableCount)
+    self.SmartSelect.Input:SetValue(0)
     self:ClearSearch()
 end
 
@@ -344,22 +370,22 @@ function AuctipusBrowseFrame:UpdateAuctionGroups()
         if nauctionGroups > 0 then
             if #self.selectedAuctionGroup.unitPriceAuctions then
                 self.StatusText:Hide()
-                self.SelectionInfo:Show()
+                self:ShowBuyControls()
             else
                 self.StatusText:SetText("All results are bid-only auctions.")
                 self.StatusText:Show()
-                self.SelectionInfo:Hide()
+                self:HideBuyControls()
             end
         else
             self.StatusText:SetText("No auctions found.")
             self.StatusText:Show()
-            self.SelectionInfo:Hide()
+            self:HideBuyControls()
         end
     else
         nauctionGroups = 0
         self.StatusText:SetText("Enter a search query.")
         self.StatusText:Show()
-        self.SelectionInfo:Hide()
+        self:HideBuyControls()
     end
 
     FauxScrollFrame_Update(self.AuctionGroupScrollFrame, nauctionGroups,
@@ -410,6 +436,39 @@ function AuctipusBrowseFrame:ToggleAuctionSelection(auction)
     end
 end
 
+function AuctipusBrowseFrame:SelectOptimalAuctions(n)
+    local ag = self.selectedAuctionGroup
+    if not ag then
+        return
+    end
+
+    if not ag.matrix then
+        ag.matrix = Matrix:New(ag.unitPriceAuctions)
+    end
+
+    self.selectedAuctions:Clear()
+    if n > 0 then
+        ag.matrix:Optimize(n)
+        local auctions = ag.matrix:GetElems(n)
+        if not auctions then
+            Auctipus.info("Not enough auctions to satisfy demand.")
+        else
+            for _, a in ipairs(auctions) do
+                self.selectedAuctions:Insert(a)
+            end
+            self.selectedAuctions:Sort(AAuction.LTUnitPrice)
+        end
+    end
+
+    self:UpdateAuctions()
+
+    local first = self.selectedAuctions:First()
+    self.BuyButton:Disable()
+    if first ~= nil then
+        first.auctionGroup.searcher:FindAuction(first, self)
+    end
+end
+
 function AuctipusBrowseFrame:UpdateAuctions()
     local nauctions
     local auctionGroup = self.selectedAuctionGroup
@@ -431,7 +490,7 @@ function AuctipusBrowseFrame:UpdateAuctions()
             local auction = auctionGroup.unitPriceAuctions[index]
             row:SetAuction(auction)
 
-            if auction.missing or AUCTIPUS_IGNORED_SELLERS[auction.owner] then
+            if not auction:IsBuyable() then
                 row:DisableRow()
             else
                 row:EnableRow()
@@ -543,8 +602,10 @@ end
 
 function AuctipusBrowseFrame:AuctionWon(searcher)
     local auction = self.selectedAuctions:Pop()
+    local ag      = auction.auctionGroup
     self.purchasedAuctions:Insert(auction)
-    auction.auctionGroup:RemoveItem(auction)
+    ag:RemoveItem(auction)
+    ag.matrix = nil
     self:UpdateAuctions()
 
     if not self.selectedAuctions:Empty() then

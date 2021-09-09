@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+    <Frame name="BetterNumberFrameTemplate" virtual="true" mixin="BetterNumberFrameMixin">
+        <Frames>
+            <Button parentKey="DecrementButton">
+                <Size x="23" y="22"/>
+                <Anchors>
+                    <Anchor point="LEFT"/>
+                </Anchors>
+                <NormalTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Up"/>
+                <PushedTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Down"/>
+                <DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Disabled"/>
+                <HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+            </Button>
+            <Button parentKey="IncrementButton">
+                <Size x="23" y="22"/>
+                <Anchors>
+                    <Anchor point="RIGHT"/>
+                </Anchors>
+                <NormalTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Up"/>
+                <PushedTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Down"/>
+                <DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Disabled"/>
+                <HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+            </Button>
+            <EditBox parentKey="NumberBox" letters="4" historyLines="0" numeric="true" autoFocus="false" inherits="InputBoxTemplate">
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.DecrementButton" relativePoint="RIGHT" x="4"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.IncrementButton" relativePoint="LEFT" x="0"/>
+                    <Anchor point="TOP"/>
+                    <Anchor point="BOTTOM"/>
+                </Anchors>
+            </EditBox>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+        </Scripts>
+    </Frame>
+</Ui>
