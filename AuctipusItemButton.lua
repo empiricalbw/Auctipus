@@ -53,7 +53,9 @@ function AuctipusItemButton:SetAuction(auction)
 
     local color = ITEM_QUALITY_COLORS[auction.quality]
     self.Name:SetText(auction.name)
-    self.Name:SetVertexColor(color.r, color.g, color.b)
+    if color then
+        self.Name:SetVertexColor(color.r, color.g, color.b)
+    end
     self.Name:Show()
 end
 
