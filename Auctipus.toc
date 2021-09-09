@@ -8,6 +8,7 @@
 
 BetterMoneyFrame.xml
 BetterNumberFrame.xml
+AuctipusWell.xml
 AuctipusItemButton.xml
 AuctipusAuctionGroupRow.xml
 AuctipusAuctionRow.xml
