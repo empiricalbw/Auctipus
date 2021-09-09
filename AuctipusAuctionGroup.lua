@@ -40,7 +40,7 @@ function AuctipusAuctionGroup:AddAuction(auction)
             self.buyableCount = self.buyableCount + auction.count
         end
     end
-    self.maxCount     = max(self.maxCount, auction.count)
+    self.maxCount        = max(self.maxCount, auction.count)
     auction.auctionGroup = self
 end
 
