@@ -23,6 +23,7 @@ AuctipusListingsFrame.xml
 AuctipusHistoryFrame.xml
 AuctipusDropDown.xml
 
+Matrix.lua
 AuctipusEventManager.lua
 AuctipusLog.lua
 BetterMoneyFrame.lua
