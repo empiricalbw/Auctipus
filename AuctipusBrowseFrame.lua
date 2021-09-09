@@ -133,10 +133,20 @@ function AuctipusBrowseFrame:OnLoad()
 
     -- Status text.
     self.StatusText:SetText("Submit a search query.")
-    self.SelectionInfo:Hide()
+    self:HideBuyControls()
 
     -- Cleanup upon hiding.
     self:SetScript("OnHide", function() self:OnHide() end)
+end
+
+function AuctipusBrowseFrame:HideBuyControls()
+    self.SelectionInfo:Hide()
+    self.BuyButton:Hide()
+end
+
+function AuctipusBrowseFrame:ShowBuyControls()
+    self.SelectionInfo:Show()
+    self.BuyButton:Show()
 end
 
 function AuctipusBrowseFrame.AUCTION_HOUSE_CLOSED()
@@ -283,7 +293,7 @@ function AuctipusBrowseFrame:DoSearch()
 
     self.StatusText:SetText("Searching...")
     self.StatusText:Show()
-    self.SelectionInfo:Hide()
+    self:HideBuyControls()
     self.scan = AScan:New({query}, self)
     self.SearchBox:ClearFocus()
     self.SearchButton:Disable()
@@ -344,22 +354,22 @@ function AuctipusBrowseFrame:UpdateAuctionGroups()
         if nauctionGroups > 0 then
             if #self.selectedAuctionGroup.unitPriceAuctions then
                 self.StatusText:Hide()
-                self.SelectionInfo:Show()
+                self:ShowBuyControls()
             else
                 self.StatusText:SetText("All results are bid-only auctions.")
                 self.StatusText:Show()
-                self.SelectionInfo:Hide()
+                self:HideBuyControls()
             end
         else
             self.StatusText:SetText("No auctions found.")
             self.StatusText:Show()
-            self.SelectionInfo:Hide()
+            self:HideBuyControls()
         end
     else
         nauctionGroups = 0
         self.StatusText:SetText("Enter a search query.")
         self.StatusText:Show()
-        self.SelectionInfo:Hide()
+        self:HideBuyControls()
     end
 
     FauxScrollFrame_Update(self.AuctionGroupScrollFrame, nauctionGroups,
