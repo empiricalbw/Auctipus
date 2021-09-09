@@ -203,7 +203,7 @@ function AuctipusBrowseFrame:ShowAuctionMenu(auctionRow)
     end
 
     local seller  = auctionRow.auction.owner
-    local ignored = (AUCTIPUS_IGNORED_SELLERS[seller] ~= nil)
+    local ignored = auctionRow.auction:IsIgnored()
     self.AuctionRowDropDown:SetItemText(1, seller)
     self.AuctionRowDropDown:SetItemEnabled(2, not ignored)
     self.AuctionRowDropDown:SetItemEnabled(3, ignored)
@@ -431,7 +431,7 @@ function AuctipusBrowseFrame:UpdateAuctions()
             local auction = auctionGroup.unitPriceAuctions[index]
             row:SetAuction(auction)
 
-            if auction.missing or AUCTIPUS_IGNORED_SELLERS[auction.owner] then
+            if not auction:IsBuyable() then
                 row:DisableRow()
             else
                 row:EnableRow()
