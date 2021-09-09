@@ -205,17 +205,10 @@
                 </Anchors>
 			</Button>
 
-            <Button name="$parentBuyButton" parentKey="BuyButton" inherits="UIPanelButtonTemplate" text="Buy">
-                <Size x="100" y="24"/>
-                <Anchors>
-                    <Anchor point="TOPRIGHT" relativeTo="$parentAuctionScrollFrame" relativePoint="BOTTOMRIGHT" x="10" y="-20"/>
-                </Anchors>
-            </Button>
-
             <Frame parentKey="SelectionInfo" inherits="AuctipusWell">
+                <Size x="286"/>
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="$parentAuction16" relativePoint="BOTTOMLEFT" y="-1"/>
-                    <Anchor point="RIGHT" relativeTo="$parentBuyButton" relativePoint="LEFT" x="-20"/>
                     <Anchor point="BOTTOM" y="8"/>
                 </Anchors>
                 <Layers>
@@ -280,6 +273,13 @@
                     </Frame>
                 </Frames>
             </Frame>
+
+            <Button name="$parentBuyButton" parentKey="BuyButton" inherits="UIPanelButtonTemplate" text="Buy">
+                <Size x="100" y="24"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativeTo="$parentAuctionScrollFrame" relativePoint="BOTTOMRIGHT" x="10" y="-20"/>
+                </Anchors>
+            </Button>
         </Frames>
         <Layers>
             <Layer level="BACKGROUND">
