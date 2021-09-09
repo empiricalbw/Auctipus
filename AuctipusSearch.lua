@@ -338,6 +338,29 @@ function ASearcher.CHAT_MSG_SYSTEM(msg)
            msg == ERR_AUCTION_MIN_BID
     then
         Auctipus.dbg("Got bid rejected event.")
+        assert(stateGood)
+        buyoutSearcher = nil
+        if self.state == STATE_WAIT_BUYOUT_RESULT then
+            self.apage:ClosePage()
+        end
+
+        self:_TRANSITION(STATE_INITIAL)
+        self:NotifyAuctionLost()
+    end
+end
+
+function ASearcher.UI_ERROR_MESSAGE(id, msg)
+    local self = buyoutSearcher
+    if not self then
+        return
+    end
+
+    local stateGood = (self.state == STATE_WAIT_BUYOUT_RESULT or
+                       self.state == STATE_WAIT_BUYOUT_RESULT_CLOSED)
+
+    if msg == ERR_NOT_ENOUGH_MONEY then
+        Auctipus.info("Not enough money.")
+        assert(stateGood)
         buyoutSearcher = nil
         if self.state == STATE_WAIT_BUYOUT_RESULT then
             self.apage:ClosePage()
