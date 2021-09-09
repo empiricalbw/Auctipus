@@ -236,17 +236,25 @@ function AuctipusBrowseFrame:OnAuctionRowDropDownClick(index)
     AUCTIPUS_IGNORED_SELLERS[seller] = (index == 2) or nil
     self:HideAuctionMenu()
 
-    local removed = ASet:New()
+    local prevFirst = self.selectedAuctions:First()
+    local removed   = {}
     for a, _ in pairs(self.selectedAuctions.elems) do
         if a.owner == seller then
-            removed:Insert(a)
+            table.insert(removed, a)
         end
     end
-    for a, _ in pairs(removed) do
+    for i, a in pairs(removed) do
         self.selectedAuctions:Remove(a)
     end
-
     self:UpdateAuctions()
+
+    local first = self.selectedAuctions:First()
+    if prevFirst ~= first then
+        self.BuyButton:Disable()
+        if first ~= nil then
+            first.auctionGroup.searcher:FindAuction(first, self)
+        end
+    end
 end
 
 function AuctipusBrowseFrame:ClearScan()
