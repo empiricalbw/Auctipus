@@ -209,7 +209,7 @@
                 <Size x="286"/>
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="$parentAuction16" relativePoint="BOTTOMLEFT" y="-1"/>
-                    <Anchor point="BOTTOM" y="8"/>
+                    <Anchor point="BOTTOM" y="4"/>
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
@@ -274,10 +274,37 @@
                 </Frames>
             </Frame>
 
-            <Button name="$parentBuyButton" parentKey="BuyButton" inherits="UIPanelButtonTemplate" text="Buy">
-                <Size x="100" y="24"/>
+            <Frame parentKey="SmartSelect" inherits="AuctipusWell">
+                <Size y="38"/>
                 <Anchors>
-                    <Anchor point="TOPRIGHT" relativeTo="$parentAuctionScrollFrame" relativePoint="BOTTOMRIGHT" x="10" y="-20"/>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.SelectionInfo" relativePoint="TOPRIGHT" x="2"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.AuctionScrollFrame" relativePoint="RIGHT" x="27"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="GameFontNormalSmall" justifyH="LEFT" text="Smart Select:">
+                            <Size x="100" y="24"/>
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="5" y="2"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <Frame parentKey="Input" inherits="BetterNumberFrameTemplate">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="25" y="-15"/>
+                            <Anchor point="BOTTOMRIGHT" x="-25" y="5"/>
+                        </Anchors>
+                    </Frame>
+                </Frames>
+            </Frame>
+
+            <Button name="$parentBuyButton" parentKey="BuyButton" inherits="UIPanelButtonTemplate" text="Buy">
+                <Size y="24"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.SmartSelect" relativePoint="BOTTOMLEFT" y="0"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.SmartSelect" relativePoint="RIGHT"/>
                 </Anchors>
             </Button>
         </Frames>
