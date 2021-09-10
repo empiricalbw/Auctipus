@@ -241,22 +241,26 @@ function ASearcher:PageUpdated(p, delta)
     assert(p == self.apage)
 
     if self.state == STATE_INITIAL or
-       self.state == STATE_WAIT_SELECTED or
-       self.state == STATE_WAIT_BUYOUT_RESULT_CLOSED or
-       self.state == STATE_INITIAL_OPENED
+       self.state == STATE_WAIT_BUYOUT_RESULT_CLOSED
     then
         error("PageUpdated not expected in "..self.state)
     end
 
     if self.state == STATE_WAIT_PAGE_STABLE then
-        assert(delta >= 0)
+        --assert(delta >= 0)
         self:SearchPage()
+    elseif self.state == STATE_WAIT_SELECTED then
+        if self.apage:GetSelectedItem() == 0 then
+            self:NotifySearchPending()
+            self:SearchPage()
+        end
     elseif self.state == STATE_WAIT_BUYOUT_RESULT then
         assert(delta <= 0)
         if delta < 0 then
             self.gotPageShrank = true
             self:CheckBuyoutState()
         end
+    elseif self.state == STATE_INITIAL_OPENED then
     end
 end
 
