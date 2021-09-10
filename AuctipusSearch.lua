@@ -368,6 +368,16 @@ function ASearcher.UI_ERROR_MESSAGE(id, msg)
 
         self:_TRANSITION(STATE_INITIAL)
         self:NotifyAuctionLost()
+    elseif msg == ERR_ITEM_NOT_FOUND then
+        Auctipus.info("Item not found.")
+        assert(stateGood)
+        buyoutSearcher = nil
+        if self.state == STATE_WAIT_BUYOUT_RESULT then
+            self.apage:ClosePage()
+        end
+
+        self:_TRANSITION(STATE_INITIAL)
+        self:NotifyAuctionLost()
     end
 end
 
