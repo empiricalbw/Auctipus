@@ -241,6 +241,7 @@ function AuctipusBrowseFrame:OnAuctionRowDropDownClick(index)
     local seller = self.AuctionRowDropDown:GetItemText(1)
     AUCTIPUS_IGNORED_SELLERS[seller] = (index == 2) or nil
     self:HideAuctionMenu()
+    self:AvailableAuctionsChanged()
 
     local prevFirst = self.selectedAuctions:First()
     local removed   = {}
@@ -577,6 +578,7 @@ function AuctipusBrowseFrame:SearchFailed(search)
     assert(search.targetAuction == self.selectedAuctions:First())
     search.targetAuction.missing = true
     self.selectedAuctions:Pop()
+    self:AvailableAuctionsChanged()
     self:UpdateAuctions()
 
     if not self.selectedAuctions:Empty() then
@@ -605,7 +607,7 @@ function AuctipusBrowseFrame:AuctionWon(searcher)
     local ag      = auction.auctionGroup
     self.purchasedAuctions:Insert(auction)
     ag:RemoveItem(auction)
-    ag.matrix = nil
+    self:AvailableAuctionsChanged()
     self:UpdateAuctions()
 
     if not self.selectedAuctions:Empty() then
@@ -615,10 +617,20 @@ end
 
 function AuctipusBrowseFrame:AuctionLost(searcher)
     self.selectedAuctions:Pop()
+    self:AvailableAuctionsChanged()
     self:UpdateAuctions()
 
     if not self.selectedAuctions:Empty() then
         searcher:FindAuction(self.selectedAuctions:First(), self)
+    end
+end
+
+function AuctipusBrowseFrame:AvailableAuctionsChanged()
+    local ag = self.selectedAuctionGroup
+    if ag then
+        ag.matrix = nil
+        ag:RecomputeBuyableCount()
+        self.SmartSelect.Input:SetMax(ag.buyableCount)
     end
 end
 
