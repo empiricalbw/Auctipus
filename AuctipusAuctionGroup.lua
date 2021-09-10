@@ -44,6 +44,15 @@ function AuctipusAuctionGroup:AddAuction(auction)
     auction.auctionGroup = self
 end
 
+function AuctipusAuctionGroup:RecomputeBuyableCount()
+    self.buyableCount = 0
+    for i, auction in ipairs(self.auctions) do
+        if auction:IsBuyable() then
+            self.buyableCount = self.buyableCount + auction.count
+        end
+    end
+end
+
 function AuctipusAuctionGroup:SortByBuyout()
     table.sort(self.auctions, AAuction.LTBuyout)
     table.sort(self.buyoutAuctions, AAuction.LTBuyout)

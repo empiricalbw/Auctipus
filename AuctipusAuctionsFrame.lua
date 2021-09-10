@@ -42,6 +42,7 @@ AuctipusAuctionsFrame = {}
 
 AUCTIPUS_CREATE_DEFAULTS = {
     perUnit = true,
+    duration = 1,
 }
 
 local AUCTION_DURATION_STRINGS = {
@@ -52,6 +53,11 @@ local AUCTION_DURATION_STRINGS = {
 
 function AuctipusAuctionsFrame:ProcessSavedVars()
     self.PerUnitCheck:SetChecked(AUCTIPUS_CREATE_DEFAULTS.perUnit)
+
+    AUCTIPUS_CREATE_DEFAULTS.duration = AUCTIPUS_CREATE_DEFAULTS.duration or 1
+    for i, b in ipairs(self.DurationButtons) do
+        b:SetChecked(i == AUCTIPUS_CREATE_DEFAULTS.duration)
+    end
 end
 
 function AuctipusAuctionsFrame:OnLoad()
@@ -73,10 +79,8 @@ function AuctipusAuctionsFrame:OnLoad()
     self.StackCountBox:Disable()
 
     -- Duration buttons.
-    self.selectedDuration = 1
     for i, b in ipairs(self.DurationButtons) do
         b.text:SetText(AUCTION_DURATION_STRINGS[i])
-        b:SetChecked(i == self.selectedDuration)
         b:SetScript("OnClick",
                     function(f, button)
                         self:OnDurationButtonClick(i, button)
@@ -182,9 +186,9 @@ function AuctipusAuctionsFrame:OnItemButtonDrag(button)
 end
 
 function AuctipusAuctionsFrame:OnDurationButtonClick(index, button)
-    self.selectedDuration = index
+    AUCTIPUS_CREATE_DEFAULTS.duration = index
     for i, b in ipairs(self.DurationButtons) do
-        b:SetChecked(i == self.selectedDuration)
+        b:SetChecked(i == AUCTIPUS_CREATE_DEFAULTS.duration)
     end
     self:UpdateControls()
 end
@@ -329,7 +333,7 @@ end
 
 function AuctipusAuctionsFrame:GetDeposit()
     return GetAuctionDeposit(
-        self.selectedDuration,
+        AUCTIPUS_CREATE_DEFAULTS.duration,
         MoneyInputFrame_GetCopper(self.BidPrice),
         MoneyInputFrame_GetCopper(self.BuyoutPrice),
         self.count,
@@ -440,8 +444,8 @@ function AuctipusAuctionsFrame:PostAuction()
     end
 
     self.waitForNilAuction = true
-    PostAuction(bidPrice, buyoutPrice, self.selectedDuration, self.count,
-                self.stackCount)
+    PostAuction(bidPrice, buyoutPrice, AUCTIPUS_CREATE_DEFAULTS.duration,
+                self.count, self.stackCount)
 end
 
 function AuctipusAuctionsFrame:PageUpdated(page)

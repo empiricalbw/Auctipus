@@ -241,6 +241,7 @@ function AuctipusBrowseFrame:OnAuctionRowDropDownClick(index)
     local seller = self.AuctionRowDropDown:GetItemText(1)
     AUCTIPUS_IGNORED_SELLERS[seller] = (index == 2) or nil
     self:HideAuctionMenu()
+    self:AvailableAuctionsChanged()
 
     local prevFirst = self.selectedAuctions:First()
     local removed   = {}
@@ -357,9 +358,13 @@ function AuctipusBrowseFrame:SelectAuctionGroup(auctionGroup)
         Auctipus.dbg("Resetting searcher...")
         self.selectedAuctionGroup.searcher:Reset()
     end
+
     self.selectedAuctionGroup = auctionGroup
-    self.SmartSelect.Input:SetMax(auctionGroup.buyableCount)
-    self.SmartSelect.Input:SetValue(0)
+
+    if auctionGroup then
+        self.SmartSelect.Input:SetMax(auctionGroup.buyableCount)
+        self.SmartSelect.Input:SetValue(0)
+    end
     self:ClearSearch()
 end
 
@@ -536,17 +541,6 @@ function AuctipusBrowseFrame:UpdateAuctions()
     else
         self.SelectionInfo.PurchasedUnitCost:SetMoney(0)
     end
-    --[[
-    self.SelectionInfo.PurchasedBuyoutCost:SetMoney(selectedBuyout)
-    self.SelectionInfo.PurchasedCountFrame.Text:SetText(
-        "x "..nselectedAuctions.." =")
-    if nselectedAuctions > 0 then
-        self.SelectionInfo.PurchasedUnitCost:SetMoney(
-            floor(selectedBuyout / nselectedAuctions))
-    else
-        self.SelectionInfo.PurchasedUnitCost:SetMoney(0)
-    end
-    ]]
 end
 
 function AuctipusBrowseFrame:SearchPending(search)
@@ -577,6 +571,7 @@ function AuctipusBrowseFrame:SearchFailed(search)
     assert(search.targetAuction == self.selectedAuctions:First())
     search.targetAuction.missing = true
     self.selectedAuctions:Pop()
+    self:AvailableAuctionsChanged()
     self:UpdateAuctions()
 
     if not self.selectedAuctions:Empty() then
@@ -594,10 +589,10 @@ function AuctipusBrowseFrame:DoBuy()
     Auctipus.info("Buying: "..auction:ToString())
     self.BuyButton:Disable()
 
-    searcher:BuyoutAuction(self)
     auction.missing = true
-
     self:UpdateAuctions()
+
+    searcher:BuyoutAuction(self)
 end
 
 function AuctipusBrowseFrame:AuctionWon(searcher)
@@ -605,7 +600,7 @@ function AuctipusBrowseFrame:AuctionWon(searcher)
     local ag      = auction.auctionGroup
     self.purchasedAuctions:Insert(auction)
     ag:RemoveItem(auction)
-    ag.matrix = nil
+    self:AvailableAuctionsChanged()
     self:UpdateAuctions()
 
     if not self.selectedAuctions:Empty() then
@@ -614,11 +609,22 @@ function AuctipusBrowseFrame:AuctionWon(searcher)
 end
 
 function AuctipusBrowseFrame:AuctionLost(searcher)
-    self.selectedAuctions:Pop()
+    local a = self.selectedAuctions:Pop()
+    assert(a.missing == true)
+    self:AvailableAuctionsChanged()
     self:UpdateAuctions()
 
     if not self.selectedAuctions:Empty() then
         searcher:FindAuction(self.selectedAuctions:First(), self)
+    end
+end
+
+function AuctipusBrowseFrame:AvailableAuctionsChanged()
+    local ag = self.selectedAuctionGroup
+    if ag then
+        ag.matrix = nil
+        ag:RecomputeBuyableCount()
+        self.SmartSelect.Input:SetMax(ag.buyableCount)
     end
 end
 
