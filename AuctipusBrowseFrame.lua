@@ -537,17 +537,6 @@ function AuctipusBrowseFrame:UpdateAuctions()
     else
         self.SelectionInfo.PurchasedUnitCost:SetMoney(0)
     end
-    --[[
-    self.SelectionInfo.PurchasedBuyoutCost:SetMoney(selectedBuyout)
-    self.SelectionInfo.PurchasedCountFrame.Text:SetText(
-        "x "..nselectedAuctions.." =")
-    if nselectedAuctions > 0 then
-        self.SelectionInfo.PurchasedUnitCost:SetMoney(
-            floor(selectedBuyout / nselectedAuctions))
-    else
-        self.SelectionInfo.PurchasedUnitCost:SetMoney(0)
-    end
-    ]]
 end
 
 function AuctipusBrowseFrame:SearchPending(search)
