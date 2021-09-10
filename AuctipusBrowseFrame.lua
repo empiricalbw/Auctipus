@@ -358,9 +358,13 @@ function AuctipusBrowseFrame:SelectAuctionGroup(auctionGroup)
         Auctipus.dbg("Resetting searcher...")
         self.selectedAuctionGroup.searcher:Reset()
     end
+
     self.selectedAuctionGroup = auctionGroup
-    self.SmartSelect.Input:SetMax(auctionGroup.buyableCount)
-    self.SmartSelect.Input:SetValue(0)
+
+    if auctionGroup then
+        self.SmartSelect.Input:SetMax(auctionGroup.buyableCount)
+        self.SmartSelect.Input:SetValue(0)
+    end
     self:ClearSearch()
 end
 
