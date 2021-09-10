@@ -178,5 +178,7 @@ function AAuction:IsIgnored()
 end
 
 function AAuction:IsBuyable()
-    return not self.missing and not self:IsMine() and not self:IsIgnored()
+    return not self.missing and
+           not self:IsMine() and
+           not self:IsIgnored()
 end
