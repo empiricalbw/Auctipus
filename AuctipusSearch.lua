@@ -333,23 +333,6 @@ function ASearcher.CHAT_MSG_SYSTEM(msg)
         assert(stateGood)
         self.gotAuctionWonMsg = true
         self:CheckBuyoutState()
-    elseif msg == ERR_AUCTION_ALREADY_BID or
-           msg == ERR_AUCTION_BID_INCREMENT or
-           msg == ERR_AUCTION_BID_OWN or
-           msg == ERR_AUCTION_DATABASE_ERROR or
-           msg == ERR_AUCTION_HIGHER_BID or
-           msg == ERR_AUCTION_HOUSE_DISABLED or
-           msg == ERR_AUCTION_MIN_BID
-    then
-        Auctipus.dbg("Got bid rejected event.")
-        assert(stateGood)
-        buyoutSearcher = nil
-        if self.state == STATE_WAIT_BUYOUT_RESULT then
-            self.apage:ClosePage()
-        end
-
-        self:_TRANSITION(STATE_INITIAL)
-        self:NotifyAuctionLost()
     end
 end
 
@@ -362,18 +345,17 @@ function ASearcher.UI_ERROR_MESSAGE(id, msg)
     local stateGood = (self.state == STATE_WAIT_BUYOUT_RESULT or
                        self.state == STATE_WAIT_BUYOUT_RESULT_CLOSED)
 
-    if msg == ERR_NOT_ENOUGH_MONEY then
-        Auctipus.info("Not enough money.")
-        assert(stateGood)
-        buyoutSearcher = nil
-        if self.state == STATE_WAIT_BUYOUT_RESULT then
-            self.apage:ClosePage()
-        end
-
-        self:_TRANSITION(STATE_INITIAL)
-        self:NotifyAuctionLost()
-    elseif msg == ERR_ITEM_NOT_FOUND then
-        Auctipus.info("Item not found.")
+    if msg == ERR_NOT_ENOUGH_MONEY or
+       msg == ERR_ITEM_NOT_FOUND or
+       msg == ERR_AUCTION_BID_OWN or
+       msg == ERR_AUCTION_BID_INCREMENT or
+       msg == ERR_AUCTION_MIN_BID or
+       msg == ERR_AUCTION_ALREADY_BID or
+       msg == ERR_AUCTION_DATABASE_ERROR or
+       msg == ERR_AUCTION_HIGHER_BID or
+       msg == ERR_AUCTION_HOUSE_DISABLED
+    then
+        Auctipus.info("Got bid rejected event: "..msg)
         assert(stateGood)
         buyoutSearcher = nil
         if self.state == STATE_WAIT_BUYOUT_RESULT then
