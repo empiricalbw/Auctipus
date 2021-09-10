@@ -43,7 +43,7 @@ end
 function BetterNumberFrameMixin:OnDecrementClicked()
     local v = self.NumberBox:GetNumber()
     if v > self.minVal then
-        v = v - 1
+        v = min(v - 1, self.maxVal)
         self:SetValue(v)
         if self.handler then
             self.handler(v)
@@ -54,7 +54,7 @@ end
 function BetterNumberFrameMixin:OnIncrementClicked()
     local v = self.NumberBox:GetNumber()
     if v < self.maxVal then
-        v = v + 1
+        v = max(v + 1, self.minVal)
         self:SetValue(v)
         if self.handler then
             self.handler(v)
