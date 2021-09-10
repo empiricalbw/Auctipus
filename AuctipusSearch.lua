@@ -179,7 +179,8 @@ function ASearcher:SearchPage()
 end
 
 function ASearcher:_PlaceAuctionBid(copper)
-    -- Places a bid on the currently-found auction.
+    -- Places a bid on the currently-found auction.  Note that this can trigger
+    -- a synchronous UI_ERROR_MESSAGE callback!
     local selectedItem = self.apage:GetSelectedItem()
     Auctipus.dbg("Selected auction item: "..selectedItem)
 

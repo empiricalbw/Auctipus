@@ -589,10 +589,10 @@ function AuctipusBrowseFrame:DoBuy()
     Auctipus.info("Buying: "..auction:ToString())
     self.BuyButton:Disable()
 
-    searcher:BuyoutAuction(self)
     auction.missing = true
-
     self:UpdateAuctions()
+
+    searcher:BuyoutAuction(self)
 end
 
 function AuctipusBrowseFrame:AuctionWon(searcher)
@@ -609,7 +609,8 @@ function AuctipusBrowseFrame:AuctionWon(searcher)
 end
 
 function AuctipusBrowseFrame:AuctionLost(searcher)
-    self.selectedAuctions:Pop()
+    local a = self.selectedAuctions:Pop()
+    assert(a.missing == true)
     self:AvailableAuctionsChanged()
     self:UpdateAuctions()
 
