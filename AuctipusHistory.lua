@@ -131,17 +131,17 @@ function AHistory:ProcessDB()
 end
 
 function AHistory:Match(substring)
-    local s = substring:upper()
-    local match = {}
+    local matches = {}
 
     if substring:len() >= 2 then
+        local s = substring:upper()
         for i = 1, #LOCAL_DB do
             local elem = LOCAL_DB[i]
             if elem.uname:find(s, 1, true) then
-                table.insert(match, elem)
+                table.insert(matches, elem)
             end
         end
     end
 
-    return match
+    return matches
 end
