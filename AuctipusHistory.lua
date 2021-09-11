@@ -145,3 +145,16 @@ function AHistory:Match(substring)
 
     return matches
 end
+
+function AHistory:MatchByItemID(itemID)
+    local matches = {}
+
+    for i = 1, #LOCAL_DB do
+        local elem = LOCAL_DB[i]
+        if elem.itemId == itemID then
+            table.insert(matches, elem)
+        end
+    end
+
+    return matches
+end
