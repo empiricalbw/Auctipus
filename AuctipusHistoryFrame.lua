@@ -19,6 +19,15 @@ function AuctipusHistoryFrame:OnLoad()
     AuctipusLinkEditBoxes(self)
     self.SearchBox:SetScript("OnTextChanged",
         function() self:OnSearchTextChanged() end)
+
+    -- Handle shift-clicking items into the search field.  We can't modify the
+    -- return value of ChatEdit_InsertLink(); without modifying the return
+    -- value you can't say you handled the event and therefore if the shift-
+    -- click was from a stack in your inventory then that tries to split the
+    -- stack.  So, we also hook ContainerFrameItemButton_OnModifiedClick() to
+    -- hide the stack-splitting window if it opens up.
+    hooksecurefunc("ChatEdit_InsertLink",
+        function(link) self:OnChatEdit_InsertLink(link) end)
     hooksecurefunc("ContainerFrameItemButton_OnModifiedClick",
         function(f, button) self:OnContainerModifiedClick(f) end)
 
@@ -85,20 +94,17 @@ function AuctipusHistoryFrame:OnSearchTextChanged()
     self:FilterResults(self.SearchBox:GetText())
 end
 
-function AuctipusHistoryFrame:OnContainerModifiedClick(f)
-    -- Handle shift-clicking an inventory item into the search field.  We can't
-    -- modify the return value of ChatEdit_InsertLink() which is what we would
-    -- normally hook; without modifying the return value you can't say you
-    -- handled the event and therefore shift-clicking a stack tries to also
-    -- split the stack.  Instead we hook
-    -- ContainerFrameItemButton_OnModifiedClick and close the stack-splitting
-    -- window if it opens up.
-    if self:IsVisible() then
-        local link = GetContainerItemLink(f:GetParent():GetID(), f:GetID())
+function AuctipusHistoryFrame:OnChatEdit_InsertLink(link)
+    if link and self:IsVisible() then
         local name = ALink.GetLinkName(link)
         self.SearchBox:SetText(name)
         self.SearchBox:ClearFocus()
         self:FilterResults(name)
+    end
+end
+
+function AuctipusHistoryFrame:OnContainerModifiedClick(f)
+    if self:IsVisible() then
         StackSplitFrame:Hide()
     end
 end

@@ -293,8 +293,8 @@
                 <Frames>
                     <Frame parentKey="Input" inherits="BetterNumberFrameTemplate">
                         <Anchors>
-                            <Anchor point="TOPLEFT" x="25" y="-15"/>
-                            <Anchor point="BOTTOMRIGHT" x="-25" y="5"/>
+                            <Anchor point="TOPLEFT" x="5" y="-15"/>
+                            <Anchor point="BOTTOMRIGHT" x="-5" y="5"/>
                         </Anchors>
                     </Frame>
                 </Frames>
