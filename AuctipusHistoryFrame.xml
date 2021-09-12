@@ -3,7 +3,7 @@
     <Frame name="AuctipusHistoryBarTemplate" enableMouse="false" virtual="true">
         <Layers>
             <Layer level="ARTWORK">
-                <Texture parentKey="Top" file="Interface\Addons\Auctipus\Bar.tga">
+                <Texture parentKey="Top" file="Interface\AddOns\Auctipus\Textures\Bar.tga">
                     <Size y="5"/>
                     <Anchors>
                         <Anchor point="TOPLEFT"/>
@@ -11,7 +11,7 @@
                     </Anchors>
                     <TexCoords left="0" right="1" top="0" bottom="0.25"/>
                 </Texture>
-                <Texture parentKey="Bottom" file="Interface\Addons\Auctipus\Bar.tga">
+                <Texture parentKey="Bottom" file="Interface\AddOns\Auctipus\Textures\Bar.tga">
                     <Size y="5"/>
                     <Anchors>
                         <Anchor point="BOTTOMLEFT"/>
@@ -19,7 +19,7 @@
                     </Anchors>
                     <TexCoords left="0" right="1" top="0.75" bottom="1"/>
                 </Texture>
-                <Texture parentKey="Middle" file="Interface\Addons\Auctipus\Bar.tga">
+                <Texture parentKey="Middle" file="Interface\AddOns\Auctipus\Textures\Bar.tga">
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.Top" relativePoint="BOTTOMLEFT"/>
                         <Anchor point="BOTTOMRIGHT" relativeKey="$parent.Bottom" relativePoint="TOPRIGHT"/>
@@ -31,7 +31,7 @@
     </Frame>
 
     <Button name="AuctipusHistoryHighlightTemplate" enableMouse="true" virtual="true">
-        <HighlightTexture name="$parentHighlight" file="Interface\Addons\Auctipus\Bar.tga" setAllPoints="true">
+        <HighlightTexture name="$parentHighlight" file="Interface\AddOns\Auctipus\Textures\Bar.tga" setAllPoints="true">
             <Color r="0.949" g="0.910" b="0.455"/>
             <TexCoords left="0" right="1" top="0.75" bottom="1"/>
         </HighlightTexture>
