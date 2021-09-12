@@ -11,10 +11,14 @@ function BetterNumberFrameMixin:OnLoad()
         function() self:OnEditFocusLost() end)
     self.NumberBox:SetScript("OnEditFocusGained",
         function() self:OnEditFocusGained() end)
+    self.MinButton:SetScript("OnClick",
+        function() self:OnMinClicked() end)
     self.DecrementButton:SetScript("OnClick",
         function() self:OnDecrementClicked() end)
     self.IncrementButton:SetScript("OnClick",
         function() self:OnIncrementClicked() end)
+    self.MaxButton:SetScript("OnClick",
+        function() self:OnMaxClicked() end)
 end
 
 function BetterNumberFrameMixin:Init(minVal, maxVal, handler)
@@ -38,6 +42,20 @@ function BetterNumberFrameMixin:SetValue(v)
     assert(self.minVal <= v and v <= self.maxVal)
     self.NumberBox:ClearFocus()
     self.NumberBox:SetText(v)
+end
+
+function BetterNumberFrameMixin:OnMinClicked()
+    self:SetValue(self.minVal)
+    if self.handler then
+        self.handler(self.minVal)
+    end
+end
+
+function BetterNumberFrameMixin:OnMaxClicked()
+    self:SetValue(self.maxVal)
+    if self.handler then
+        self.handler(self.maxVal)
+    end
 end
 
 function BetterNumberFrameMixin:OnDecrementClicked()
