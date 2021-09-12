@@ -1,30 +1,23 @@
 ALink = {}
 ALink.__index = ALink
 
-local function LinkColor(l)
-    local _, _, a, r, g, b = l:find("|c(..)(..)(..)(..)|H")
+local function LinkDecode(l)
+    local _, _, a, r, g, b, itemId = l:find("|c(..)(..)(..)(..)|Hitem:(%d+):")
     a = tonumber(a, 16)
     r = tonumber(r, 16)
     g = tonumber(g, 16)
     b = tonumber(b, 16)
-    return CreateColor(r / 255, g / 255, b / 255, a / 255)
-end
-
-local function LinkTexture(l)
-    local _, _, itemId = l:find("|Hitem:(%d+):")
     itemId = tonumber(itemId, 10)
     local _, _, _, _, texture = GetItemInfoInstant(itemId)
-    return texture
+    return itemId, texture, CreateColor(r / 255, g / 255, b / 255, a / 255)
 end
 
 function ALink:New(l)
     local al = {
-        link    = ALink.SaneLink(l),
-        color   = LinkColor(l),
-        texture = LinkTexture(l),
-        name    = ALink.GetLinkName(l),
-        uname   = nil,
+        link = ALink.SaneLink(l),
+        name = ALink.GetLinkName(l),
     }
+    al.itemId, al.texture, al.color = LinkDecode(l)
     al.uname = al.name:upper()
     setmetatable(al, self)
 
