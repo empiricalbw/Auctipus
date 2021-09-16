@@ -1,3 +1,5 @@
+Auctipus.AddOn = {}
+
 UIPanelWindows["AuctipusFrame"] = {
     area                = "doublewide",
     pushable            = 8,
@@ -7,7 +9,7 @@ UIPanelWindows["AuctipusFrame"] = {
     width               = 840,
 }
 
-function Auctipus.ADDON_LOADED(addOnName)
+function Auctipus.AddOn.ADDON_LOADED(addOnName)
     if addOnName ~= "Auctipus" then
         return
     end
@@ -17,7 +19,7 @@ function Auctipus.ADDON_LOADED(addOnName)
     AHistory.ProcessSavedVars()
 
     -- Slash.
-    SlashCmdList["AUCTIPUS"] = Auctipus.OnSlash
+    SlashCmdList["AUCTIPUS"] = Auctipus.AddOn.OnSlash
     SLASH_AUCTIPUS1          = "/auctipus"
 
     -- Disable the Blizzard auction house frames.
@@ -33,17 +35,17 @@ function Auctipus.ADDON_LOADED(addOnName)
     PanelTemplates_SetTab(AuctipusFrame, 4)
 
     -- Set scripts.
-    AuctipusFrame:SetScript("OnShow", Auctipus.OnShow)
-    AuctipusFrame:SetScript("OnHide", Auctipus.OnHide)
+    AuctipusFrame:SetScript("OnShow", Auctipus.AddOn.OnShow)
+    AuctipusFrame:SetScript("OnHide", Auctipus.AddOn.OnHide)
     for i, tab in ipairs(AuctipusFrame.Tabs) do
-        tab:SetScript("OnClick", function() Auctipus.SelectTab(i) end)
+        tab:SetScript("OnClick", function() Auctipus.AddOn.SelectTab(i) end)
     end
 
     -- Make it so that the frame will close when we hit Escape.
     table.insert(UISpecialFrames, AuctipusFrame:GetName())
 end
 
-function Auctipus.AUCTION_HOUSE_SHOW()
+function Auctipus.AddOn.AUCTION_HOUSE_SHOW()
     Auctipus.dbg("AUCTION_HOUSE_SHOW")
 
     PanelTemplates_EnableTab(AuctipusFrame, 1)
@@ -51,16 +53,16 @@ function Auctipus.AUCTION_HOUSE_SHOW()
     PanelTemplates_EnableTab(AuctipusFrame, 3)
     ShowUIPanel(AuctipusFrame)
     PlaySound(SOUNDKIT.AUCTION_WINDOW_OPEN)
-    Auctipus.SelectTab(1)
-    Auctipus.DumpSortOrder()
+    Auctipus.AddOn.SelectTab(1)
+    Auctipus.AddOn.DumpSortOrder()
 end
 
-function Auctipus.OnSlash()
+function Auctipus.AddOn.OnSlash()
     ShowUIPanel(AuctipusFrame)
-    Auctipus.SelectTab(4)
+    Auctipus.AddOn.SelectTab(4)
 end
 
-function Auctipus.AUCTION_HOUSE_CLOSED()
+function Auctipus.AddOn.AUCTION_HOUSE_CLOSED()
     Auctipus.dbg("AUCTION_HOUSE_CLOSED")
     HideUIPanel(AuctipusFrame)
     PanelTemplates_DisableTab(AuctipusFrame, 1)
@@ -69,20 +71,20 @@ function Auctipus.AUCTION_HOUSE_CLOSED()
     PanelTemplates_SetTab(AuctipusFrame, 4)
 end
 
-function Auctipus.OnShow()
+function Auctipus.AddOn.OnShow()
     SetUpSideDressUpFrame(AuctipusFrame, 840, 1020, "TOPLEFT", "TOPRIGHT", -2,
                           -28)
 end
 
-function Auctipus.OnHide()
+function Auctipus.AddOn.OnHide()
     CloseAuctionHouse()
 end
 
-function Auctipus.AUCTION_HOUSE_DISABLED()
+function Auctipus.AddOn.AUCTION_HOUSE_DISABLED()
     Auctipus.dbg("AUCTION_HOUSE_DISABLED")
 end
 
-function Auctipus.SelectTab(index)
+function Auctipus.AddOn.SelectTab(index)
     PanelTemplates_SetTab(AuctipusFrame, index)
     AuctipusFrame.BrowseFrame:Hide()
     AuctipusFrame.AuctionsFrame:Hide()
@@ -109,7 +111,7 @@ function Auctipus.SelectTab(index)
     end
 end
 
-function Auctipus.DumpSortOrder()
+function Auctipus.AddOn.DumpSortOrder()
     local i = 0
     while true do
         i = i + 1
@@ -127,4 +129,4 @@ function Auctipus.DumpSortOrder()
     end
 end
 
-AEventManager.Register(Auctipus)
+AEventManager.Register(Auctipus.AddOn)
