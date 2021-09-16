@@ -646,4 +646,4 @@ function AuctipusBrowseFrame:AvailableAuctionsChanged()
     end
 end
 
-AEventManager.Register(AuctipusBrowseFrame)
+Auctipus.EventManager.Register(AuctipusBrowseFrame)

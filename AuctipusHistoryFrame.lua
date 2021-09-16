@@ -208,4 +208,4 @@ function AuctipusHistoryFrame:UpdateGraph()
     end
 end
 
-AEventManager.Register(AuctipusHistoryFrame)
+Auctipus.EventManager.Register(AuctipusHistoryFrame)

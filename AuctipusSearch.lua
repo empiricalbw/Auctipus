@@ -418,4 +418,4 @@ function ASearcher:NotifyAuctionLost()
     end
 end
 
-AEventManager.Register(ASearcher)
+Auctipus.EventManager.Register(ASearcher)

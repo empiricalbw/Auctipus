@@ -129,4 +129,4 @@ function Auctipus.AddOn.DumpSortOrder()
     end
 end
 
-AEventManager.Register(Auctipus.AddOn)
+Auctipus.EventManager.Register(Auctipus.AddOn)

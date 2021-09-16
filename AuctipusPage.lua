@@ -274,4 +274,4 @@ function APage:Dump()
     end
 end
 
-AEventManager.Register(APage)
+Auctipus.EventManager.Register(APage)

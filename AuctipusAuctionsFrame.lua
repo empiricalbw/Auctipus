@@ -555,4 +555,4 @@ function AuctipusAuctionsFrame:UpdateComparables()
     end
 end
 
-AEventManager.Register(AuctipusAuctionsFrame)
+Auctipus.EventManager.Register(AuctipusAuctionsFrame)
