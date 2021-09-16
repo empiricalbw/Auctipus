@@ -1,4 +1,4 @@
-APage = {
+Auctipus.Page = {
     activePage = {
         ["list"]  = nil,
         ["owner"] = nil,
@@ -8,7 +8,8 @@ APage = {
         ["owner"] = nil,
     }
 }
-APage.__index = APage
+Auctipus.Page.__index = Auctipus.Page
+local APage = Auctipus.Page
 
 local SORT_ORDER = {
     ["BUYOUT"] = {

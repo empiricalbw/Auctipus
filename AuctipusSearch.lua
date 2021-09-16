@@ -97,7 +97,8 @@ function ASearcher:LoadNextPage()
     end
 
     if index then
-        self.apage = APage.OpenListPage(self.query, index, "BUYOUT", self)
+        self.apage = Auctipus.Page.OpenListPage(self.query, index, "BUYOUT",
+                                                self)
         self:_TRANSITION(STATE_WAIT_PAGE_STABLE)
         self:NotifySearchPending()
     else

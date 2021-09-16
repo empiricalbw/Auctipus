@@ -228,8 +228,8 @@ function AuctipusAuctionsFrame.NEW_AUCTION_UPDATE()
     end
 
     if name ~= nil then
-        self.aopage = APage.OpenListPage({text = name, exactMatch = true}, 0,
-                                         "UNITPRICE", self)
+        self.aopage = Auctipus.Page.OpenListPage(
+            {text = name, exactMatch = true}, 0, "UNITPRICE", self)
     elseif self.aopage then
         self.aopage:ClosePage()
         self.aopage = nil
