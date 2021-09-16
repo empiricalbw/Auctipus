@@ -1,10 +1,10 @@
-ACategoryMenu = ADropDown:_New()
+ACategoryMenu = Auctipus.DropDown:_New()
 ACategoryMenu.__index = ACategoryMenu
 
 local RESET_FILTERS_HEIGHT = 16
 
 function ACategoryMenu:Init(config)
-    ADropDown.Init(self, config)
+    Auctipus.DropDown.Init(self, config)
 
     for i, item in ipairs(self.items) do
         item.RadioOff:Show()
@@ -55,7 +55,7 @@ function ACategoryMenu:OnItemClick(index)
         self.resetButton:Enable()
     end
 
-    ADropDown.OnItemClick(self, index)
+    Auctipus.DropDown.OnItemClick(self, index)
 end
 
 function ACategoryMenu:GetSelection()
@@ -71,13 +71,13 @@ end
 function ACategoryMenu:DisableItem(index)
     local f        = self.items[index]
     f.disableCount = f.disableCount + 1
-    ADropDown.DisableItem(self, index)
+    Auctipus.DropDown.DisableItem(self, index)
 end
 
 function ACategoryMenu:EnableItem(index)
     local f        = self.items[index]
     f.disableCount = max(f.disableCount - 1, 0)
     if f.disableCount == 0 then
-        ADropDown.EnableItem(self, index)
+        Auctipus.DropDown.EnableItem(self, index)
     end
 end

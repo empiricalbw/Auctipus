@@ -1,5 +1,6 @@
-ADropDown = {}
-ADropDown.__index = ADropDown
+Auctipus.DropDown = {}
+Auctipus.DropDown.__index = Auctipus.DropDown
+local ADropDown = Auctipus.DropDown
 
 AUCTIPUS_DROPDOWN_BACKDROP_INFO = {
     bgFile   = "Interface/DialogFrame/UI-DialogBox-Background-Dark",

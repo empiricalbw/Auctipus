@@ -64,7 +64,7 @@ function AuctipusBrowseFrame:OnLoad()
     for i=0, #ITEM_QUALITY_COLORS - 4 do
         table.insert(config.items, _G["ITEM_QUALITY"..i.."_DESC"])
     end
-    self.RarityDropDownMenu = ADropDown:New(config)
+    self.RarityDropDownMenu = Auctipus.DropDown:New(config)
     self.RarityDropDownMenu:CheckOneItem(1)
     self.RarityDropDownButton.Button:SetScript("OnClick",
         function()
@@ -111,7 +111,7 @@ function AuctipusBrowseFrame:OnLoad()
                    "Stop Ignoring Seller",
                    }
     }
-    self.AuctionRowDropDown = ADropDown:New(config2)
+    self.AuctionRowDropDown = Auctipus.DropDown:New(config2)
     self.AuctionRowDropDown:SetItemTitle(1)
 
     -- Search button.
