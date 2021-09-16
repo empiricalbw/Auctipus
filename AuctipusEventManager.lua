@@ -11,8 +11,8 @@ function AEventManager.Initialize()
 
     -- A dummy frame to get us the events we are interested in.
     AEventManager.aeFrame = CreateFrame("Frame")
-    AEventManager.aeFrame:SetScript("OnEvent",AEventManager.OnEvent)
-    AEventManager.aeFrame:SetScript("OnUpdate",AEventManager.OnUpdate)
+    AEventManager.aeFrame:SetScript("OnEvent", AEventManager.OnEvent)
+    AEventManager.aeFrame:SetScript("OnUpdate", AEventManager.OnUpdate)
 end
 
 function AEventManager.Register(obj)
