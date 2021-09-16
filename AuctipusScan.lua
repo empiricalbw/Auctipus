@@ -1,5 +1,6 @@
-AScan = {}
-AScan.__index = AScan
+Auctipus.Scan = {}
+Auctipus.Scan.__index = Auctipus.Scan
+local AScan = Auctipus.Scan
 
 function AScan:New(queries, handler)
     local as = {

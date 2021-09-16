@@ -32,7 +32,7 @@ end
 
 function AHistory:FullScan()
     Auctipus.info("Initiating full scan...")
-    self.scan = AScan:New({{getAll=true}}, self)
+    self.scan = Auctipus.Scan:New({{getAll=true}}, self)
 end
 
 function AHistory:ScanComplete(scan)
