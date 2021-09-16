@@ -1,5 +1,6 @@
-ACategoryMenu = Auctipus.DropDown:_New()
-ACategoryMenu.__index = ACategoryMenu
+Auctipus.CategoryMenu = Auctipus.DropDown:_New()
+Auctipus.CategoryMenu.__index = Auctipus.CategoryMenu
+local ACategoryMenu = Auctipus.CategoryMenu
 
 local RESET_FILTERS_HEIGHT = 16
 
