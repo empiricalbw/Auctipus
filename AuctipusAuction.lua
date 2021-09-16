@@ -1,5 +1,6 @@
-AAuction = {}
-AAuction.__index = AAuction
+Auctipus.Auction = {}
+Auctipus.Auction.__index = Auctipus.Auction
+local AAuction = Auctipus.Auction
 
 local function GoldString(c)
     local cost = ""

@@ -54,9 +54,9 @@ function AuctipusAuctionGroup:RecomputeBuyableCount()
 end
 
 function AuctipusAuctionGroup:SortByBuyout()
-    table.sort(self.auctions, AAuction.LTBuyout)
-    table.sort(self.buyoutAuctions, AAuction.LTBuyout)
-    table.sort(self.unitPriceAuctions, AAuction.LTUnitPrice)
+    table.sort(self.auctions, Auctipus.Auction.LTBuyout)
+    table.sort(self.buyoutAuctions, Auctipus.Auction.LTBuyout)
+    table.sort(self.unitPriceAuctions, Auctipus.Auction.LTUnitPrice)
 
     for i, auction in ipairs(self.auctions) do
         auction.auctionIndex = i

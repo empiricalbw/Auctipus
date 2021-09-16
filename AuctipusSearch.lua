@@ -184,7 +184,7 @@ function ASearcher:_PlaceAuctionBid(copper)
     local selectedItem = self.apage:GetSelectedItem()
     Auctipus.dbg("Selected auction item: "..selectedItem)
 
-    local auction = AAuction:FromGetAuctionItemInfo(selectedItem)
+    local auction = Auctipus.Auction:FromGetAuctionItemInfo(selectedItem)
     assert(self.targetAuction:Matches(auction))
 
     PlaceAuctionBid("list", selectedItem, copper)

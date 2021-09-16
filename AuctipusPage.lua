@@ -165,7 +165,8 @@ function APage:ProcessPage()
     self.auctions      = {}
     self.nilAuctions   = {}
     for i = 1, numAuctions do
-        local auction = AAuction:FromGetAuctionItemInfo(i, self.category)
+        local auction = Auctipus.Auction:FromGetAuctionItemInfo(
+            i, self.category)
         if self:IsNilAuction(auction) then
             table.insert(self.nilAuctions, auction)
         end
@@ -196,8 +197,8 @@ function APage:ProcessNilAuctions()
     self.nilAuctions = {}
     for i, a in ipairs(self.auctions) do
         if self:IsNilAuction(a) then
-            local auction = AAuction:FromGetAuctionItemInfo(a.pageIndex,
-                                                            self.category)
+            local auction = Auctipus.Auction:FromGetAuctionItemInfo(
+                a.pageIndex, self.category)
             if self:IsNilAuction(auction) then
                 table.insert(self.nilAuctions, auction)
             end

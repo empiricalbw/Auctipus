@@ -447,7 +447,7 @@ function AuctipusBrowseFrame:ToggleAuctionSelection(auction)
     else
         self.selectedAuctions:Insert(auction)
     end
-    self.selectedAuctions:Sort(AAuction.LTUnitPrice)
+    self.selectedAuctions:Sort(Auctipus.Auction.LTUnitPrice)
     self:UpdateAuctions()
 
     local first = self.selectedAuctions:First()
@@ -479,7 +479,7 @@ function AuctipusBrowseFrame:SelectOptimalAuctions(n)
             for _, a in ipairs(auctions) do
                 self.selectedAuctions:Insert(a)
             end
-            self.selectedAuctions:Sort(AAuction.LTUnitPrice)
+            self.selectedAuctions:Sort(Auctipus.Auction.LTUnitPrice)
         end
     end
 
@@ -570,7 +570,7 @@ function AuctipusBrowseFrame:SearchSucceeded(search, page, index)
     Auctipus.dbg("-------- Found auction on page "..page.." at index "..index..
                  "--------")
     local fauction = self.selectedAuctions:First()
-    local pauction = AAuction:FromGetAuctionItemInfo(index)
+    local pauction = Auctipus.Auction:FromGetAuctionItemInfo(index)
     Auctipus.dbg("Desired auction: "..fauction:ToString())
     Auctipus.dbg("Found auction:"..pauction:ToString())
 
