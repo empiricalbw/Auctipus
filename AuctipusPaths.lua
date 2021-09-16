@@ -1,4 +1,3 @@
-AUCTIPUS_TREE = {}
 AUCTIPUS_PATHS = {
     {Enum.ItemClass.Weapon},
     {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Axe1H},
