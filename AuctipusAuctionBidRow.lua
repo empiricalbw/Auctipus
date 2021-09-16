@@ -1,10 +1,10 @@
-AuctipusAuctionBidRow = {}
+AuctipusAuctionBidRowMixin = {}
 
-function AuctipusAuctionBidRow:OnLoad()
+function AuctipusAuctionBidRowMixin:OnLoad()
     self.auction = nil
 end
 
-function AuctipusAuctionBidRow:SetAuction(auction)
+function AuctipusAuctionBidRowMixin:SetAuction(auction)
     self.auction = auction
 
     if auction then
