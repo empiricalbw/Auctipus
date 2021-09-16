@@ -1,5 +1,3 @@
-Auctipus.log = Auctipus.Log:New(1, 2)
-
 UIPanelWindows["AuctipusFrame"] = {
     area                = "doublewide",
     pushable            = 8,
@@ -8,22 +6,6 @@ UIPanelWindows["AuctipusFrame"] = {
     bottomClampOverride = 140+12,
     width               = 840,
 }
-
-function Auctipus._log(lvl, ...)
-    local timestamp = GetTime()
-    Auctipus.log:log(
-        lvl, "[", timestamp, "] ",
-        LIGHTYELLOW_FONT_COLOR_CODE.."Auctipus: "..FONT_COLOR_CODE_CLOSE,
-        ...)
-end
-
-function Auctipus.dbg(...)
-    Auctipus._log(1, ...)
-end
-
-function Auctipus.info(...)
-    Auctipus._log(2, ...)
-end
 
 function Auctipus.ADDON_LOADED(addOnName)
     if addOnName ~= "Auctipus" then
