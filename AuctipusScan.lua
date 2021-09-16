@@ -82,7 +82,7 @@ function AScan:ScanComplete()
     for i, auction in ipairs(self.auctions) do
         local aag = self.auctionHash[auction.link]
         if not aag then
-            aag = AuctipusAuctionGroup:New(auction)
+            aag = Auctipus.AuctionGroup:New(auction)
             self.auctionHash[auction.link] = aag
             table.insert(self.auctionHashOrder, auction.link)
         end

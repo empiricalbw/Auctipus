@@ -1,7 +1,7 @@
-AuctipusAuctionGroup = {}
-AuctipusAuctionGroup.__index = AuctipusAuctionGroup
+Auctipus.AuctionGroup = {}
+Auctipus.AuctionGroup.__index = Auctipus.AuctionGroup
 
-function AuctipusAuctionGroup:New(auction)
+function Auctipus.AuctionGroup:New(auction)
     local g = {name              = auction.name,
                texture           = auction.texture,
                quality           = auction.quality,
@@ -22,7 +22,7 @@ function AuctipusAuctionGroup:New(auction)
     return g
 end
 
-function AuctipusAuctionGroup:AddAuction(auction)
+function Auctipus.AuctionGroup:AddAuction(auction)
     assert(auction.name           == self.name)
     assert(auction.texture        == self.texture)
     assert(auction.quality        == self.quality)
@@ -44,7 +44,7 @@ function AuctipusAuctionGroup:AddAuction(auction)
     auction.auctionGroup = self
 end
 
-function AuctipusAuctionGroup:RecomputeBuyableCount()
+function Auctipus.AuctionGroup:RecomputeBuyableCount()
     self.buyableCount = 0
     for i, auction in ipairs(self.auctions) do
         if auction:IsBuyable() then
@@ -53,7 +53,7 @@ function AuctipusAuctionGroup:RecomputeBuyableCount()
     end
 end
 
-function AuctipusAuctionGroup:SortByBuyout()
+function Auctipus.AuctionGroup:SortByBuyout()
     table.sort(self.auctions, Auctipus.Auction.LTBuyout)
     table.sort(self.buyoutAuctions, Auctipus.Auction.LTBuyout)
     table.sort(self.unitPriceAuctions, Auctipus.Auction.LTUnitPrice)
@@ -69,7 +69,7 @@ function AuctipusAuctionGroup:SortByBuyout()
     end
 end
 
-function AuctipusAuctionGroup:RemoveItem(auction)
+function Auctipus.AuctionGroup:RemoveItem(auction)
     assert(auction.auctionIndex   ~= nil)
     assert(auction.buyoutIndex    ~= nil)
     assert(auction.unitPriceIndex ~= nil)
