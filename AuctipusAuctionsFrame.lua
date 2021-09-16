@@ -74,7 +74,7 @@ function AuctipusAuctionsFrame:OnLoad()
     self:SetScript("OnHide", function() self:SetAuctionsTabShowing(false) end)
 
     -- Edit boxes.
-    AuctipusLinkEditBoxes(self)
+    Auctipus.UI.LinkEditBoxes(self)
     self.StackSizeBox:Disable()
     self.StackCountBox:Disable()
 

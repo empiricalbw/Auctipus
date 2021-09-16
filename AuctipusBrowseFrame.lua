@@ -30,7 +30,7 @@ function AuctipusBrowseFrame:OnLoad()
     end
 
     -- Edit boxes.
-    AuctipusLinkEditBoxes(self)
+    Auctipus.UI.LinkEditBoxes(self)
     for i, e in ipairs(self.EditBoxes) do
         e:SetScript("OnEnterPressed", function() self:DoSearch() end)
     end

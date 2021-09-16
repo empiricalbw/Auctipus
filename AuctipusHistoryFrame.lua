@@ -16,7 +16,7 @@ function AuctipusHistoryFrame:OnLoad()
     end
 
     -- Search box.
-    AuctipusLinkEditBoxes(self)
+    Auctipus.UI.LinkEditBoxes(self)
     self.SearchBox:SetScript("OnTextChanged",
         function() self:OnSearchTextChanged() end)
 
