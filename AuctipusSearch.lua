@@ -25,8 +25,9 @@
 --  ERR_AUCTION_WON_S = "You won an auction for %s"
 --  ERR_AUCTION_OUTBID_S = "You have been outbid on %s."
 --]]
-ASearcher = {}
-ASearcher.__index = ASearcher
+Auctipus.Searcher = {}
+Auctipus.Searcher.__index = Auctipus.Searcher
+local ASearcher = Auctipus.Searcher
 
 local STATE_INITIAL                     = "STATE_INITIAL"
 local STATE_WAIT_PAGE_STABLE            = "STATE_WAIT_PAGE_STABLE"

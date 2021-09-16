@@ -15,7 +15,7 @@ function AuctipusAuctionGroup:New(auction)
                auctions          = {},
                unitPriceAuctions = {},
                buyoutAuctions    = {},
-               searcher          = ASearcher:New(auction.name), 
+               searcher          = Auctipus.Searcher:New(auction.name), 
                }
     setmetatable(g, self)
 
