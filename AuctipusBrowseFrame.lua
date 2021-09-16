@@ -88,7 +88,7 @@ function AuctipusBrowseFrame:OnLoad()
                    },
         items   = {},
     }
-    for i, p in ipairs(AuctipusGenPaths()) do
+    for i, p in ipairs(Auctipus.Paths.Generate()) do
         table.insert(config.items, p.name)
     end
     self.CategoryDropdown = ACategoryMenu:New(config)
@@ -209,11 +209,11 @@ function AuctipusBrowseFrame:OnRarityDropDownClick(index, selected)
 end
 
 function AuctipusBrowseFrame:OnCategoryDropDownClick(index, selected)
-    local classID, subClassID, invType = unpack(AUCTIPUS_PATHS[index])
+    local classID, subClassID, invType = unpack(Auctipus.PATHS[index])
     if subClassID then
         -- If a subclass is selected, then we can only allow selections that
         -- are peers of the subclass or in parent nodes.
-        for i, path in ipairs(AUCTIPUS_PATHS) do
+        for i, path in ipairs(Auctipus.PATHS) do
             if path[1] ~= classID then
                 self.CategoryDropdown:SetItemEnabled(i, not selected)
             end
@@ -221,7 +221,7 @@ function AuctipusBrowseFrame:OnCategoryDropDownClick(index, selected)
     else
         -- If no subclass is selected, then we can allow any child node or any
         -- peer class.
-        for i, path in ipairs(AUCTIPUS_PATHS) do
+        for i, path in ipairs(Auctipus.PATHS) do
             if path[1] ~= classID and path[2] ~= nil then
                 self.CategoryDropdown:SetItemEnabled(i, not selected)
             end
@@ -312,7 +312,7 @@ function AuctipusBrowseFrame:DoSearch()
 
     local selection = self.CategoryDropdown:GetSelection()
     for _, index in ipairs(selection) do
-        local classID, subClassID, invType = unpack(AUCTIPUS_PATHS[index])
+        local classID, subClassID, invType = unpack(Auctipus.PATHS[index])
         local filter = {
             classID       = classID,
             subClassID    = subClassID,
