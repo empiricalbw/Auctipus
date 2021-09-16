@@ -47,24 +47,31 @@ function AuctipusBrowseFrame:OnLoad()
         function(f, button) self:OnContainerModifiedClick(f) end)
 
     -- Rarity dropdown.
-    UIDropDownMenu_Initialize(self.RarityDropDown, function()
-        local info         = UIDropDownMenu_CreateInfo()
-        info.text          = ALL
-        info.value         = -1
-        info.func          = function(arg) self:HandleRarityClick(arg) end
-        info.checked       = nil
-        info.classicChecks = true
-        UIDropDownMenu_AddButton(info)
-        for i=0, #ITEM_QUALITY_COLORS - 4 do
-            info.text    = _G["ITEM_QUALITY"..i.."_DESC"]
-            info.value   = i
-            info.func    = function(arg) self:HandleRarityClick(arg) end
-            info.checked = nil
-            UIDropDownMenu_AddButton(info)
-        end
-    end)
-    UIDropDownMenu_SetSelectedValue(self.RarityDropDown, -1)
-    UIDropDownMenu_SetWidth(self.RarityDropDown, 100)
+    local config = {
+        handler = function(index, selected)
+                    self:OnRarityDropDownClick(index, selected)
+                  end,
+        width   = 100,
+        rows    = #ITEM_QUALITY_COLORS - 2,
+        anchor  = {point="TOPLEFT",
+                   relativeTo=self.RarityDropDownButton,
+                   relativePoint="BOTTOMLEFT",
+                   dx=0,
+                   dy=0,
+                   },
+        items   = {ALL},
+    }
+    for i=0, #ITEM_QUALITY_COLORS - 4 do
+        table.insert(config.items, _G["ITEM_QUALITY"..i.."_DESC"])
+    end
+    self.RarityDropDownMenu = ADropDown:New(config)
+    self.RarityDropDownMenu:CheckOneItem(1)
+    self.RarityDropDownButton.Button:SetScript("OnClick",
+        function()
+            self.RarityDropDownMenu:Toggle()
+            self.CategoryDropdown:Hide()
+        end)
+    self.RarityDropDownButton.LabelWhite:SetText(config.items[1])
 
     -- Paths dropdown.
     local config = {
@@ -88,6 +95,7 @@ function AuctipusBrowseFrame:OnLoad()
     self.CategoriesFrame.Button:SetScript("OnClick",
         function()
             self.CategoryDropdown:Toggle()
+            self.RarityDropDownMenu:Hide()
         end)
     self.CategoriesFrame.LabelGold:SetText("Categories")
 
@@ -170,6 +178,7 @@ end
 
 function AuctipusBrowseFrame:OnHide()
     self.CategoryDropdown:Hide()
+    self.RarityDropDownMenu:Hide()
 end
 
 function AuctipusBrowseFrame:OnChatEdit_InsertLink(link)
@@ -179,8 +188,9 @@ function AuctipusBrowseFrame:OnChatEdit_InsertLink(link)
         self.CategoryDropdown:ClearSelection()
         self.MinLvlBox:SetText("")
         self.MaxLvlBox:SetText("")
-        UIDropDownMenu_SetSelectedValue(self.RarityDropDown, -1)
-        UIDropDownMenu_SetText(self.RarityDropDown, ALL)
+        self.RarityDropDownMenu:CheckOneItem(1)
+        self.RarityDropDownButton.LabelWhite:SetText(
+            self.RarityDropDownMenu:GetItemText(1))
         self:DoSearch()
     end
 end
@@ -191,8 +201,11 @@ function AuctipusBrowseFrame:OnContainerModifiedClick(f)
     end
 end
 
-function AuctipusBrowseFrame:HandleRarityClick(info)
-    UIDropDownMenu_SetSelectedValue(self.RarityDropDown, info.value)
+function AuctipusBrowseFrame:OnRarityDropDownClick(index, selected)
+    self.RarityDropDownMenu:CheckOneItem(index)
+    self.RarityDropDownMenu:Hide()
+    self.RarityDropDownButton.LabelWhite:SetText(
+        self.RarityDropDownMenu:GetItemText(index))
 end
 
 function AuctipusBrowseFrame:OnCategoryDropDownClick(index, selected)
@@ -291,7 +304,7 @@ function AuctipusBrowseFrame:DoSearch()
         text       = self.SearchBox:GetText(),
         minLevel   = self.MinLvlBox:GetNumber(),
         maxLevel   = self.MaxLvlBox:GetNumber(),
-        rarity     = UIDropDownMenu_GetSelectedValue(self.RarityDropDown),
+        rarity     = self.RarityDropDownMenu:GetFirstCheckIndex() - 2,
         exactMatch = false,
         usable     = self.CanUseCheckButton:GetChecked(),
         filters    = {},
@@ -317,6 +330,7 @@ function AuctipusBrowseFrame:DoSearch()
     self.SearchBox:ClearFocus()
     self.SearchButton:Disable()
     self.CategoryDropdown:Hide()
+    self.RarityDropDownMenu:Hide()
 end
 
 function AuctipusBrowseFrame:ScanProgress(scan, page, totalPages)

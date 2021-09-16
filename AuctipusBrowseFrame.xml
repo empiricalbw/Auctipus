@@ -55,8 +55,8 @@
                 </Layers>
             </EditBox>
 
-            <Frame name="$parentRarityDropDown" parentKey="RarityDropDown" inherits="UIDropDownMenuTemplate">
-                <Size x="80" y="32"/>
+            <Frame name="$parentRarityDropDown" parentKey="RarityDropDownButton" inherits="AuctipusDropDownButtonTemplate">
+                <Size x="135" y="24"/>
                 <Anchors>
                     <Anchor point="LEFT" relativeTo="$parentMaxLvlBox" relativePoint="RIGHT" x="30"/>
                 </Anchors>
@@ -74,7 +74,7 @@
             <Frame name="$parentCategories" parentKey="CategoriesFrame" inherits="AuctipusDropDownButtonTemplate">
                 <Size x="120" y="24"/>
                 <Anchors>
-                    <Anchor point="LEFT" relativeTo="$parentRarityDropDown" relativePoint="RIGHT" x="-20"/>
+                    <Anchor point="LEFT" relativeTo="$parentRarityDropDown" relativePoint="RIGHT" x="-5"/>
                 </Anchors>
             </Frame>
 
