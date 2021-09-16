@@ -41,8 +41,8 @@ function AAuction:FromGetAuctionItemInfo(index, list)
                 saleStatus      = saleStatus,
                 itemId          = itemId,
                 hasAllInfo      = hasAllInfo,
-                link            = ALink.SaneLink(GetAuctionItemLink(list,
-                                                                    index)),
+                link            = Auctipus.Link.SaneLink(
+                                    GetAuctionItemLink(list, index)),
                 duration        = GetAuctionItemTimeLeft(list, index),
                 pageIndex       = index,
                 missing         = false,

@@ -96,7 +96,7 @@ end
 
 function AuctipusHistoryFrame:OnChatEdit_InsertLink(link)
     if link and self:IsVisible() then
-        local name = ALink.GetLinkName(link)
+        local name = Auctipus.Link.GetLinkName(link)
         self.SearchBox:SetText(name)
         self.SearchBox:ClearFocus()
         self:FilterResults(name)

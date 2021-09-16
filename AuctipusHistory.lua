@@ -89,7 +89,7 @@ function AHistory:Update0To20502()
     for realm, realmHistory in pairs(AUCTIPUS_ITEM_HISTORY_DB) do
         local oldLinks = {}
         for link, history in pairs(realmHistory) do
-            if ALink.CountAttrs(link) == 17 then
+            if Auctipus.Link.CountAttrs(link) == 17 then
                 table.insert(oldLinks, link)
             end
         end
@@ -97,8 +97,8 @@ function AHistory:Update0To20502()
         -- Update the old links to new links and concatenate them into the
         -- database.
         for _, link in ipairs(oldLinks) do
-            local newLink = ALink.UpdateLink(link)
-            assert(ALink.CountAttrs(newLink) == 18)
+            local newLink = Auctipus.Link.UpdateLink(link)
+            assert(Auctipus.Link.CountAttrs(newLink) == 18)
 
             local oldData = realmHistory[link]
             local newData = realmHistory[newLink] or {}
@@ -123,7 +123,7 @@ end
 function AHistory:ProcessDB()
     local newDB = {}
     for link, history in pairs(AUCTIPUS_ITEM_HISTORY) do
-        local l = ALink:New(link)
+        local l = Auctipus.Link:New(link)
         l.history = history
         table.insert(newDB, l)
     end

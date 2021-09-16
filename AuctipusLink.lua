@@ -1,5 +1,6 @@
-ALink = {}
-ALink.__index = ALink
+Auctipus.Link = {}
+Auctipus.Link.__index = Auctipus.Link
+local ALink = Auctipus.Link
 
 local function LinkDecode(l)
     local _, _, a, r, g, b, itemId = l:find("|c(..)(..)(..)(..)|Hitem:(%d+):")

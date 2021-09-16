@@ -183,7 +183,7 @@ end
 
 function AuctipusBrowseFrame:OnChatEdit_InsertLink(link)
     if link and self:IsVisible() then
-        local name = ALink.GetLinkName(link)
+        local name = Auctipus.Link.GetLinkName(link)
         self.SearchBox:SetText(name)
         self.CategoryDropdown:ClearSelection()
         self.MinLvlBox:SetText("")
