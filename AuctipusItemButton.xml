@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
-    <Button name="AuctipusItemButtonTemplate" mixin="AuctipusItemButton" virtual="true">
+    <Button name="AuctipusItemButtonTemplate" mixin="AuctipusItemButtonMixin" virtual="true">
         <Size x="36" y="36"/>
         <Layers>
             <Layer level="BACKGROUND">

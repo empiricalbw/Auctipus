@@ -1,6 +1,6 @@
-AuctipusItemButton = {}
+AuctipusItemButtonMixin = {}
 
-function AuctipusItemButton:OnLoad()
+function AuctipusItemButtonMixin:OnLoad()
     self:SetScript("OnEnter", function() self:OnEnter() end)
     self:SetScript("OnLeave", function() self:OnLeave() end)
     self:SetScript("OnEvent", function() self:OnEvent() end)
@@ -11,7 +11,7 @@ function AuctipusItemButton:OnLoad()
     self._is_auctipus = true
 end
 
-function AuctipusItemButton:SetAuctionGroup(auctionGroup)
+function AuctipusItemButtonMixin:SetAuctionGroup(auctionGroup)
     self.auctionGroup = auctionGroup
 
     self.Count:Hide()
@@ -28,7 +28,7 @@ function AuctipusItemButton:SetAuctionGroup(auctionGroup)
     end
 end
 
-function AuctipusItemButton:SetAuctionSellItem()
+function AuctipusItemButtonMixin:SetAuctionSellItem()
     local name, texture, count, quality = GetAuctionSellItemInfo()
     if name then
         self.sellInfo = {name, texture}
@@ -46,7 +46,7 @@ function AuctipusItemButton:SetAuctionSellItem()
     end
 end
 
-function AuctipusItemButton:SetAuction(auction)
+function AuctipusItemButtonMixin:SetAuction(auction)
     self.link = auction.link
     self:SetNormalTexture(auction.texture)
     self:SetCount(auction.count)
@@ -59,7 +59,7 @@ function AuctipusItemButton:SetAuction(auction)
     self.Name:Show()
 end
 
-function AuctipusItemButton:SetHistoryGroup(historyGroup)
+function AuctipusItemButtonMixin:SetHistoryGroup(historyGroup)
     self.historyGroup = historyGroup
 
     self.Count:Hide()
@@ -76,7 +76,7 @@ function AuctipusItemButton:SetHistoryGroup(historyGroup)
     end
 end
 
-function AuctipusItemButton:Clear()
+function AuctipusItemButtonMixin:Clear()
     self.auctionGroup = nil
     self.link         = nil
     self.sellInfo     = nil
@@ -85,7 +85,7 @@ function AuctipusItemButton:Clear()
     self.Name:Hide()
 end
 
-function AuctipusItemButton:SetCount(count)
+function AuctipusItemButtonMixin:SetCount(count)
     if count > 1 then
         self.Count:SetText(count)
         self.Count:Show()
@@ -94,7 +94,7 @@ function AuctipusItemButton:SetCount(count)
     end
 end
 
-function AuctipusItemButton:OnEnter()
+function AuctipusItemButtonMixin:OnEnter()
     if self.link then
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
         GameTooltip:SetHyperlink(self.link)
@@ -112,11 +112,11 @@ function AuctipusItemButton:OnEnter()
     end
 end
 
-function AuctipusItemButton:OnLeave()
+function AuctipusItemButtonMixin:OnLeave()
     GameTooltip_Hide()
 end
 
-function AuctipusItemButton:OnEvent()
+function AuctipusItemButtonMixin:OnEvent()
     if GameTooltip:GetOwner() == self then
         self:OnEnter()
     end
