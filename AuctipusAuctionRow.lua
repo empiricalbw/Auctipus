@@ -1,6 +1,6 @@
-AuctipusAuctionRow = {}
+AuctipusAuctionRowMixin = {}
 
-function AuctipusAuctionRow:OnLoad()
+function AuctipusAuctionRowMixin:OnLoad()
     self:SetScript("OnClick", function(frame, button) self:OnClick(button) end)
     self:RegisterForClicks("LeftButtonUp", "RightButtonUp")
     self.DisabledButton:SetScript("OnClick",
@@ -9,7 +9,7 @@ function AuctipusAuctionRow:OnLoad()
     self.auction = nil
 end
 
-function AuctipusAuctionRow:SetAuction(auction)
+function AuctipusAuctionRowMixin:SetAuction(auction)
     self.auction = auction
 
     if auction then
@@ -30,7 +30,7 @@ function AuctipusAuctionRow:SetAuction(auction)
     end
 end
 
-function AuctipusAuctionRow:OnClick(button)
+function AuctipusAuctionRowMixin:OnClick(button)
     if button == "LeftButton" then
         if IsShiftKeyDown() then
             AuctipusFrame.BrowseFrame:ToggleAuctionSelection(self.auction)
@@ -42,18 +42,18 @@ function AuctipusAuctionRow:OnClick(button)
     end
 end
 
-function AuctipusAuctionRow:OnDisabledClick(button)
+function AuctipusAuctionRowMixin:OnDisabledClick(button)
     assert(button == "RightButton")
     AuctipusFrame.BrowseFrame:ShowAuctionMenu(self)
 end
 
-function AuctipusAuctionRow:DisableRow()
+function AuctipusAuctionRowMixin:DisableRow()
     self:SetAlpha(0.5)
     self:Disable()
     self.DisabledButton:Show()
 end
 
-function AuctipusAuctionRow:EnableRow()
+function AuctipusAuctionRowMixin:EnableRow()
     self.DisabledButton:Hide()
     self:SetAlpha(1)
     self:Enable()
