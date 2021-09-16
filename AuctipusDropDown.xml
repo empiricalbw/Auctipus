@@ -29,6 +29,11 @@
                         <Anchor point="RIGHT" x="-29" y="3"/>
                     </Anchors>
                 </FontString>
+                <FontString parentKey="LabelWhite" font="GameFontHighlightSmallRight" justifyH="RIGHT" justifyV="MIDDLE">
+                    <Anchors>
+                        <Anchor point="RIGHT" x="-29" y="3"/>
+                    </Anchors>
+                </FontString>
             </Layer>
         </Layers>
         <Frames>
