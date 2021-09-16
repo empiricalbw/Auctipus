@@ -63,8 +63,6 @@ function ADropDown:Init(config)
         end
         self:SetItemText(i, item)
         f.LabelDisabled:Hide()
-        f.Check:Hide()
-        f.UnCheck:Hide()
         f:SetScript("OnClick", function() self:OnItemClick(i) end)
         y = y - f:GetHeight()
 
