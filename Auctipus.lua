@@ -16,7 +16,7 @@ function Auctipus.AddOn.ADDON_LOADED(addOnName)
 
     -- Saved variables.
     AuctipusFrame.AuctionsFrame:ProcessSavedVars()
-    AHistory.ProcessSavedVars()
+    Auctipus.History.ProcessSavedVars()
 
     -- Slash.
     SlashCmdList["AUCTIPUS"] = Auctipus.AddOn.OnSlash

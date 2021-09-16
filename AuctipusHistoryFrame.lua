@@ -32,7 +32,10 @@ function AuctipusHistoryFrame:OnLoad()
         function(f, button) self:OnContainerModifiedClick(f) end)
 
     -- Full scan button.
-    self.FullScanButton:SetScript("OnClick", function() AHistory:FullScan() end)
+    self.FullScanButton:SetScript("OnClick",
+        function()
+            Auctipus.History:FullScan()
+        end)
 
     -- Scroll bars.
     self.HistoryGroupScrollFrame:SetScript("OnVerticalScroll",
@@ -110,7 +113,7 @@ function AuctipusHistoryFrame:OnContainerModifiedClick(f)
 end
 
 function AuctipusHistoryFrame:FilterResults(substring)
-    self.results = AHistory:Match(substring)
+    self.results = Auctipus.History:Match(substring)
     if #self.results == 1 then
         self:SelectHistoryGroup(self.results[1])
     else
@@ -156,7 +159,7 @@ function AuctipusHistoryFrame:UpdateGraph()
         return
     end
 
-    local today     = AHistory:GetServerDay()
+    local today     = Auctipus.History:GetServerDay()
     local firstDay  = today - #self.Graph.HistoryBars + 1
     local minBuyout = 100000000000
     local maxBuyout = 0

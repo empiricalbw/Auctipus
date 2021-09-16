@@ -26,14 +26,14 @@ Auctipus.API = {}
 -- was seen yesterday, etc.
 --]]
 function Auctipus.API.GetAuctionBuyoutRange(itemID)
-    local matches = AHistory:MatchByItemID(itemID)
+    local matches = Auctipus.History:MatchByItemID(itemID)
     if #matches == 0 then
         return nil
     end
 
     assert(#matches == 1)
     local link  = matches[1]
-    local today = AHistory:GetServerDay()
+    local today = Auctipus.History:GetServerDay()
     local last  = link.history[#link.history]
     return last[2], last[3], today - last[1]
 end

@@ -1,5 +1,6 @@
-AHistory = {}
-AHistory.__index = AHistory
+Auctipus.History = {}
+Auctipus.History.__index = Auctipus.History
+local AHistory = Auctipus.History
 
 -- Saved variables.
 AUCTIPUS_ITEM_HISTORY_DB = {}
