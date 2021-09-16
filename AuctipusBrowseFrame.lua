@@ -89,7 +89,7 @@ function AuctipusBrowseFrame:OnLoad()
         function()
             self.CategoryDropdown:Toggle()
         end)
-    self.CategoriesFrame.Label:SetText("Categories")
+    self.CategoriesFrame.LabelGold:SetText("Categories")
 
     -- Ignore dropdown.
     local config2 = {
