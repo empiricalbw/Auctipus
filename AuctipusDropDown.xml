@@ -69,6 +69,12 @@
                     </Anchors>
                     <TexCoords left="0.5" right="1.0" top="0.5" bottom="1.0"/>
                 </Texture>
+                <Texture parentKey="CheckMark" file="Interface\Buttons\UI-CheckBox-Check" hidden="true">
+                    <Size x="16" y="16"/>
+                    <Anchors>
+                        <Anchor point="LEFT" y="1"/>
+                    </Anchors>
+                </Texture>
                 <FontString parentKey="LabelEnabled" font="GameFontWhiteSmall" justifyH="LEFT">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="16"/>

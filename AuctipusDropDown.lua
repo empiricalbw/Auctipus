@@ -151,3 +151,19 @@ function ADropDown:EnableItem(index)
     self.items[index].LabelEnabled:Show()
     self.items[index].LabelDisabled:Hide()
 end
+
+function ADropDown:CheckOneItem(index)
+    for i, item in ipairs(self.items) do
+        item.CheckMark:SetShown(i == index)
+    end
+end
+
+function ADropDown:GetFirstCheckIndex()
+    for i, item in ipairs(self.items) do
+        if item.CheckMark:IsShown() then
+            return i
+        end
+    end
+
+    error("No items selected!")
+end
