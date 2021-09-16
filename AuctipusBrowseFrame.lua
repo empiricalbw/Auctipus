@@ -466,7 +466,7 @@ function AuctipusBrowseFrame:SelectOptimalAuctions(n)
     end
 
     if not ag.matrix then
-        ag.matrix = Matrix:New(ag.unitPriceAuctions)
+        ag.matrix = Auctipus.Matrix:New(ag.unitPriceAuctions)
     end
 
     self.selectedAuctions:Clear()
