@@ -1,4 +1,4 @@
-AuctipusListingsSellRow = {}
+AuctipusListingsSellRowMixin = {}
 
 local AUCTION_DURATION = {
     AUCTION_TIME_LEFT1,
@@ -10,16 +10,16 @@ local AUCTION_DURATION = {
 local AUCTION_STATUS_UNSOLD = 0
 local AUCTION_STATUS_SOLD   = 1
 
-function AuctipusListingsSellRow:OnLoad()
+function AuctipusListingsSellRowMixin:OnLoad()
     self.ItemButton:SetHeight(self:GetHeight())
     self.ItemButton:SetWidth(self:GetHeight())
 end
 
-function AuctipusListingsSellRow:OnClick()
+function AuctipusListingsSellRowMixin:OnClick()
     AuctipusFrame.ListingsFrame:SetSelection(self:GetID())
 end
 
-function AuctipusListingsSellRow:SetAuction(auction)
+function AuctipusListingsSellRowMixin:SetAuction(auction)
     local durationText
 
     if auction then
