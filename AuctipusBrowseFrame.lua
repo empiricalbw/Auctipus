@@ -3,8 +3,8 @@ AuctipusBrowseFrame = {}
 function AuctipusBrowseFrame:OnLoad()
     -- Variables.
     self.selectedAuctionGroup = nil
-    self.selectedAuctions     = ASet:New()
-    self.purchasedAuctions    = ASet:New()
+    self.selectedAuctions     = Auctipus.Set:New()
+    self.purchasedAuctions    = Auctipus.Set:New()
     self.scan                 = nil
     self.auctionMenuRow       = nil
 

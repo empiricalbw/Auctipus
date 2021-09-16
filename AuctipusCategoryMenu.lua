@@ -31,7 +31,7 @@ function ACategoryMenu:Init(config)
     f.RadioOff:Hide()
     f:SetScript("OnClick", function() self:ClearSelection() end)
 
-    self.selection = ASet:New()
+    self.selection = Auctipus.Set:New()
 end
 
 function ACategoryMenu:OnItemClick(index)

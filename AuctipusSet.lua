@@ -1,5 +1,6 @@
-ASet = {}
-ASet.__index = ASet
+Auctipus.Set = {}
+Auctipus.Set.__index = Auctipus.Set
+local ASet = Auctipus.Set
 
 function ASet:New(elems)
     local aset = {elems        = {},

@@ -48,7 +48,7 @@ function ASearcher:New(name)
         targetAuction     = nil,
         handler           = nil,
         searchQueue       = nil,
-        searchedPages     = ASet:New(),
+        searchedPages     = Auctipus.Set:New(),
         apage             = nil,
         gotBidAcceptedMsg = nil,
         gotAuctionWonMsg  = nil,
