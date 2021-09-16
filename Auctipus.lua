@@ -1,6 +1,4 @@
-Auctipus = {
-    log       = ALog:new(1, 2),
-}
+Auctipus.log = Auctipus.Log:New(1, 2)
 
 UIPanelWindows["AuctipusFrame"] = {
     area                = "doublewide",

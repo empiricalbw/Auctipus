@@ -23,6 +23,7 @@ AuctipusListingsFrame.xml
 AuctipusHistoryFrame.xml
 AuctipusDropDown.xml
 
+Namespace.lua
 Matrix.lua
 AuctipusEventManager.lua
 AuctipusLog.lua
