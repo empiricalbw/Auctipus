@@ -327,7 +327,9 @@ function AuctipusBrowseFrame:DoSearch()
     self.StatusText:Show()
     self:HideBuyControls()
     self.scan = Auctipus.Scan:New({query}, self)
-    self.SearchBox:ClearFocus()
+    for i, e in ipairs(self.EditBoxes) do
+        e:ClearFocus()
+    end
     self.SearchButton:Disable()
     self.CategoryDropdown:Hide()
     self.RarityDropDownMenu:Hide()
