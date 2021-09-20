@@ -30,12 +30,36 @@
         </Layers>
     </Frame>
 
-    <Button name="AuctipusHistoryHighlightTemplate" enableMouse="true" virtual="true">
-        <HighlightTexture name="$parentHighlight" file="Interface\AddOns\Auctipus\Textures\Bar.tga" setAllPoints="true">
-            <Color r="0.949" g="0.910" b="0.455"/>
-            <TexCoords left="0" right="1" top="0.75" bottom="1"/>
-        </HighlightTexture>
-    </Button>
+    <Frame name="AuctipusHistoryGraphSectionTemplate" virtual="true">
+        <Layers>
+            <Layer level="ARTWORK" textureSubLevel="0">
+                <Texture parentKey="TopTriangle" parentArray="Triangles" file="Interface\AddOns\Auctipus\Textures\triangle_mask.tga">
+                    <Anchors>
+                        <Anchor point="LEFT"/>
+                        <Anchor point="RIGHT"/>
+                    </Anchors>
+                </Texture>
+                <Texture parentArray="Triangles" file="Interface\AddOns\Auctipus\Textures\triangle_mask.tga">
+                    <Anchors>
+                        <Anchor point="LEFT"/>
+                        <Anchor point="RIGHT"/>
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="Rectangle" file="Interface\AddOns\Auctipus\Textures\square_mask.tga">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.TopTriangle" relativePoint="BOTTOMLEFT"/>
+                        <Anchor point="BOTTOMRIGHT"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK" textureSubLevel="1">
+                <Line parentArray="Lines" thickness="1"/>
+                <Line parentArray="Lines" thickness="1"/>
+            </Layer>
+        </Layers>
+    </Frame>
+
+    <Button name="AuctipusHistoryHighlightTemplate" enableMouse="true" virtual="true"/>
 
     <Frame name="AuctipusHistoryFrameTemplate" enableMouse="true" virtual="true" mixin="AuctipusHistoryFrame">
         <Size x="832" y="440"/>
@@ -107,9 +131,9 @@
                     <KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
                     <KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
                 </KeyValues>
-                <Size x="512" y="380"/>
+                <Size x="514" y="380"/>
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.FullScanButton" relativePoint="BOTTOMLEFT" x="96" y="-16"/>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.FullScanButton" relativePoint="BOTTOMLEFT" x="94" y="-16"/>
                 </Anchors>
                 <Frames>
                     <Button name="$parentHistoryHighlight1" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
@@ -140,40 +164,56 @@
                     <Button name="$parentHistoryHighlight26" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
                     <Button name="$parentHistoryHighlight27" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
                     <Button name="$parentHistoryHighlight28" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory1" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory2" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory3" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory4" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory5" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory6" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory7" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory8" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory9" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory10" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory11" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory12" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory13" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory14" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory15" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory16" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory17" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory18" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory19" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory20" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory21" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory22" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory23" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory24" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory25" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory26" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory27" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
-                    <Frame toplevel="true" frameStrata="TOOLTIP" name="$parentHistory28" parentArray="HistoryBars" inherits="AuctipusHistoryBarTemplate"/>
+                    <Button name="$parentHistoryHighlight29" parentArray="HistoryHighlights" inherits="AuctipusHistoryHighlightTemplate"/>
+                    <Frame toplevel="true" name="$parentSection1"  parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection2"  parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection3"  parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection4"  parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection5"  parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection6"  parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection7"  parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection8"  parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection9"  parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection10" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection11" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection12" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection13" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection14" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection15" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection16" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection17" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection18" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection19" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection20" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection21" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection22" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection23" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection24" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection25" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection26" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection27" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
+                    <Frame toplevel="true" name="$parentSection28" parentArray="Sections" inherits="AuctipusHistoryGraphSectionTemplate"/>
 
                     <Frame name="$parentMinPrice" parentKey="MinPrice" inherits="BetterMoneyFrameNormalTemplate">
                         <Anchors><Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMLEFT" x="-0"/></Anchors>
                     </Frame>
                     <Frame name="$parentMaxPrice" parentKey="MaxPrice" inherits="BetterMoneyFrameNormalTemplate">
                         <Anchors><Anchor point="TOPRIGHT" relativePoint="TOPLEFT" x="-0"/></Anchors>
+                    </Frame>
+
+                    <Frame toplevel="true" parentKey="Dots" frameStrata="TOOLTIP">
+                        <Layers>
+                            <Layer level="OVERLAY">
+                                <Texture parentKey="Top" file="Interface\AddOns\Auctipus\Textures\Dot.tga">
+                                    <Size x="10" y="10"/>
+                                    <TexCoords left="0" right="0.5625" top="0" bottom="0.5625"/>
+                                </Texture>
+                                <Texture parentKey="Bottom" file="Interface\AddOns\Auctipus\Textures\Dot.tga">
+                                    <Size x="10" y="10"/>
+                                    <TexCoords left="0" right="0.5625" top="0" bottom="0.5625"/>
+                                </Texture>
+                            </Layer>
+                        </Layers>
                     </Frame>
                 </Frames>
             </Frame>

@@ -48,26 +48,29 @@ function AuctipusHistoryFrame:OnLoad()
     self.HistoryGroupScrollFrame.ScrollBar.scrollStep = 1
     self:UpdateHistoryGroups()
 
-    -- History bars.
-    self.buyoutSpan = {}
-    for i, bar in ipairs(self.Graph.HistoryBars) do
-        bar:SetPoint("LEFT", self.Graph, "LEFT", 5 + ((i-1)*18), 0)
-        bar:SetPoint("TOP", self.Graph, "TOP", 0, -4)
-        bar:SetPoint("BOTTOM", self.Graph, "BOTTOM", 0, 4)
-        bar:SetWidth(16)
-        bar.Top:SetVertexColor(0, 0.6, 0, 0.85)
-        bar.Middle:SetVertexColor(0, 0.6, 0, 0.85)
-        bar.Bottom:SetVertexColor(0, 0.6, 0, 0.85)
-        bar:Hide()
+    -- Plot.
+    self.xyData = {top = {}, bottom = {}, dotPos = {}}
+    for i, section in ipairs(self.Graph.Sections) do
+        section:SetPoint("TOPLEFT", self.Graph, "TOPLEFT", 5 + ((i - 1)*18), -5)
+        section:SetPoint("BOTTOM", 0, 5)
+        section:SetWidth(18)
+        for j, line in ipairs(section.Lines) do
+            line:SetColorTexture(0, 0.5, 0.1, 1)
+        end
+        section:Hide()
     end
+    self.Graph.Dots.Top:ClearAllPoints()
+    self.Graph.Dots.Top:Hide()
+    self.Graph.Dots.Bottom:ClearAllPoints()
+    self.Graph.Dots.Bottom:Hide()
+
+    -- History bars.
     for i, hl in ipairs(self.Graph.HistoryHighlights) do
-        table.insert(self.buyoutSpan, nil)
-        hl:SetPoint("LEFT", self.Graph, "LEFT", 4 + ((i-1)*18), 0)
-        hl:SetPoint("TOP", self.Graph, "TOP", 0, -4)
-        hl:SetPoint("BOTTOM", self.Graph, "BOTTOM", 0, 4)
+        hl:SetPoint("TOPLEFT", self.Graph, "TOPLEFT", 5 + ((i - 1)*18) - 9, -5)
+        hl:SetPoint("BOTTOM", 0, 5)
         hl:SetWidth(18)
         hl:SetScript("OnEnter", function() self:OnEnterBar(i) end)
-        hl:Show()
+        hl:Hide()
     end
 
     -- Money frames.
@@ -86,10 +89,26 @@ function AuctipusHistoryFrame.OnUpdate()
 end
 
 function AuctipusHistoryFrame:OnEnterBar(index)
-    local span = self.buyoutSpan[index]
-    if span then
-        self.MinPrice:SetMoney(floor(span[1] + 0.5))
-        self.MaxPrice:SetMoney(floor(span[2] + 0.5))
+    local x = 5 + (index - 1)*18
+    if self.xyData.top[index] > 0 then
+        self.MaxPrice:SetMoney(floor(self.xyData.top[index] + 0.5))
+        self.MaxPrice:Show()
+        self.Graph.Dots.Top:SetPoint("CENTER", self.Graph, "BOTTOMLEFT",
+            x, self.xyData.tPos[index])
+        self.Graph.Dots.Top:Show()
+    else
+        self.MaxPrice:Hide()
+        self.Graph.Dots.Top:Hide()
+    end
+    if self.xyData.bottom[index] > 0 then
+        self.MinPrice:SetMoney(floor(self.xyData.bottom[index] + 0.5))
+        self.MinPrice:Show()
+        self.Graph.Dots.Bottom:SetPoint("CENTER", self.Graph, "BOTTOMLEFT",
+            x, self.xyData.bPos[index])
+        self.Graph.Dots.Bottom:Show()
+    else
+        self.MinPrice:Hide()
+        self.Graph.Dots.Bottom:Hide()
     end
 end
 
@@ -124,7 +143,13 @@ end
 function AuctipusHistoryFrame:SelectHistoryGroup(hg)
     self.selectedHistoryGroup = hg
     self:UpdateHistoryGroups()
-    self:UpdateGraph()
+    self:UpdateLineGraph()
+    for i=#self.xyData.top, 1, -1 do
+        if self.xyData.top[i] > 0 then
+            self:OnEnterBar(i)
+            break
+        end
+    end
 end
 
 function AuctipusHistoryFrame:UpdateHistoryGroups()
@@ -153,62 +178,185 @@ function AuctipusHistoryFrame:UpdateHistoryGroups()
     end
 end
 
-function AuctipusHistoryFrame:UpdateGraph()
+function AuctipusHistoryFrame:UpdateLineGraph()
     local hg = self.selectedHistoryGroup
     if not hg then
         return
     end
 
+    -- Find the starting index, pos, and the high end of the buyout range.
     local today     = Auctipus.History:GetServerDay()
-    local firstDay  = today - #self.Graph.HistoryBars + 1
-    local minBuyout = 100000000000
+    local firstDay  = today - #self.Graph.Sections
     local maxBuyout = 0
     local pos       = nil
     for i, info in ipairs(hg.history) do
         if info[1] >= firstDay then
             pos       = pos or i
-            minBuyout = min(minBuyout, info[2])
             maxBuyout = max(maxBuyout, info[3])
         end
     end
-    minBuyout = 0
     if maxBuyout > 10000 then
         maxBuyout = ceil(maxBuyout / 10000) * 10000
     elseif maxBuyout > 100 then
         maxBuyout = ceil(maxBuyout / 100) * 100
     end
-    for _, b in ipairs(self.Graph.HistoryBars) do
-        b:Hide()
-    end
-    if pos ~= nil then
-        local gheight = self.Graph:GetHeight() - 16
-        local buySpan = maxBuyout - minBuyout
-        if buySpan == 0 then
-            minBuyout = minBuyout - 1
-            maxBuyout = maxBuyout + 1
-            buySpan   = 2
-        end
-        while pos <= #hg.history do
-            local info   = hg.history[pos]
-            local index  = info[1] - firstDay + 1
-            local b      = self.Graph.HistoryBars[index]
-            local bottom = ((info[2] - minBuyout) / buySpan) * gheight + 4
-            local top    = ((info[3] - minBuyout) / buySpan) * gheight + 12
-            b:SetPoint("BOTTOM", self.Graph, "BOTTOM", 0, bottom)
-            b:SetPoint("TOP", self.Graph, "BOTTOM", 0, top)
-            b:Show()
-            pos = pos + 1
 
-            self.buyoutSpan[index] = {info[2], info[3]}
-        end
-        self.Graph.MinPrice:Show()
-        self.Graph.MaxPrice:Show()
-        self.Graph.MinPrice:SetMoney(minBuyout)
-        self.Graph.MaxPrice:SetMoney(maxBuyout)
-    else
+    -- Hide all sections to begin with.
+    for _, section in ipairs(self.Graph.Sections) do
+        section:Hide()
+    end
+
+    -- If no data was found, bail early.
+    self.xyData.top    = {}
+    self.xyData.bottom = {}
+    self.xyData.tPos   = {}
+    self.xyData.bPos   = {}
+    if pos == nil then
+        self.MinPrice:Hide()
+        self.MaxPrice:Hide()
         self.Graph.MinPrice:Hide()
         self.Graph.MaxPrice:Hide()
+        self.Graph.Dots.Top:Hide()
+        self.Graph.Dots.Bottom:Hide()
+        for i, hl in ipairs(self.Graph.HistoryHighlights) do
+            hl:Hide()
+        end
+        return
     end
+
+    -- Calculate the buyout span.  For now, this just reduces to the maxBuyout
+    -- value, but in the future we might want to be able to narrow the y-axis.
+    local minBuyout = 0
+    local buySpan   = maxBuyout - minBuyout
+    if buySpan == 0 then
+        minBuyout = minBuyout - 1
+        maxBuyout = maxBuyout + 1
+        buySpan   = 2
+    end
+
+    -- Build the sparse x-y data.
+    local bData     = self.xyData.bottom
+    local tData     = self.xyData.top
+    local bPos      = self.xyData.bPos
+    local tPos      = self.xyData.tPos
+    local lastIndex = #hg.history
+    local gheight   = self.Graph:GetHeight() - 16
+    while pos <= lastIndex do
+        local info   = hg.history[pos]
+        local index  = info[1] - firstDay + 1
+        bData[index] = info[2]
+        tData[index] = info[3]
+        bPos[index]  = ((info[2] - minBuyout) / buySpan) * gheight + 4
+        tPos[index]  = ((info[3] - minBuyout) / buySpan) * gheight + 4
+        pos          = pos + 1
+    end
+    self.xyData.top    = tData
+    self.xyData.bottom = bData
+    self.xyData.tPos   = tPos
+    self.xyData.bPos   = bPos
+
+    -- Set which points are mouseover-able.
+    for i, hl in ipairs(self.Graph.HistoryHighlights) do
+        hl:SetShown(bData[i] ~= nil)
+    end
+
+    -- Fill in the nil data.
+    local lastBottom = nil
+    local lastTop   = nil
+    for i=1, #self.Graph.Sections + 1 do
+        if bData[i] == nil then
+            if lastBottom ~= nil then
+                bData[i] = -abs(bData[lastBottom])
+                bPos[i]  = -abs(bPos[lastBottom])
+            end
+        else
+            lastBottom = i
+        end
+
+        if tData[i] == nil then
+            if lastTop ~= nil then
+                tData[i] = -abs(tData[lastTop])
+                tPos[i]  = -abs(tPos[lastTop])
+            end
+        else
+            lastTop = i
+        end
+    end
+    lastBottom = nil
+    lastTop    = nil
+    for i=#self.Graph.Sections + 1, 1, -1 do
+        if bData[i] == nil then
+            if lastBottom ~= nil then
+                bData[i] = -abs(bData[lastBottom])
+                bPos[i]  = -abs(bPos[lastBottom])
+            end
+        else
+            lastBottom = i
+        end
+
+        if tData[i] == nil then
+            if lastTop ~= nil then
+                tData[i] = -abs(tData[lastTop])
+                tPos[i]  = -abs(tPos[lastTop])
+            end
+        else
+            lastTop = i
+        end
+    end
+
+    -- Set the graph sections up.
+    for x, section in ipairs(self.Graph.Sections) do
+        local b0 = abs(self.xyData.bPos[x])
+        local b1 = abs(self.xyData.bPos[x + 1])
+        local t0 = abs(self.xyData.tPos[x])
+        local t1 = abs(self.xyData.tPos[x + 1])
+        if t0 <= t1 then
+            section.Triangles[1]:SetTexCoord(0, 1, 0, 1)
+            section.Triangles[1]:SetPoint("BOTTOM", self.Graph, "BOTTOM", 0, t0)
+            section.Triangles[1]:SetPoint("TOP", self.Graph, "BOTTOM", 0, t1)
+            section.Lines[1]:SetStartPoint("BOTTOMLEFT", section.Triangles[1])
+            section.Lines[1]:SetEndPoint("TOPRIGHT", section.Triangles[1])
+        else
+            section.Triangles[1]:SetTexCoord(1, 0, 0, 1)
+            section.Triangles[1]:SetPoint("BOTTOM", self.Graph, "BOTTOM", 0, t1)
+            section.Triangles[1]:SetPoint("TOP", self.Graph, "BOTTOM", 0, t0)
+            section.Lines[1]:SetStartPoint("TOPLEFT", section.Triangles[1])
+            section.Lines[1]:SetEndPoint("BOTTOMRIGHT", section.Triangles[1])
+        end
+        if b0 <= b1 then
+            section.Triangles[2]:SetTexCoord(0, 1, 0, 1)
+            section.Triangles[2]:SetPoint("BOTTOM", self.Graph, "BOTTOM", 0, b0)
+            section.Triangles[2]:SetPoint("TOP", self.Graph, "BOTTOM", 0, b1)
+            section.Lines[2]:SetStartPoint("BOTTOMLEFT", section.Triangles[2])
+            section.Lines[2]:SetEndPoint("TOPRIGHT", section.Triangles[2])
+        else
+            section.Triangles[2]:SetTexCoord(1, 0, 0, 1)
+            section.Triangles[2]:SetPoint("BOTTOM", self.Graph, "BOTTOM", 0, b1)
+            section.Triangles[2]:SetPoint("TOP", self.Graph, "BOTTOM", 0, b0)
+            section.Lines[2]:SetStartPoint("TOPLEFT", section.Triangles[2])
+            section.Lines[2]:SetEndPoint("BOTTOMRIGHT", section.Triangles[2])
+        end
+        if bData[x] < 0 or bData[x + 1] < 0 then
+            section.Triangles[1]:SetVertexColor(0, 0.5, 0.1, 0.1)
+            section.Rectangle:SetVertexColor(0, 0.5, 0.1, 0.1)
+            section.Lines[1]:Hide()
+            section.Lines[2]:Hide()
+        else
+            section.Triangles[1]:SetVertexColor(0, 0.5, 0.1, 0.5)
+            section.Rectangle:SetVertexColor(0, 0.5, 0.1, 0.5)
+            section.Lines[1]:Show()
+            section.Lines[2]:Show()
+        end
+        section:Show()
+        section.Triangles[1]:Show()
+        section.Triangles[2]:Hide()
+    end
+
+    -- And Y-axis labels.
+    self.Graph.MinPrice:Show()
+    self.Graph.MaxPrice:Show()
+    self.Graph.MinPrice:SetMoney(minBuyout)
+    self.Graph.MaxPrice:SetMoney(maxBuyout)
 end
 
 Auctipus.EventManager.Register(AuctipusHistoryFrame)
