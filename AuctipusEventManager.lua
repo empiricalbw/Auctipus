@@ -1,4 +1,5 @@
-AEventManager = {}
+Auctipus.EventManager = {}
+local AEventManager = Auctipus.EventManager
 
 local function starts_with(str, start)
     return str:sub(1, #start) == start
@@ -11,8 +12,8 @@ function AEventManager.Initialize()
 
     -- A dummy frame to get us the events we are interested in.
     AEventManager.aeFrame = CreateFrame("Frame")
-    AEventManager.aeFrame:SetScript("OnEvent",AEventManager.OnEvent)
-    AEventManager.aeFrame:SetScript("OnUpdate",AEventManager.OnUpdate)
+    AEventManager.aeFrame:SetScript("OnEvent", AEventManager.OnEvent)
+    AEventManager.aeFrame:SetScript("OnUpdate", AEventManager.OnUpdate)
 end
 
 function AEventManager.Register(obj)

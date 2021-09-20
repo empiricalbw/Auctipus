@@ -25,8 +25,9 @@
 --  ERR_AUCTION_WON_S = "You won an auction for %s"
 --  ERR_AUCTION_OUTBID_S = "You have been outbid on %s."
 --]]
-ASearcher = {}
-ASearcher.__index = ASearcher
+Auctipus.Searcher = {}
+Auctipus.Searcher.__index = Auctipus.Searcher
+local ASearcher = Auctipus.Searcher
 
 local STATE_INITIAL                     = "STATE_INITIAL"
 local STATE_WAIT_PAGE_STABLE            = "STATE_WAIT_PAGE_STABLE"
@@ -48,7 +49,7 @@ function ASearcher:New(name)
         targetAuction     = nil,
         handler           = nil,
         searchQueue       = nil,
-        searchedPages     = ASet:New(),
+        searchedPages     = Auctipus.Set:New(),
         apage             = nil,
         gotBidAcceptedMsg = nil,
         gotAuctionWonMsg  = nil,
@@ -97,7 +98,8 @@ function ASearcher:LoadNextPage()
     end
 
     if index then
-        self.apage = APage.OpenListPage(self.query, index, "BUYOUT", self)
+        self.apage = Auctipus.Page.OpenListPage(self.query, index, "BUYOUT",
+                                                self)
         self:_TRANSITION(STATE_WAIT_PAGE_STABLE)
         self:NotifySearchPending()
     else
@@ -184,7 +186,7 @@ function ASearcher:_PlaceAuctionBid(copper)
     local selectedItem = self.apage:GetSelectedItem()
     Auctipus.dbg("Selected auction item: "..selectedItem)
 
-    local auction = AAuction:FromGetAuctionItemInfo(selectedItem)
+    local auction = Auctipus.Auction:FromGetAuctionItemInfo(selectedItem)
     assert(self.targetAuction:Matches(auction))
 
     PlaceAuctionBid("list", selectedItem, copper)
@@ -418,4 +420,4 @@ function ASearcher:NotifyAuctionLost()
     end
 end
 
-AEventManager.Register(ASearcher)
+Auctipus.EventManager.Register(ASearcher)

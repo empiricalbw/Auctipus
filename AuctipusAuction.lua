@@ -1,5 +1,6 @@
-AAuction = {}
-AAuction.__index = AAuction
+Auctipus.Auction = {}
+Auctipus.Auction.__index = Auctipus.Auction
+local AAuction = Auctipus.Auction
 
 local function GoldString(c)
     local cost = ""
@@ -41,8 +42,8 @@ function AAuction:FromGetAuctionItemInfo(index, list)
                 saleStatus      = saleStatus,
                 itemId          = itemId,
                 hasAllInfo      = hasAllInfo,
-                link            = ALink.SaneLink(GetAuctionItemLink(list,
-                                                                    index)),
+                link            = Auctipus.Link.SaneLink(
+                                    GetAuctionItemLink(list, index)),
                 duration        = GetAuctionItemTimeLeft(list, index),
                 pageIndex       = index,
                 missing         = false,

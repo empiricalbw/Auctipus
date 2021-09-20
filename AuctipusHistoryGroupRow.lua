@@ -1,6 +1,6 @@
-AuctipusHistoryGroupRow = {}
+AuctipusHistoryGroupRowMixin = {}
 
-function AuctipusHistoryGroupRow:OnLoad()
+function AuctipusHistoryGroupRowMixin:OnLoad()
     self.ItemButton:SetScript("OnClick", function() self:OnClick() end)
     self.ItemButton:SetScript("OnEnter", function() self:OnEnterItem() end)
     self.ItemButton:SetScript("OnLeave", function() self:OnLeaveItem() end)
@@ -8,23 +8,23 @@ function AuctipusHistoryGroupRow:OnLoad()
     self.historyGroup = nil
 end
 
-function AuctipusHistoryGroupRow:SetHistoryGroup(historyGroup)
+function AuctipusHistoryGroupRowMixin:SetHistoryGroup(historyGroup)
     self.historyGroup = historyGroup
 
     self.ItemButton:SetMouseClickEnabled(historyGroup ~= nil)
     self.ItemButton:SetHistoryGroup(historyGroup)
 end
 
-function AuctipusHistoryGroupRow:OnClick()
+function AuctipusHistoryGroupRowMixin:OnClick()
     AuctipusFrame.HistoryFrame:SelectHistoryGroup(self.historyGroup)
 end
 
-function AuctipusHistoryGroupRow:OnEnterItem()
+function AuctipusHistoryGroupRowMixin:OnEnterItem()
     self:LockHighlight()
     self.ItemButton:OnEnter()
 end
 
-function AuctipusHistoryGroupRow:OnLeaveItem()
+function AuctipusHistoryGroupRowMixin:OnLeaveItem()
     self.ItemButton:OnLeave()
     if (not self.historyGroup or
         AuctipusFrame.HistoryFrame.selectedHistoryGroup ~= self.historyGroup)

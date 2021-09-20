@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
-    <Button name="AuctipusAuctionBidRowTemplate" virtual="true" mixin="AuctipusAuctionBidRow">
+    <Button name="AuctipusAuctionBidRowTemplate" virtual="true" mixin="AuctipusAuctionBidRowMixin">
         <Size x="396" y="30"/>
         <Layers>
             <Layer level="BACKGROUND">

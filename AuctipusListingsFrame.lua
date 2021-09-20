@@ -43,7 +43,7 @@ end
 
 function AuctipusListingsFrame.AUCTION_HOUSE_SHOW()
     local self = AuctipusFrame.ListingsFrame
-    self.aopage = APage.OpenOwnerPage(0, self)
+    self.aopage = Auctipus.Page.OpenOwnerPage(0, self)
 end
 
 function AuctipusListingsFrame:UpdateControls()
@@ -102,4 +102,4 @@ function AuctipusListingsFrame:UpdateListings()
     end
 end
 
-AEventManager.Register(AuctipusListingsFrame)
+Auctipus.EventManager.Register(AuctipusListingsFrame)

@@ -1,6 +1,6 @@
 ## Interface: 20502
 ## Title: Auctipus
-## Version: 2.5.2-v4
+## Version: 2.5.2-v5a1
 ## Author: Empirical
 ## DefaultState: enabled
 ## Dependencies:
@@ -23,6 +23,7 @@ AuctipusListingsFrame.xml
 AuctipusHistoryFrame.xml
 AuctipusDropDown.xml
 
+Namespace.lua
 Matrix.lua
 AuctipusEventManager.lua
 AuctipusLog.lua

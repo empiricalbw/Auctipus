@@ -1,4 +1,6 @@
-function AuctipusLinkEditBoxes(frame)
+Auctipus.UI = {}
+
+function Auctipus.UI.LinkEditBoxes(frame)
     for i=1, #frame.EditBoxes - 1 do
         frame.EditBoxes[i].nextFocus = frame.EditBoxes[i + 1]
     end

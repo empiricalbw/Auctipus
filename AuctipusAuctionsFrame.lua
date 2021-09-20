@@ -74,7 +74,7 @@ function AuctipusAuctionsFrame:OnLoad()
     self:SetScript("OnHide", function() self:SetAuctionsTabShowing(false) end)
 
     -- Edit boxes.
-    AuctipusLinkEditBoxes(self)
+    Auctipus.UI.LinkEditBoxes(self)
     self.StackSizeBox:Disable()
     self.StackCountBox:Disable()
 
@@ -228,8 +228,8 @@ function AuctipusAuctionsFrame.NEW_AUCTION_UPDATE()
     end
 
     if name ~= nil then
-        self.aopage = APage.OpenListPage({text = name, exactMatch = true}, 0,
-                                         "UNITPRICE", self)
+        self.aopage = Auctipus.Page.OpenListPage(
+            {text = name, exactMatch = true}, 0, "UNITPRICE", self)
     elseif self.aopage then
         self.aopage:ClosePage()
         self.aopage = nil
@@ -555,4 +555,4 @@ function AuctipusAuctionsFrame:UpdateComparables()
     end
 end
 
-AEventManager.Register(AuctipusAuctionsFrame)
+Auctipus.EventManager.Register(AuctipusAuctionsFrame)

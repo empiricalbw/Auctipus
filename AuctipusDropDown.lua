@@ -1,5 +1,6 @@
-ADropDown = {}
-ADropDown.__index = ADropDown
+Auctipus.DropDown = {}
+Auctipus.DropDown.__index = Auctipus.DropDown
+local ADropDown = Auctipus.DropDown
 
 AUCTIPUS_DROPDOWN_BACKDROP_INFO = {
     bgFile   = "Interface/DialogFrame/UI-DialogBox-Background-Dark",
@@ -63,8 +64,6 @@ function ADropDown:Init(config)
         end
         self:SetItemText(i, item)
         f.LabelDisabled:Hide()
-        f.Check:Hide()
-        f.UnCheck:Hide()
         f:SetScript("OnClick", function() self:OnItemClick(i) end)
         y = y - f:GetHeight()
 
@@ -152,4 +151,20 @@ function ADropDown:EnableItem(index)
     self.items[index]:Enable()
     self.items[index].LabelEnabled:Show()
     self.items[index].LabelDisabled:Hide()
+end
+
+function ADropDown:CheckOneItem(index)
+    for i, item in ipairs(self.items) do
+        item.CheckMark:SetShown(i == index)
+    end
+end
+
+function ADropDown:GetFirstCheckIndex()
+    for i, item in ipairs(self.items) do
+        if item.CheckMark:IsShown() then
+            return i
+        end
+    end
+
+    error("No items selected!")
 end

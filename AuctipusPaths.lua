@@ -1,5 +1,6 @@
-AUCTIPUS_TREE = {}
-AUCTIPUS_PATHS = {
+Auctipus.Paths = {}
+
+Auctipus.PATHS = {
     {Enum.ItemClass.Weapon},
     {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Axe1H},
     {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Axe2H},
@@ -78,10 +79,10 @@ AUCTIPUS_PATHS = {
 
 local function GenerateAuctionPaths(classID)
     local subClassIDs = {GetAuctionItemSubClasses(classID)}
-    table.insert(AUCTIPUS_PATHS, {classID})
+    table.insert(Auctipus.PATHS, {classID})
     if #subClassIDs > 1 then
         for i, subClassID in ipairs(subClassIDs) do
-            table.insert(AUCTIPUS_PATHS, {classID, subClassID})
+            table.insert(Auctipus.PATHS, {classID, subClassID})
         end
     end
 end
@@ -102,9 +103,9 @@ local RENAME_TABLE = {
     ["Gem > Orange"] = "Gem > Orange [Red/Yellow]",
 }
 
-function AuctipusGenPaths()
+function Auctipus.Paths.Generate()
     local paths = {}
-    for i, path in ipairs(AUCTIPUS_PATHS) do
+    for i, path in ipairs(Auctipus.PATHS) do
         local s = GetItemClassInfo(path[1])
         if #path >= 2 then
             s = s.." > "..GetItemSubClassInfo(path[1], path[2])
@@ -119,8 +120,8 @@ function AuctipusGenPaths()
     return paths
 end
 
-function AuctipusDumpPaths()
-    for i, path in ipairs(AuctipusGenPaths()) do
+function Auctipus.Paths.Dump()
+    for i, path in ipairs(Auctipus.Paths.Generate()) do
         print(path.name)
     end
 end

@@ -1,13 +1,14 @@
-ACategoryMenu = ADropDown:_New()
-ACategoryMenu.__index = ACategoryMenu
+Auctipus.CategoryMenu = Auctipus.DropDown:_New()
+Auctipus.CategoryMenu.__index = Auctipus.CategoryMenu
+local ACategoryMenu = Auctipus.CategoryMenu
 
 local RESET_FILTERS_HEIGHT = 16
 
 function ACategoryMenu:Init(config)
-    ADropDown.Init(self, config)
+    Auctipus.DropDown.Init(self, config)
 
     for i, item in ipairs(self.items) do
-        item.UnCheck:Show()
+        item.RadioOff:Show()
         item.disableCount = 0
     end
 
@@ -27,18 +28,18 @@ function ACategoryMenu:Init(config)
     f.LabelDisabled:SetJustifyV("MIDDLE")
     f.LabelEnabled:Hide()
     f:Disable()
-    f.Check:Hide()
-    f.UnCheck:Hide()
+    f.RadioOn:Hide()
+    f.RadioOff:Hide()
     f:SetScript("OnClick", function() self:ClearSelection() end)
 
-    self.selection = ASet:New()
+    self.selection = Auctipus.Set:New()
 end
 
 function ACategoryMenu:OnItemClick(index)
     local f = self.items[index]
     f.selected = not f.selected
-    f.Check:SetShown(f.selected)
-    f.UnCheck:SetShown(not f.selected)
+    f.RadioOn:SetShown(f.selected)
+    f.RadioOff:SetShown(not f.selected)
     if f.selected then
         self.selection:Insert(index)
     else
@@ -55,7 +56,7 @@ function ACategoryMenu:OnItemClick(index)
         self.resetButton:Enable()
     end
 
-    ADropDown.OnItemClick(self, index)
+    Auctipus.DropDown.OnItemClick(self, index)
 end
 
 function ACategoryMenu:GetSelection()
@@ -71,13 +72,13 @@ end
 function ACategoryMenu:DisableItem(index)
     local f        = self.items[index]
     f.disableCount = f.disableCount + 1
-    ADropDown.DisableItem(self, index)
+    Auctipus.DropDown.DisableItem(self, index)
 end
 
 function ACategoryMenu:EnableItem(index)
     local f        = self.items[index]
     f.disableCount = max(f.disableCount - 1, 0)
     if f.disableCount == 0 then
-        ADropDown.EnableItem(self, index)
+        Auctipus.DropDown.EnableItem(self, index)
     end
 end

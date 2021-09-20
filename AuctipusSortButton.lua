@@ -1,5 +1,5 @@
-AuctipusSortButton = {}
+AuctipusSortButtonMixin = {}
 
-function AuctipusSortButton:OnLoad()
+function AuctipusSortButtonMixin:OnLoad()
     self:Disable()
 end

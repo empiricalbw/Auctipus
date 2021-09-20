@@ -1,6 +1,6 @@
-AuctipusAuctionGroupRow = {}
+AuctipusAuctionGroupRowMixin = {}
 
-function AuctipusAuctionGroupRow:OnLoad()
+function AuctipusAuctionGroupRowMixin:OnLoad()
     self.ItemButton:SetScript("OnClick", function() self:OnClick() end)
     self.ItemButton:SetScript("OnEnter", function() self:OnEnterItem() end)
     self.ItemButton:SetScript("OnLeave", function() self:OnLeaveItem() end)
@@ -13,7 +13,7 @@ function AuctipusAuctionGroupRow:OnLoad()
     self.hovering     = false
 end
 
-function AuctipusAuctionGroupRow:SetAuctionGroup(auctionGroup)
+function AuctipusAuctionGroupRowMixin:SetAuctionGroup(auctionGroup)
     self.auctionGroup = auctionGroup
 
     if auctionGroup then
@@ -43,7 +43,7 @@ function AuctipusAuctionGroupRow:SetAuctionGroup(auctionGroup)
     self.ItemButton:SetAuctionGroup(auctionGroup)
 end
 
-function AuctipusAuctionGroupRow:OnClick()
+function AuctipusAuctionGroupRowMixin:OnClick()
     if IsModifiedClick("DRESSUP") then
         AuctipusFrame.BrowseFrame:DressupAuctionGroup(self.auctionGroup)
     else
@@ -51,7 +51,7 @@ function AuctipusAuctionGroupRow:OnClick()
     end
 end
 
-function AuctipusAuctionGroupRow:OnEnter()
+function AuctipusAuctionGroupRowMixin:OnEnter()
     self.hovering = true
     if IsModifiedClick("DRESSUP") then
         ShowInspectCursor()
@@ -60,23 +60,23 @@ function AuctipusAuctionGroupRow:OnEnter()
     end
 end
 
-function AuctipusAuctionGroupRow:OnLeave()
+function AuctipusAuctionGroupRowMixin:OnLeave()
     ResetCursor()
     self.hovering = false
 end
 
-function AuctipusAuctionGroupRow:OnEvent()
+function AuctipusAuctionGroupRowMixin:OnEvent()
     if self.hovering then
         self:OnEnter()
     end
 end
 
-function AuctipusAuctionGroupRow:OnEnterItem()
+function AuctipusAuctionGroupRowMixin:OnEnterItem()
     self:LockHighlight()
     self.ItemButton:OnEnter()
 end
 
-function AuctipusAuctionGroupRow:OnLeaveItem()
+function AuctipusAuctionGroupRowMixin:OnLeaveItem()
     self.ItemButton:OnLeave()
     if (not self.auctionGroup or
         AuctipusFrame.BrowseFrame.selectedAuctionGroup ~= self.auctionGroup)

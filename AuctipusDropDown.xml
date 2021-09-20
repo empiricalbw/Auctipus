@@ -24,7 +24,12 @@
                     </Anchors>
                     <TexCoords left="0.1953125" right="0.8046875" top="0" bottom="1"/>
                 </Texture>
-                <FontString parentKey="Label" font="GameFontNormalSmall" justifyH="RIGHT" justifyV="MIDDLE">
+                <FontString parentKey="LabelGold" font="GameFontNormalSmall" justifyH="RIGHT" justifyV="MIDDLE">
+                    <Anchors>
+                        <Anchor point="RIGHT" x="-29" y="3"/>
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="LabelWhite" font="GameFontHighlightSmallRight" justifyH="RIGHT" justifyV="MIDDLE">
                     <Anchors>
                         <Anchor point="RIGHT" x="-29" y="3"/>
                     </Anchors>
@@ -55,19 +60,25 @@
         <Size x="100" y="13"/>
         <Layers>
             <Layer level="ARTWORK">
-                <Texture name="$parentCheck" parentKey="Check" file="Interface\Common\UI-DropDownRadioChecks">
+                <Texture parentKey="RadioOn" file="Interface\Common\UI-DropDownRadioChecks" hidden="true">
                     <Size x="16" y="16"/>
                     <Anchors>
                         <Anchor point="LEFT" y="1"/>
                     </Anchors>
                     <TexCoords left="0" right="0.5" top="0.5" bottom="1.0"/>
                 </Texture>
-                <Texture name="$parentUnCheck" parentKey="UnCheck" file="Interface\Common\UI-DropDownRadioChecks">
+                <Texture parentKey="RadioOff" file="Interface\Common\UI-DropDownRadioChecks" hidden="true">
                     <Size x="16" y="16"/>
                     <Anchors>
                         <Anchor point="LEFT" y="1"/>
                     </Anchors>
                     <TexCoords left="0.5" right="1.0" top="0.5" bottom="1.0"/>
+                </Texture>
+                <Texture parentKey="CheckMark" file="Interface\Buttons\UI-CheckBox-Check" hidden="true">
+                    <Size x="16" y="16"/>
+                    <Anchors>
+                        <Anchor point="LEFT" y="1"/>
+                    </Anchors>
                 </Texture>
                 <FontString parentKey="LabelEnabled" font="GameFontWhiteSmall" justifyH="LEFT">
                     <Anchors>

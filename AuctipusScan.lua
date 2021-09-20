@@ -1,5 +1,6 @@
-AScan = {}
-AScan.__index = AScan
+Auctipus.Scan = {}
+Auctipus.Scan.__index = Auctipus.Scan
+local AScan = Auctipus.Scan
 
 function AScan:New(queries, handler)
     local as = {
@@ -22,12 +23,12 @@ end
 
 function AScan:StartNextQuery()
     self.query = table.remove(self.queries)
-    self.apage = APage.OpenListPage(self.query, 0, "QUALITY", self)
+    self.apage = Auctipus.Page.OpenListPage(self.query, 0, "QUALITY", self)
 end
 
 function AScan:LoadNextPage()
-    self.apage = APage.OpenListPage(self.query, self.apage.page + 1, "QUALITY",
-                                    self)
+    self.apage = Auctipus.Page.OpenListPage(self.query, self.apage.page + 1,
+                                            "QUALITY", self)
 end
 
 function AScan:PageUpdated(p)
@@ -81,7 +82,7 @@ function AScan:ScanComplete()
     for i, auction in ipairs(self.auctions) do
         local aag = self.auctionHash[auction.link]
         if not aag then
-            aag = AuctipusAuctionGroup:New(auction)
+            aag = Auctipus.AuctionGroup:New(auction)
             self.auctionHash[auction.link] = aag
             table.insert(self.auctionHashOrder, auction.link)
         end
