@@ -54,9 +54,10 @@ function AuctipusHistoryFrame:OnLoad()
         section:SetPoint("TOPLEFT", self.Graph, "TOPLEFT", 5 + ((i - 1)*18), -5)
         section:SetPoint("BOTTOM", 0, 5)
         section:SetWidth(18)
-        for j, line in ipairs(section.Lines) do
-            line:SetColorTexture(0, 0.5, 0.1, 1)
-        end
+        section.TopQuad:SetColorTexture(0, 0.5, 0.1, 0.5)
+        section.BottomQuad:SetColorTexture(0, 0.5, 0.1, 0.1)
+        section.RedLine:SetColorTexture(0.718, 0.122, 0.133, 1)
+        section.GreenLine:SetColorTexture(0, 0.631, 0.314, 1)
         section:Hide()
     end
     self.Graph.Dots.Top:ClearAllPoints()
@@ -240,7 +241,7 @@ function AuctipusHistoryFrame:UpdateLineGraph()
     local bPos      = self.xyData.bPos
     local tPos      = self.xyData.tPos
     local lastIndex = #hg.history
-    local gheight   = self.Graph:GetHeight() - 16
+    local gheight   = self.Graph:GetHeight() - 8
     while pos <= lastIndex do
         local info   = hg.history[pos]
         local index  = info[1] - firstDay + 1
@@ -306,50 +307,52 @@ function AuctipusHistoryFrame:UpdateLineGraph()
 
     -- Set the graph sections up.
     for x, section in ipairs(self.Graph.Sections) do
-        local b0 = abs(self.xyData.bPos[x])
-        local b1 = abs(self.xyData.bPos[x + 1])
-        local t0 = abs(self.xyData.tPos[x])
-        local t1 = abs(self.xyData.tPos[x + 1])
-        if t0 <= t1 then
-            section.Triangles[1]:SetTexCoord(0, 1, 0, 1)
-            section.Triangles[1]:SetPoint("BOTTOM", self.Graph, "BOTTOM", 0, t0)
-            section.Triangles[1]:SetPoint("TOP", self.Graph, "BOTTOM", 0, t1)
-            section.Lines[1]:SetStartPoint("BOTTOMLEFT", section.Triangles[1])
-            section.Lines[1]:SetEndPoint("TOPRIGHT", section.Triangles[1])
+        local b0   = abs(self.xyData.bPos[x])
+        local b1   = abs(self.xyData.bPos[x + 1])
+        local t0   = abs(self.xyData.tPos[x])
+        local t1   = abs(self.xyData.tPos[x + 1])
+        local bmin = min(b0, b1)
+        local tmax = max(t0, t1)
+
+        if b0 == t0 and b1 == t1 then
+            section.TopQuad:Hide()
+            section.RedLine:Hide()
+            section.GreenLine:SetStartPoint("TOPLEFT", section.BottomQuad, 0,
+                                            b0 - bmin)
+            section.GreenLine:SetEndPoint("TOPRIGHT", section.BottomQuad, 0,
+                                          b1 - bmin)
         else
-            section.Triangles[1]:SetTexCoord(1, 0, 0, 1)
-            section.Triangles[1]:SetPoint("BOTTOM", self.Graph, "BOTTOM", 0, t1)
-            section.Triangles[1]:SetPoint("TOP", self.Graph, "BOTTOM", 0, t0)
-            section.Lines[1]:SetStartPoint("TOPLEFT", section.Triangles[1])
-            section.Lines[1]:SetEndPoint("BOTTOMRIGHT", section.Triangles[1])
+            section.TopQuad:Show()
+            section.RedLine:Show()
+            section.TopQuad:SetPoint("TOP", self.Graph, "BOTTOM", 0, tmax)
+            section.TopQuad:SetPoint("BOTTOM", self.Graph, "BOTTOM", 0, bmin)
+            section.TopQuad:SetVertexOffset(UPPER_LEFT_VERTEX,  0, t0 - tmax)
+            section.TopQuad:SetVertexOffset(LOWER_LEFT_VERTEX,  0, b0 - bmin)
+            section.TopQuad:SetVertexOffset(UPPER_RIGHT_VERTEX, 0, t1 - tmax)
+            section.TopQuad:SetVertexOffset(LOWER_RIGHT_VERTEX, 0, b1 - bmin)
+            section.GreenLine:SetStartPoint("TOPLEFT", section.TopQuad, 0,
+                                            t0 - tmax)
+            section.GreenLine:SetEndPoint("TOPRIGHT", section.TopQuad, 0,
+                                          t1 - tmax)
+            section.RedLine:SetStartPoint("TOPLEFT", section.BottomQuad, 0,
+                                          b0 - bmin)
+            section.RedLine:SetEndPoint("TOPRIGHT", section.BottomQuad, 0,
+                                        b1 - bmin)
         end
-        if b0 <= b1 then
-            section.Triangles[2]:SetTexCoord(0, 1, 0, 1)
-            section.Triangles[2]:SetPoint("BOTTOM", self.Graph, "BOTTOM", 0, b0)
-            section.Triangles[2]:SetPoint("TOP", self.Graph, "BOTTOM", 0, b1)
-            section.Lines[2]:SetStartPoint("BOTTOMLEFT", section.Triangles[2])
-            section.Lines[2]:SetEndPoint("TOPRIGHT", section.Triangles[2])
-        else
-            section.Triangles[2]:SetTexCoord(1, 0, 0, 1)
-            section.Triangles[2]:SetPoint("BOTTOM", self.Graph, "BOTTOM", 0, b1)
-            section.Triangles[2]:SetPoint("TOP", self.Graph, "BOTTOM", 0, b0)
-            section.Lines[2]:SetStartPoint("TOPLEFT", section.Triangles[2])
-            section.Lines[2]:SetEndPoint("BOTTOMRIGHT", section.Triangles[2])
-        end
+        section.BottomQuad:SetPoint("TOP", self.Graph, "BOTTOM", 0, bmin)
+        section.BottomQuad:SetVertexOffset(UPPER_LEFT_VERTEX,  0, b0 - bmin)
+        section.BottomQuad:SetVertexOffset(UPPER_RIGHT_VERTEX, 0, b1 - bmin)
+
         if bData[x] < 0 or bData[x + 1] < 0 then
-            section.Triangles[1]:SetVertexColor(0, 0.5, 0.1, 0.1)
-            section.Rectangle:SetVertexColor(0, 0.5, 0.1, 0.1)
-            section.Lines[1]:Hide()
-            section.Lines[2]:Hide()
+            section.RedLine:Hide()
+            section.GreenLine:Hide()
+            section.TopQuad:SetColorTexture(0, 0.5, 0.1, 0.1)
         else
-            section.Triangles[1]:SetVertexColor(0, 0.5, 0.1, 0.5)
-            section.Rectangle:SetVertexColor(0, 0.5, 0.1, 0.5)
-            section.Lines[1]:Show()
-            section.Lines[2]:Show()
+            section.GreenLine:Show()
+            section.TopQuad:SetColorTexture(0, 0.5, 0.1, 0.5)
         end
+
         section:Show()
-        section.Triangles[1]:Show()
-        section.Triangles[2]:Hide()
     end
 
     -- And Y-axis labels.
