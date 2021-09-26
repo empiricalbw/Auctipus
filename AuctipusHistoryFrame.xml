@@ -33,28 +33,24 @@
     <Frame name="AuctipusHistoryGraphSectionTemplate" virtual="true">
         <Layers>
             <Layer level="ARTWORK" textureSubLevel="0">
-                <Texture parentKey="TopTriangle" parentArray="Triangles" file="Interface\AddOns\Auctipus\Textures\triangle_mask.tga">
+                <Texture parentKey="TopQuad">
                     <Anchors>
                         <Anchor point="LEFT"/>
                         <Anchor point="RIGHT"/>
                     </Anchors>
                 </Texture>
-                <Texture parentArray="Triangles" file="Interface\AddOns\Auctipus\Textures\triangle_mask.tga">
+                <Texture parentKey="BottomQuad">
                     <Anchors>
                         <Anchor point="LEFT"/>
-                        <Anchor point="RIGHT"/>
-                    </Anchors>
-                </Texture>
-                <Texture parentKey="Rectangle" file="Interface\AddOns\Auctipus\Textures\square_mask.tga">
-                    <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent.TopTriangle" relativePoint="BOTTOMLEFT"/>
                         <Anchor point="BOTTOMRIGHT"/>
                     </Anchors>
                 </Texture>
             </Layer>
             <Layer level="ARTWORK" textureSubLevel="1">
-                <Line parentArray="Lines" thickness="1"/>
-                <Line parentArray="Lines" thickness="1"/>
+                <Line parentKey="RedLine" thickness="1.5"/>
+            </Layer>
+            <Layer level="ARTWORK" textureSubLevel="2">
+                <Line parentKey="GreenLine" thickness="1.5"/>
             </Layer>
         </Layers>
     </Frame>
