@@ -36,12 +36,13 @@ function ADropDown:Init(config)
                            "AuctipusDropDownListTemplate")
     self.frame:SetWidth(12)
     self.frame:SetHeight(20)
+
     if config.anchor then
         self.frame:SetPoint(config.anchor.point,
-                          config.anchor.relativeTo,
-                          config.anchor.relativePoint,
-                          config.anchor.dx,
-                          config.anchor.dy)
+                            config.anchor.relativeTo,
+                            config.anchor.relativePoint,
+                            config.anchor.dx,
+                            config.anchor.dy)
     end
     self.frame:Hide()
 
@@ -67,7 +68,6 @@ function ADropDown:Init(config)
         f:SetScript("OnClick", function() self:OnItemClick(i) end)
         y = y - f:GetHeight()
 
-
         remRows = remRows - 1
         if remRows == 0 then
             x = x + config.width
@@ -75,7 +75,7 @@ function ADropDown:Init(config)
             remRows = config.rows
         end
 
-        f.selected     = false
+        f.selected = false
     end
 
     local nrows = min(#config.items, config.rows)
