@@ -16,6 +16,8 @@ AUCTIPUS_DROPDOWN_BACKDROP_INFO = {
 
 local ADD_INDEX = 1
 local ADD_BUTTON_POOL = {}
+local TEMPLATE_BUTTON = CreateFrame("Button", nil, UIParent,
+                                    "AuctipusDropDownItemTemplate")
 
 local function AllocButton(parent)
     if #ADD_BUTTON_POOL > 0 then
@@ -75,6 +77,15 @@ function ADropDown:ReInit(config)
                             config.anchor.dy)
     end
 
+    local fwidth = config.width or 32
+    if fwidth <= 32 then
+        for _, s in ipairs(config.items) do
+            TEMPLATE_BUTTON.LabelEnabled:SetText(s)
+            fwidth = max(fwidth,
+                TEMPLATE_BUTTON.LabelEnabled:GetUnboundedStringWidth() + 32)
+        end
+    end
+
     local y       = -10
     local x       = 12
     local remRows = config.rows
@@ -82,7 +93,7 @@ function ADropDown:ReInit(config)
         local f = AllocButton(self.frame)
         table.insert(self.items, f)
 
-        f:SetWidth(config.width)
+        f:SetWidth(fwidth)
         if i == 1 then
             f:SetPoint("TOPLEFT", x, y)
         elseif (i % config.rows) == 1 then
@@ -97,7 +108,7 @@ function ADropDown:ReInit(config)
 
         remRows = remRows - 1
         if remRows == 0 then
-            x = x + config.width
+            x = x + fwidth
             y = -10
             remRows = config.rows
         end
@@ -106,10 +117,15 @@ function ADropDown:ReInit(config)
     end
 
     local nrows = min(#config.items, config.rows)
+    if nrows > 0 then
+        self.frame:SetHeight(self.frame:GetHeight() +
+                             self.items[1]:GetHeight()*nrows)
+    end
+
     local ncols = ceil(#config.items / config.rows)
-    self.frame:SetHeight(self.frame:GetHeight() +
-                         self.items[1]:GetHeight()*nrows)
-    self.frame:SetWidth(self.frame:GetWidth() + config.width*ncols)
+    if ncols > 0 then
+        self.frame:SetWidth(self.frame:GetWidth() + fwidth*ncols)
+    end
 
     self.handler = config.handler
 end
