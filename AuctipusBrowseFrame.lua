@@ -69,7 +69,7 @@ function AuctipusBrowseFrame:OnLoad()
     self.RarityDropDownButton.Button:SetScript("OnClick",
         function()
             self.RarityDropDownMenu:Toggle()
-            self.CategoryDropdown:Hide()
+            self.CategoryDropDown:Hide()
         end)
     self.RarityDropDownButton.LabelWhite:SetText(config.items[1])
 
@@ -91,10 +91,10 @@ function AuctipusBrowseFrame:OnLoad()
     for i, p in ipairs(Auctipus.Paths.Generate()) do
         table.insert(config.items, p.name)
     end
-    self.CategoryDropdown = Auctipus.CategoryMenu:New(config)
+    self.CategoryDropDown = Auctipus.CategoryMenu:New(config)
     self.CategoriesFrame.Button:SetScript("OnClick",
         function()
-            self.CategoryDropdown:Toggle()
+            self.CategoryDropDown:Toggle()
             self.RarityDropDownMenu:Hide()
         end)
     self.CategoriesFrame.LabelGold:SetText("Categories")
@@ -173,11 +173,11 @@ end
 function AuctipusBrowseFrame.AUCTION_HOUSE_CLOSED()
     local self = AuctipusFrame.BrowseFrame
     self:ClearSearch()
-    self.CategoryDropdown:ClearSelection()
+    self.CategoryDropDown:ClearSelection()
 end
 
 function AuctipusBrowseFrame:OnHide()
-    self.CategoryDropdown:Hide()
+    self.CategoryDropDown:Hide()
     self.RarityDropDownMenu:Hide()
 end
 
@@ -185,7 +185,7 @@ function AuctipusBrowseFrame:OnChatEdit_InsertLink(link)
     if link and self:IsVisible() then
         local name = Auctipus.Link.GetLinkName(link)
         self.SearchBox:SetText(name)
-        self.CategoryDropdown:ClearSelection()
+        self.CategoryDropDown:ClearSelection()
         self.MinLvlBox:SetText("")
         self.MaxLvlBox:SetText("")
         self.RarityDropDownMenu:CheckOneItem(1)
@@ -215,7 +215,7 @@ function AuctipusBrowseFrame:OnCategoryDropDownClick(index, selected)
         -- are peers of the subclass or in parent nodes.
         for i, path in ipairs(Auctipus.PATHS) do
             if path[1] ~= classID then
-                self.CategoryDropdown:SetItemEnabled(i, not selected)
+                self.CategoryDropDown:SetItemEnabled(i, not selected)
             end
         end
     else
@@ -223,7 +223,7 @@ function AuctipusBrowseFrame:OnCategoryDropDownClick(index, selected)
         -- peer class.
         for i, path in ipairs(Auctipus.PATHS) do
             if path[1] ~= classID and path[2] ~= nil then
-                self.CategoryDropdown:SetItemEnabled(i, not selected)
+                self.CategoryDropDown:SetItemEnabled(i, not selected)
             end
         end
     end
@@ -310,7 +310,7 @@ function AuctipusBrowseFrame:DoSearch()
         filters    = {},
     }
 
-    local selection = self.CategoryDropdown:GetSelection()
+    local selection = self.CategoryDropDown:GetSelection()
     for _, index in ipairs(selection) do
         local classID, subClassID, invType = unpack(Auctipus.PATHS[index])
         local filter = {
@@ -331,7 +331,7 @@ function AuctipusBrowseFrame:DoSearch()
         e:ClearFocus()
     end
     self.SearchButton:Disable()
-    self.CategoryDropdown:Hide()
+    self.CategoryDropDown:Hide()
     self.RarityDropDownMenu:Hide()
 end
 
