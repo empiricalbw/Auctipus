@@ -68,8 +68,7 @@ function AuctipusBrowseFrame:OnLoad()
     self.RarityDropDownMenu:CheckOneItem(1)
     self.RarityDropDownButton.Button:SetScript("OnClick",
         function()
-            self.RarityDropDownMenu:Toggle()
-            self.CategoryDropDown:Hide()
+            self:ToggleDropDown(self.RarityDropDownMenu)
         end)
     self.RarityDropDownButton.LabelWhite:SetText(config.items[1])
 
@@ -94,8 +93,7 @@ function AuctipusBrowseFrame:OnLoad()
     self.CategoryDropDown = Auctipus.CategoryMenu:New(config)
     self.CategoriesFrame.Button:SetScript("OnClick",
         function()
-            self.CategoryDropDown:Toggle()
-            self.RarityDropDownMenu:Hide()
+            self:ToggleDropDown(self.CategoryDropDown)
         end)
     self.CategoriesFrame.LabelGold:SetText("Categories")
 
@@ -158,6 +156,27 @@ function AuctipusBrowseFrame:OnLoad()
     self:SetScript("OnHide", function() self:OnHide() end)
 end
 
+function AuctipusBrowseFrame:ToggleDropDown(dd)
+    local dds = {self.RarityDropDownMenu,
+                 self.CategoryDropDown,
+                 }
+    dd:Toggle()
+    for _, _dd in ipairs(dds) do
+        if _dd ~= dd then
+            _dd:Hide()
+        end
+    end
+end
+
+function AuctipusBrowseFrame:HideDropDowns()
+    local dds = {self.RarityDropDownMenu,
+                 self.CategoryDropDown,
+                 }
+    for _, dd in ipairs(dds) do
+        dd:Hide()
+    end
+end
+
 function AuctipusBrowseFrame:HideBuyControls()
     self.SelectionInfo:Hide()
     self.SmartSelect:Hide()
@@ -177,8 +196,7 @@ function AuctipusBrowseFrame.AUCTION_HOUSE_CLOSED()
 end
 
 function AuctipusBrowseFrame:OnHide()
-    self.CategoryDropDown:Hide()
-    self.RarityDropDownMenu:Hide()
+    self:HideDropDowns()
 end
 
 function AuctipusBrowseFrame:OnChatEdit_InsertLink(link)
@@ -331,8 +349,7 @@ function AuctipusBrowseFrame:DoSearch()
         e:ClearFocus()
     end
     self.SearchButton:Disable()
-    self.CategoryDropDown:Hide()
-    self.RarityDropDownMenu:Hide()
+    self:HideDropDowns()
 end
 
 function AuctipusBrowseFrame:ScanProgress(scan, page, totalPages)
