@@ -15,6 +15,22 @@ AUCTIPUS_DROPDOWN_BACKDROP_INFO = {
 }
 
 local ADD_INDEX = 1
+local ADD_BUTTON_POOL = {}
+
+local function AllocButton(parent)
+    if #ADD_BUTTON_POOL > 0 then
+        local f = table.remove(ADD_BUTTON_POOL)
+        f:SetParent(parent)
+        return f
+    end
+
+    return CreateFrame("Button", nil, parent, "AuctipusDropDownItemTemplate")
+end
+
+local function FreeButton(b)
+    b:ClearAllPoints()
+    table.insert(ADD_BUTTON_POOL, b)
+end
 
 function ADropDown:_New()
     local dd = {}
@@ -51,8 +67,7 @@ function ADropDown:Init(config)
     local remRows = config.rows
     self.items = {}
     for i, item in ipairs(config.items) do
-        local f = CreateFrame("Button", nil, self.frame,
-                              "AuctipusDropDownItemTemplate")
+        local f = AllocButton(self.frame)
         table.insert(self.items, f)
 
         f:SetWidth(config.width)
