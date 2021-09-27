@@ -20,12 +20,22 @@
                     <Anchor point="LEFT" relativeTo="$parentSearchBoxLabel" relativePoint="RIGHT" x="5"/>
                 </Anchors>
             </EditBox>
+            <Button parentKey="PastSearchesButton">
+                <Size x="26" y="26"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentSearchBox" relativePoint="RIGHT" x="-5" y="-1"/>
+                </Anchors>
+                <NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up"/>
+                <PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down"/>
+                <DisabledTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Disabled"/>
+                <HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+            </Button>
 
             <EditBox name="$parentMinLvlBox" parentKey="MinLvlBox" parentArray="EditBoxes" autoFocus="false" letters="2" numeric="true"
              inherits="InputBoxTemplate">
                 <Size x="25" y="24"/>
                 <Anchors>
-                    <Anchor point="LEFT" relativeTo="$parentSearchBox" relativePoint="RIGHT" x="30"/>
+                    <Anchor point="LEFT" relativeKey="$parent.PastSearchesButton" relativePoint="RIGHT" x="30" y="1"/>
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
@@ -102,7 +112,7 @@
             <Button name="$parentSearchButton" parentKey="SearchButton" inherits="UIPanelButtonTemplate" text="Search">
                 <Size x="100" y="23"/>
                 <Anchors>
-                    <Anchor point="LEFT" relativeKey="$parent.CanUseCheckButton" relativePoint="RIGHT" x="85"/>
+                    <Anchor point="LEFT" relativeKey="$parent.CanUseCheckButton" relativePoint="RIGHT" x="70"/>
                 </Anchors>
             </Button>
 
