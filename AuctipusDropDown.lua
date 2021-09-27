@@ -15,6 +15,24 @@ AUCTIPUS_DROPDOWN_BACKDROP_INFO = {
 }
 
 local ADD_INDEX = 1
+local ADD_BUTTON_POOL = {}
+local TEMPLATE_BUTTON = CreateFrame("Button", nil, UIParent,
+                                    "AuctipusDropDownItemTemplate")
+
+local function AllocButton(parent)
+    if #ADD_BUTTON_POOL > 0 then
+        local f = table.remove(ADD_BUTTON_POOL)
+        f:SetParent(parent)
+        return f
+    end
+
+    return CreateFrame("Button", nil, parent, "AuctipusDropDownItemTemplate")
+end
+
+local function FreeButton(b)
+    b:ClearAllPoints()
+    table.insert(ADD_BUTTON_POOL, b)
+end
 
 function ADropDown:_New()
     local dd = {}
@@ -34,27 +52,48 @@ function ADropDown:Init(config)
 
     self.frame = CreateFrame("Frame", name, UIParent,
                            "AuctipusDropDownListTemplate")
+    self.items = {}
+    self:ReInit(config)
+
+    table.insert(UIMenus, name)
+end
+
+function ADropDown:ReInit(config)
+    while #self.items > 0 do
+        FreeButton(table.remove(self.items))
+    end
+
+    self.frame:Hide()
     self.frame:SetWidth(12)
     self.frame:SetHeight(20)
+
     if config.anchor then
+        assert(config.anchor.relativeTo ~= nil)
+        self.frame:ClearAllPoints()
         self.frame:SetPoint(config.anchor.point,
-                          config.anchor.relativeTo,
-                          config.anchor.relativePoint,
-                          config.anchor.dx,
-                          config.anchor.dy)
+                            config.anchor.relativeTo,
+                            config.anchor.relativePoint,
+                            config.anchor.dx,
+                            config.anchor.dy)
     end
-    self.frame:Hide()
+
+    local fwidth = config.width or 32
+    if fwidth <= 32 then
+        for _, s in ipairs(config.items) do
+            TEMPLATE_BUTTON.LabelEnabled:SetText(s)
+            fwidth = max(fwidth,
+                TEMPLATE_BUTTON.LabelEnabled:GetUnboundedStringWidth() + 32)
+        end
+    end
 
     local y       = -10
     local x       = 12
     local remRows = config.rows
-    self.items = {}
     for i, item in ipairs(config.items) do
-        local f = CreateFrame("Button", nil, self.frame,
-                              "AuctipusDropDownItemTemplate")
+        local f = AllocButton(self.frame)
         table.insert(self.items, f)
 
-        f:SetWidth(config.width)
+        f:SetWidth(fwidth)
         if i == 1 then
             f:SetPoint("TOPLEFT", x, y)
         elseif (i % config.rows) == 1 then
@@ -67,26 +106,28 @@ function ADropDown:Init(config)
         f:SetScript("OnClick", function() self:OnItemClick(i) end)
         y = y - f:GetHeight()
 
-
         remRows = remRows - 1
         if remRows == 0 then
-            x = x + config.width
+            x = x + fwidth
             y = -10
             remRows = config.rows
         end
 
-        f.selected     = false
+        f.selected = false
     end
 
     local nrows = min(#config.items, config.rows)
+    if nrows > 0 then
+        self.frame:SetHeight(self.frame:GetHeight() +
+                             self.items[1]:GetHeight()*nrows)
+    end
+
     local ncols = ceil(#config.items / config.rows)
-    self.frame:SetHeight(self.frame:GetHeight() +
-                         self.items[1]:GetHeight()*nrows)
-    self.frame:SetWidth(self.frame:GetWidth() + config.width*ncols)
+    if ncols > 0 then
+        self.frame:SetWidth(self.frame:GetWidth() + fwidth*ncols)
+    end
 
     self.handler = config.handler
-
-    table.insert(UIMenus, name)
 end
 
 function ADropDown:Show(anchor)
