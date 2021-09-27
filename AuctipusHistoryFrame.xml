@@ -1,35 +1,5 @@
 <?xml version="1.0"?>
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
-    <Frame name="AuctipusHistoryBarTemplate" enableMouse="false" virtual="true">
-        <Layers>
-            <Layer level="ARTWORK">
-                <Texture parentKey="Top" file="Interface\AddOns\Auctipus\Textures\Bar.tga">
-                    <Size y="5"/>
-                    <Anchors>
-                        <Anchor point="TOPLEFT"/>
-                        <Anchor point="TOPRIGHT"/>
-                    </Anchors>
-                    <TexCoords left="0" right="1" top="0" bottom="0.25"/>
-                </Texture>
-                <Texture parentKey="Bottom" file="Interface\AddOns\Auctipus\Textures\Bar.tga">
-                    <Size y="5"/>
-                    <Anchors>
-                        <Anchor point="BOTTOMLEFT"/>
-                        <Anchor point="BOTTOMRIGHT"/>
-                    </Anchors>
-                    <TexCoords left="0" right="1" top="0.75" bottom="1"/>
-                </Texture>
-                <Texture parentKey="Middle" file="Interface\AddOns\Auctipus\Textures\Bar.tga">
-                    <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent.Top" relativePoint="BOTTOMLEFT"/>
-                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.Bottom" relativePoint="TOPRIGHT"/>
-                    </Anchors>
-                    <TexCoords left="0" right="1" top="0.25" bottom="0.75"/>
-                </Texture>
-            </Layer>
-        </Layers>
-    </Frame>
-
     <Frame name="AuctipusHistoryGraphSectionTemplate" virtual="true">
         <Layers>
             <Layer level="ARTWORK" textureSubLevel="0">
