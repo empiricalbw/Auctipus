@@ -50,22 +50,33 @@ function ADropDown:Init(config)
 
     self.frame = CreateFrame("Frame", name, UIParent,
                            "AuctipusDropDownListTemplate")
+    self.items = {}
+    self:ReInit(config)
+
+    table.insert(UIMenus, name)
+end
+
+function ADropDown:ReInit(config)
+    while #self.items > 0 do
+        FreeButton(table.remove(self.items))
+    end
+
+    self.frame:Hide()
     self.frame:SetWidth(12)
     self.frame:SetHeight(20)
 
     if config.anchor then
+        self.frame:ClearAllPoints()
         self.frame:SetPoint(config.anchor.point,
                             config.anchor.relativeTo,
                             config.anchor.relativePoint,
                             config.anchor.dx,
                             config.anchor.dy)
     end
-    self.frame:Hide()
 
     local y       = -10
     local x       = 12
     local remRows = config.rows
-    self.items = {}
     for i, item in ipairs(config.items) do
         local f = AllocButton(self.frame)
         table.insert(self.items, f)
@@ -100,8 +111,6 @@ function ADropDown:Init(config)
     self.frame:SetWidth(self.frame:GetWidth() + config.width*ncols)
 
     self.handler = config.handler
-
-    table.insert(UIMenus, name)
 end
 
 function ADropDown:Show(anchor)
