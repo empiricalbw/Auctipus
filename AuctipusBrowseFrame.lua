@@ -410,7 +410,7 @@ function AuctipusBrowseFrame:UpdateAuctionGroups()
     if self.scan then
         nauctionGroups = #self.scan.auctionGroups
         if nauctionGroups > 0 then
-            if #self.selectedAuctionGroup.unitPriceAuctions then
+            if #self.selectedAuctionGroup.unitPriceAuctions > 0 then
                 self.StatusText:Hide()
                 self:ShowBuyControls()
             else
