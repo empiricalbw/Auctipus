@@ -207,9 +207,7 @@ function AuctipusBrowseFrame:OnChatEdit_InsertLink(link)
         self.CategoryDropDown:ClearSelection()
         self.MinLvlBox:SetText("")
         self.MaxLvlBox:SetText("")
-        self.RarityDropDownMenu:CheckOneItem(1)
-        self.RarityDropDownButton.LabelWhite:SetText(
-            self.RarityDropDownMenu:GetItemText(1))
+        self:OnRarityDropDownClick(1)
         self:DoSearch()
     end
 end
