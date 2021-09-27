@@ -66,6 +66,7 @@ function ADropDown:ReInit(config)
     self.frame:SetHeight(20)
 
     if config.anchor then
+        assert(config.anchor.relativeTo ~= nil)
         self.frame:ClearAllPoints()
         self.frame:SetPoint(config.anchor.point,
                             config.anchor.relativeTo,
