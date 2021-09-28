@@ -89,7 +89,7 @@ function ADropDown:ReInit(config)
     local fwidth = config.width or 32
     if fwidth <= 32 then
         for _, s in ipairs(config.items) do
-            TEMPLATE_BUTTON.LabelEnabled:SetText(s)
+            TEMPLATE_BUTTON.LabelEnabled:SetText(s:sub(2))
             fwidth = max(fwidth,
                 TEMPLATE_BUTTON.LabelEnabled:GetUnboundedStringWidth() + 32)
         end
@@ -100,7 +100,6 @@ function ADropDown:ReInit(config)
     local remRows = config.rows
     for i, item in ipairs(config.items) do
         local f = AllocButton(self.frame)
-        f.XButton:SetShown(config.xhandler ~= nil)
         f.XButton:SetScript("OnClick", function() self:OnXClick(i) end)
         table.insert(self.items, f)
 
@@ -112,7 +111,7 @@ function ADropDown:ReInit(config)
         else
             f:SetPoint("TOPLEFT", self.items[i - 1], "BOTTOMLEFT")
         end
-        self:SetItemText(i, item)
+        self:SetItemText(i, item:sub(2))
         f.LabelDisabled:Hide()
         f:SetScript("OnClick", function() self:OnItemClick(i) end)
         y = y - f:GetHeight()
@@ -125,6 +124,19 @@ function ADropDown:ReInit(config)
         end
 
         f.selected = false
+
+        local c = item:sub(1, 1)
+        if c == "-" then
+            self:DisableItem(i)
+        elseif c == "!" then
+            self:SetItemTitle(i)
+        elseif c == "x" then
+            f.XButton:Show()
+        elseif c == "o" then
+            f.RadioOff:Show()
+        else
+            assert(c == " ")
+        end
     end
 
     local nrows = min(#config.items, config.rows)

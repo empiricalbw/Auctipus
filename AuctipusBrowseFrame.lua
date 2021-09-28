@@ -67,10 +67,10 @@ function AuctipusBrowseFrame:OnLoad()
                    dx=0,
                    dy=0,
                    },
-        items   = {ALL},
+        items   = {" "..ALL},
     }
     for i=0, #ITEM_QUALITY_COLORS - 4 do
-        table.insert(config.items, _G["ITEM_QUALITY"..i.."_DESC"])
+        table.insert(config.items, " ".._G["ITEM_QUALITY"..i.."_DESC"])
     end
     self.RarityDropDownMenu = Auctipus.DropDown:New(config)
     self.RarityDropDownMenu:CheckOneItem(1)
@@ -97,7 +97,7 @@ function AuctipusBrowseFrame:OnLoad()
     }
     self.paths = Auctipus.Paths.Generate()
     for i, p in ipairs(self.paths) do
-        table.insert(config.items, p.name)
+        table.insert(config.items, "o"..p.name)
     end
     self.CategoryDropDown = Auctipus.CategoryMenu:New(config)
     self.CategoriesFrame.Button:SetScript("OnClick",
@@ -113,13 +113,12 @@ function AuctipusBrowseFrame:OnLoad()
                   end,
         width   = 150,
         rows    = 3,
-        items   = {"",
-                   "Ignore Seller",
-                   "Stop Ignoring Seller",
+        items   = {"!",
+                   " Ignore Seller",
+                   " Stop Ignoring Seller",
                    }
     }
     self.AuctionRowDropDown = Auctipus.DropDown:New(config2)
-    self.AuctionRowDropDown:SetItemTitle(1)
 
     -- Search button.
     local config3 = {
@@ -452,7 +451,7 @@ function AuctipusBrowseFrame:UpdateSearchHistoryMenu()
                     dx=0,
                     dy=0,
                     },
-        items    = {"Recent Searches"},
+        items    = {"!Recent Searches"},
     }
 
     for _, q in ipairs(AUCTIPUS_SEARCH_HISTORY) do
@@ -490,7 +489,7 @@ function AuctipusBrowseFrame:UpdateSearchHistoryMenu()
         if #sections >= colorStart then
             sections[colorStart] = "|cFFFFD100"..sections[colorStart]
         end
-        table.insert(config.items, table.concat(sections, " "))
+        table.insert(config.items, "x"..table.concat(sections, " "))
     end
 
     self.SearchHistoryDropDown:ReInit(config)
