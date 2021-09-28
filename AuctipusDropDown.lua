@@ -23,6 +23,7 @@ local function AllocButton(parent)
     if #ADD_BUTTON_POOL > 0 then
         local f = table.remove(ADD_BUTTON_POOL)
         f:SetParent(parent)
+        f:Show()
         return f
     end
 
@@ -31,6 +32,8 @@ end
 
 local function FreeButton(b)
     b:ClearAllPoints()
+    b:Hide()
+    b:SetParent(UIParent)
     table.insert(ADD_BUTTON_POOL, b)
 end
 
