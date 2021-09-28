@@ -386,29 +386,9 @@ end
 function AuctipusBrowseFrame:RecordSearchHistory(query)
     local foundIndex = nil
     for i, q in ipairs(AUCTIPUS_SEARCH_HISTORY) do
-        if (query.text:upper() == q.text:upper() and
-            query.minLevel     == q.minLevel and
-            query.maxLevel     == q.maxLevel and
-            query.rarity       == q.rarity and
-            query.usable       == q.usable and
-            #query.filters     == #q.filters)
-        then
-            local found = true
-            for j=1, #q.filters do
-                local q1 = query.filters[j]
-                local q2 = q.filters[j]
-                if (q1.classID       ~= q2.classID or
-                    q1.subClassID    ~= q2.subClassID or
-                    q1.inventoryType ~= q2.inventoryType)
-                then
-                    found = false
-                    break
-                end
-            end
-            if found then
-                foundIndex = i
-                break
-            end
+        if Auctipus.Page.IsSameQuery(query, q) then
+            foundIndex = i
+            break
         end
     end
 
