@@ -50,7 +50,7 @@
         </Frames>
     </Frame>
 
-    <Frame name="AuctipusDropDownListTemplate" frameStrata="TOOLTIP" toplevel="true" virtual="true" inherits="BackdropTemplate">
+    <Frame name="AuctipusDropDownListTemplate" frameStrata="TOOLTIP" toplevel="true" virtual="true" inherits="BackdropTemplate" enableMouse="true">
         <KeyValues>
             <KeyValue key="backdropInfo" value="AUCTIPUS_DROPDOWN_BACKDROP_INFO" type="global"/>
         </KeyValues>
