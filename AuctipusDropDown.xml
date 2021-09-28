@@ -58,6 +58,19 @@
 
     <Button name="AuctipusDropDownItemTemplate" virtual="true">
         <Size x="100" y="13"/>
+        <Frames>
+            <Button parentKey="XButton" hidden="true">
+                <Size x="16" y="16"/>
+                <Anchors>
+                    <Anchor point="LEFT" x="0" y="1"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <Texture parentKey="Texture" file="Interface\FriendsFrame\ClearBroadcastIcon" setAllPoints="true"/>
+                    </Layer>
+                </Layers>
+            </Button>
+        </Frames>
         <Layers>
             <Layer level="ARTWORK">
                 <Texture parentKey="RadioOn" file="Interface\Common\UI-DropDownRadioChecks" hidden="true">

@@ -20,14 +20,20 @@ local TEMPLATE_BUTTON = CreateFrame("Button", nil, UIParent,
                                     "AuctipusDropDownItemTemplate")
 
 local function AllocButton(parent)
+    local f
     if #ADD_BUTTON_POOL > 0 then
-        local f = table.remove(ADD_BUTTON_POOL)
+        f = table.remove(ADD_BUTTON_POOL)
         f:SetParent(parent)
         f:Show()
         return f
     end
 
-    return CreateFrame("Button", nil, parent, "AuctipusDropDownItemTemplate")
+    f = CreateFrame("Button", nil, parent, "AuctipusDropDownItemTemplate")
+    local b = f.XButton
+    b.Texture:SetAlpha(0.5)
+    b:SetScript("OnEnter", function() b.Texture:SetAlpha(1) end)
+    b:SetScript("OnLeave", function() b.Texture:SetAlpha(0.5) end)
+    return f
 end
 
 local function FreeButton(b)
@@ -94,6 +100,8 @@ function ADropDown:ReInit(config)
     local remRows = config.rows
     for i, item in ipairs(config.items) do
         local f = AllocButton(self.frame)
+        f.XButton:SetShown(config.xhandler ~= nil)
+        f.XButton:SetScript("OnClick", function() self:OnXClick(i) end)
         table.insert(self.items, f)
 
         f:SetWidth(fwidth)
@@ -130,7 +138,8 @@ function ADropDown:ReInit(config)
         self.frame:SetWidth(self.frame:GetWidth() + fwidth*ncols)
     end
 
-    self.handler = config.handler
+    self.handler  = config.handler
+    self.xhandler = config.xhandler
 end
 
 function ADropDown:Show(anchor)
@@ -158,6 +167,11 @@ function ADropDown:OnItemClick(index)
     if self.handler then
         self.handler(index, f.selected)
     end
+end
+
+function ADropDown:OnXClick(index)
+    assert(self.xhandler)
+    self.xhandler(index)
 end
 
 function ADropDown:SetItemTitle(index)
@@ -189,12 +203,14 @@ function ADropDown:DisableItem(index)
     self.items[index]:Disable()
     self.items[index].LabelEnabled:Hide()
     self.items[index].LabelDisabled:Show()
+    self.items[index].XButton:Hide()
 end
 
 function ADropDown:EnableItem(index)
     self.items[index]:Enable()
     self.items[index].LabelEnabled:Show()
     self.items[index].LabelDisabled:Hide()
+    self.items[index].XButton:SetShown(self.xhandler ~= nil)
 end
 
 function ADropDown:CheckOneItem(index)
