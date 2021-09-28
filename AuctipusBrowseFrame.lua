@@ -123,17 +123,20 @@ function AuctipusBrowseFrame:OnLoad()
 
     -- Search button.
     local config3 = {
-        handler = function(index)
-                    self:OnSearchHistoryDropDownClick(index)
-                  end,
-        rows    = 0,
-        anchor  = {point="TOPLEFT",
-                   relativeTo=self.SearchBox,
-                   relativePoint="BOTTOMLEFT",
-                   dx=0,
-                   dy=0,
-                   },
-        items   = {},
+        handler  = function(index)
+                     self:OnSearchHistoryDropDownClick(index)
+                   end,
+        xhandler = function(index)
+                     self:OnSearchHistoryDropDownX(index)
+                   end,
+        rows     = 0,
+        anchor   = {point="TOPLEFT",
+                    relativeTo=self.SearchBox,
+                    relativePoint="BOTTOMLEFT",
+                    dx=0,
+                    dy=0,
+                    },
+        items    = {},
     }
     self.SearchButton:SetScript("OnClick", function() self:DoSearch() end)
     self.SearchHistoryDropDown = Auctipus.DropDown:New(config3)
@@ -436,17 +439,20 @@ end
 
 function AuctipusBrowseFrame:UpdateSearchHistoryMenu()
     local config = {
-        handler = function(index)
-                    self:OnSearchHistoryDropDownClick(index)
-                  end,
-        rows    = #AUCTIPUS_SEARCH_HISTORY,
-        anchor  = {point="TOPLEFT",
-                   relativeTo=self.SearchBox,
-                   relativePoint="BOTTOMLEFT",
-                   dx=0,
-                   dy=0,
-                   },
-        items   = {},
+        handler  = function(index)
+                     self:OnSearchHistoryDropDownClick(index)
+                   end,
+        xhandler = function(index)
+                     self:OnSearchHistoryDropDownX(index)
+                   end,
+        rows     = #AUCTIPUS_SEARCH_HISTORY + 1,
+        anchor   = {point="TOPLEFT",
+                    relativeTo=self.SearchBox,
+                    relativePoint="BOTTOMLEFT",
+                    dx=0,
+                    dy=0,
+                    },
+        items    = {"Recent Searches"},
     }
 
     for _, q in ipairs(AUCTIPUS_SEARCH_HISTORY) do
@@ -488,10 +494,11 @@ function AuctipusBrowseFrame:UpdateSearchHistoryMenu()
     end
 
     self.SearchHistoryDropDown:ReInit(config)
+    self.SearchHistoryDropDown:SetItemTitle(1)
 end
 
 function AuctipusBrowseFrame:OnSearchHistoryDropDownClick(index)
-    local q = AUCTIPUS_SEARCH_HISTORY[index]
+    local q = AUCTIPUS_SEARCH_HISTORY[index - 1]
     self.SearchBox:SetText(q.text)
     if q.minLevel > 0 then
         self.MinLvlBox:SetText(q.minLevel)
@@ -513,6 +520,15 @@ function AuctipusBrowseFrame:OnSearchHistoryDropDownClick(index)
         end
     end
     self:DoSearch()
+end
+
+function AuctipusBrowseFrame:OnSearchHistoryDropDownX(index)
+    table.remove(AUCTIPUS_SEARCH_HISTORY, index - 1)
+    self.PastSearchesButton:SetEnabled(#AUCTIPUS_SEARCH_HISTORY > 0)
+    self:UpdateSearchHistoryMenu()
+    if #AUCTIPUS_SEARCH_HISTORY > 0 then
+        self.SearchHistoryDropDown:Show()
+    end
 end
 
 function AuctipusBrowseFrame:ScanProgress(scan, page, totalPages)
