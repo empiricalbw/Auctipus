@@ -4,11 +4,7 @@ AUCTIPUS_SEARCH_HISTORY = {}
 local MAX_SEARCH_HISTORY = 20
 
 function AuctipusBrowseFrame:ProcessSavedVars()
-    if #AUCTIPUS_SEARCH_HISTORY > 0 then
-        self.PastSearchesButton:Enable()
-    else
-        self.PastSearchesButton:Disable()
-    end
+    self.PastSearchesButton:SetEnabled(#AUCTIPUS_SEARCH_HISTORY > 0)
     self:UpdateSearchHistoryMenu()
 end
 
