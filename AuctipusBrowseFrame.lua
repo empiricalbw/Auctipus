@@ -432,7 +432,6 @@ function AuctipusBrowseFrame:UpdateSearchHistoryMenu()
     end
 
     self.SearchHistoryDropDown:ReInit(config)
-    self.SearchHistoryDropDown:SetItemTitle(1)
 end
 
 function AuctipusBrowseFrame:OnSearchHistoryDropDownClick(index)
