@@ -103,7 +103,7 @@ local RENAME_TABLE = {
     ["Gem > Orange"] = "Gem > Orange [Red/Yellow]",
 }
 
-function Auctipus.Paths.Generate()
+local function GeneratePaths()
     local paths = {}
     for i, path in ipairs(Auctipus.PATHS) do
         local s = GetItemClassInfo(path[1])
@@ -120,7 +120,7 @@ function Auctipus.Paths.Generate()
     return paths
 end
 
-Auctipus.Paths.paths = Auctipus.Paths.Generate()
+Auctipus.Paths.paths = GeneratePaths()
 
 function Auctipus.Paths.Dump()
     for i, path in ipairs(Auctipus.Paths.paths) do
