@@ -1,10 +1,10 @@
 ## Interface: 20502
 ## Title: Auctipus
-## Version: 2.5.2-v5
+## Version: 2.5.2-v6a1
 ## Author: Empirical
 ## DefaultState: enabled
 ## Dependencies:
-## SavedVariables: AUCTIPUS_ITEM_HISTORY_DB, AUCTIPUS_ITEM_HISTORY_DB_VERSION, AUCTIPUS_IGNORED_SELLERS_DB, AUCTIPUS_CREATE_DEFAULTS, AUCTIPUS_SEARCH_HISTORY
+## SavedVariables: AUCTIPUS_ITEM_HISTORY_DB, AUCTIPUS_ITEM_HISTORY_DB_VERSION, AUCTIPUS_IGNORED_SELLERS_DB, AUCTIPUS_CREATE_DEFAULTS, AUCTIPUS_SEARCH_HISTORY, AUCTIPUS_FAVORITES
 
 BetterMoneyFrame.xml
 BetterNumberFrame.xml
@@ -33,6 +33,7 @@ AuctipusCommonUI.lua
 AuctipusLink.lua
 AuctipusHistory.lua
 AuctipusSortButton.lua
+AuctipusQuery.lua
 AuctipusPaths.lua
 AuctipusSet.lua
 AuctipusAuction.lua

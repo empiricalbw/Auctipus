@@ -9,7 +9,6 @@ function ACategoryMenu:Init(config)
 
     for i, item in ipairs(self.items) do
         item.RadioOff:Show()
-        item.disableCount = 0
     end
 
     self.frame:SetHeight(self.frame:GetHeight() + RESET_FILTERS_HEIGHT)
@@ -33,6 +32,17 @@ function ACategoryMenu:Init(config)
     f:SetScript("OnClick", function() self:ClearSelection() end)
 
     self.selection = Auctipus.Set:New()
+end
+
+function ACategoryMenu:AllocButton()
+    local b = Auctipus.DropDown.AllocButton(self)
+    b.disableCount = 0
+    return b
+end
+
+function ACategoryMenu:FreeButton(b)
+    b.disableCount = nil
+    Auctipus.DropDown.FreeButton(b)
 end
 
 function ACategoryMenu:OnItemClick(index)

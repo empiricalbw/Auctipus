@@ -1,13 +1,93 @@
 AuctipusBrowseFrame = {}
 
-AUCTIPUS_SEARCH_HISTORY = {}
+AUCTIPUS_DEFAULT_FAVORITES = {
+    {userTitle  = "Red Gems",
+     maxLevel   = 0,
+     minLevel   = 0,
+     exactMatch = false,
+     usable     = false,
+     text       = "",
+     rarity     = -1,
+     filters    = {{subClassID=0, classID=3},
+                   {subClassID=3, classID=3},
+                   {subClassID=5, classID=3}},
+    },
+    {userTitle  = "Blue Gems",
+     maxLevel   = 0,
+     minLevel   = 0,
+     exactMatch = false,
+     usable     = false,
+     text       = "",
+     rarity     = -1,
+     filters    = {{subClassID=3, classID= 3},
+                   {subClassID=1, classID= 3},
+                   {subClassID=4, classID= 3}},
+     },
+    {userTitle  = "Yellow Gems",
+     maxLevel   = 0,
+     minLevel   = 0,
+     exactMatch = false,
+     usable     = false,
+     text       = "",
+     rarity     = -1,
+     filters    = {{subClassID=4, classID=3},
+                   {subClassID=2, classID=3},
+                   {subClassID=5, classID=3}},
+    },
+    -- Usable weapons
+    {maxLevel   = 0,
+     minLevel   = 0,
+     exactMatch = false,
+     usable     = true,
+     text       = "",
+     rarity     = -1,
+     filters    = {{classID=2}},
+    },
+    -- Usable armor
+    {maxLevel   = 0,
+     minLevel   = 0,
+     exactMatch = false,
+     usable     = true,
+     text       = "",
+     rarity     = -1,
+     filters    = {{classID=4}},
+    },
+}
+
+AUCTIPUS_FAVORITES       = AUCTIPUS_DEFAULT_FAVORITES
+AUCTIPUS_SEARCH_HISTORY  = {}
 local MAX_SEARCH_HISTORY = 20
 
+
+StaticPopupDialogs["AUCTIPUS_ADD_FAVORITE"] = {
+    text = "Name this search or leave blank for default format:",
+    button1 = "OK",
+    button2 = "Cancel",
+    OnShow = function(self)
+        self.editBox:SetFocus()
+    end,
+    OnAccept = function(self, data)
+        AuctipusFrame.BrowseFrame:OnSearchHistoryAddFavorite(
+            self.editBox:GetText())
+    end,
+    EditBoxOnEnterPressed = function(self)
+        AuctipusFrame.BrowseFrame:OnSearchHistoryAddFavorite(self:GetText())
+        self:GetParent():Hide()
+    end,
+    timeout = 0,
+    hideOnEscape = true,
+    preferredIndex = 3,
+    hasEditBox = true,
+    enterClicksFirstButton = true,
+    exclusive = true,
+}
+
 function AuctipusBrowseFrame:ProcessSavedVars()
-    if #AUCTIPUS_SEARCH_HISTORY > 0 then
-        self.PastSearchesButton:Enable()
-    else
-        self.PastSearchesButton:Disable()
+    for i, q in ipairs(AUCTIPUS_FAVORITES) do
+        AUCTIPUS_FAVORITES[i] = Auctipus.Query:New(q)
+    end
+    for i, q in ipairs(AUCTIPUS_SEARCH_HISTORY) do
+        AUCTIPUS_SEARCH_HISTORY[i] = Auctipus.Query:New(q)
     end
     self:UpdateSearchHistoryMenu()
 end
@@ -71,10 +151,10 @@ function AuctipusBrowseFrame:OnLoad()
                    dx=0,
                    dy=0,
                    },
-        items   = {ALL},
+        items   = {" "..ALL},
     }
     for i=0, #ITEM_QUALITY_COLORS - 4 do
-        table.insert(config.items, _G["ITEM_QUALITY"..i.."_DESC"])
+        table.insert(config.items, " ".._G["ITEM_QUALITY"..i.."_DESC"])
     end
     self.RarityDropDownMenu = Auctipus.DropDown:New(config)
     self.RarityDropDownMenu:CheckOneItem(1)
@@ -99,9 +179,8 @@ function AuctipusBrowseFrame:OnLoad()
                    },
         items   = {},
     }
-    self.paths = Auctipus.Paths.Generate()
-    for i, p in ipairs(self.paths) do
-        table.insert(config.items, p.name)
+    for i, p in ipairs(Auctipus.Paths.paths) do
+        table.insert(config.items, "o"..p.name)
     end
     self.CategoryDropDown = Auctipus.CategoryMenu:New(config)
     self.CategoriesFrame.Button:SetScript("OnClick",
@@ -117,27 +196,29 @@ function AuctipusBrowseFrame:OnLoad()
                   end,
         width   = 150,
         rows    = 3,
-        items   = {"",
-                   "Ignore Seller",
-                   "Stop Ignoring Seller",
+        items   = {"!",
+                   " Ignore Seller",
+                   " Stop Ignoring Seller",
                    }
     }
     self.AuctionRowDropDown = Auctipus.DropDown:New(config2)
-    self.AuctionRowDropDown:SetItemTitle(1)
 
     -- Search button.
     local config3 = {
-        handler = function(index)
-                    self:OnSearchHistoryDropDownClick(index)
-                  end,
-        rows    = 0,
-        anchor  = {point="TOPLEFT",
-                   relativeTo=self.SearchBox,
-                   relativePoint="BOTTOMLEFT",
-                   dx=0,
-                   dy=0,
-                   },
-        items   = {},
+        handler  = function(index)
+                     self:OnSearchHistoryDropDownClick(index)
+                   end,
+        xhandler = function(index)
+                     self:OnSearchHistoryDropDownX(index)
+                   end,
+        rows     = 0,
+        anchor   = {point="TOPLEFT",
+                    relativeTo=self.SearchBox,
+                    relativePoint="BOTTOMLEFT",
+                    dx=0,
+                    dy=0,
+                    },
+        items    = {},
     }
     self.SearchButton:SetScript("OnClick", function() self:DoSearch() end)
     self.SearchHistoryDropDown = Auctipus.DropDown:New(config3)
@@ -259,11 +340,12 @@ function AuctipusBrowseFrame:OnRarityDropDownClick(index, selected)
 end
 
 function AuctipusBrowseFrame:OnCategoryDropDownClick(index, selected)
-    local classID, subClassID, invType = unpack(self.paths[index].path)
+    local classID, subClassID, invType =
+        unpack(Auctipus.Paths.paths[index].path)
     if subClassID then
         -- If a subclass is selected, then we can only allow selections that
         -- are peers of the subclass or in parent nodes.
-        for i, path in ipairs(self.paths) do
+        for i, path in ipairs(Auctipus.Paths.paths) do
             if path.path[1] ~= classID then
                 self.CategoryDropDown:SetItemEnabled(i, not selected)
             end
@@ -271,7 +353,7 @@ function AuctipusBrowseFrame:OnCategoryDropDownClick(index, selected)
     else
         -- If no subclass is selected, then we can allow any child node or any
         -- peer class.
-        for i, path in ipairs(self.paths) do
+        for i, path in ipairs(Auctipus.Paths.paths) do
             if path.path[1] ~= classID and path.path[2] ~= nil then
                 self.CategoryDropDown:SetItemEnabled(i, not selected)
             end
@@ -345,12 +427,8 @@ function AuctipusBrowseFrame:ClearSearch()
     self:UpdateAuctions()
 end
 
-function AuctipusBrowseFrame:DoSearch()
-    if not self.SearchButton:IsEnabled() then
-        return
-    end
-
-    local query = {
+function AuctipusBrowseFrame:ParseQuery()
+    local query = Auctipus.Query:New({
         text       = self.SearchBox:GetText(),
         minLevel   = self.MinLvlBox:GetNumber(),
         maxLevel   = self.MaxLvlBox:GetNumber(),
@@ -358,18 +436,22 @@ function AuctipusBrowseFrame:DoSearch()
         exactMatch = false,
         usable     = self.CanUseCheckButton:GetChecked(),
         filters    = {},
-    }
+        })
 
     local selection = self.CategoryDropDown:GetSelection()
     for _, index in ipairs(selection) do
-        local classID, subClassID, invType = unpack(self.paths[index].path)
-        local filter = {
-            classID       = classID,
-            subClassID    = subClassID,
-            inventoryType = invType,
-        }
-        table.insert(query.filters, filter)
+        query:AddFilter(unpack(Auctipus.Paths.paths[index].path))
     end
+
+    return query
+end
+
+function AuctipusBrowseFrame:DoSearch()
+    if not self.SearchButton:IsEnabled() then
+        return
+    end
+
+    local query = self:ParseQuery()
 
     self:ClearScan()
 
@@ -388,29 +470,9 @@ end
 function AuctipusBrowseFrame:RecordSearchHistory(query)
     local foundIndex = nil
     for i, q in ipairs(AUCTIPUS_SEARCH_HISTORY) do
-        if (query.text:upper() == q.text:upper() and
-            query.minLevel     == q.minLevel and
-            query.maxLevel     == q.maxLevel and
-            query.rarity       == q.rarity and
-            query.usable       == q.usable and
-            #query.filters     == #q.filters)
-        then
-            local found = true
-            for j=1, #q.filters do
-                local q1 = query.filters[j]
-                local q2 = q.filters[j]
-                if (q1.classID       ~= q2.classID or
-                    q1.subClassID    ~= q2.subClassID or
-                    q1.inventoryType ~= q2.inventoryType)
-                then
-                    found = false
-                    break
-                end
-            end
-            if found then
-                foundIndex = i
-                break
-            end
+        if query:IsSame(q) then
+            foundIndex = i
+            break
         end
     end
 
@@ -426,76 +488,53 @@ function AuctipusBrowseFrame:RecordSearchHistory(query)
     self:UpdateSearchHistoryMenu()
 end
 
-function AuctipusBrowseFrame:GetFilterIndexPath(f)
-    for i, p in ipairs(self.paths) do
-        local classID, subClassID, invType = unpack(p.path)
-        if (f.classID    == classID and
-            f.subClassID == subClassID and
-            f.invType    == invType)
-        then
-            return i, p
-        end
-    end
-end
-
 function AuctipusBrowseFrame:UpdateSearchHistoryMenu()
     local config = {
-        handler = function(index)
-                    self:OnSearchHistoryDropDownClick(index)
-                  end,
-        rows    = #AUCTIPUS_SEARCH_HISTORY,
-        anchor  = {point="TOPLEFT",
-                   relativeTo=self.SearchBox,
-                   relativePoint="BOTTOMLEFT",
-                   dx=0,
-                   dy=0,
+        handler  = function(index)
+                     self:OnSearchHistoryDropDownClick(index)
+                   end,
+        xhandler = function(index)
+                     self:OnSearchHistoryDropDownX(index)
+                   end,
+        rows     = #AUCTIPUS_SEARCH_HISTORY + #AUCTIPUS_FAVORITES + 4,
+        anchor   = {point="TOPLEFT",
+                    relativeTo=self.SearchBox,
+                    relativePoint="BOTTOMLEFT",
+                    dx=0,
+                    dy=0,
+                    },
+        items    = {"!Favorites",
+                    " Add current search",
                    },
-        items   = {},
     }
 
-    for _, q in ipairs(AUCTIPUS_SEARCH_HISTORY) do
-        local sections = {}
-        local colorStart = 2
-        if q.text ~= "" then
-            table.insert(sections, q.text)
-        else
-            colorStart = 1
+    for _, q in ipairs(AUCTIPUS_FAVORITES) do
+        table.insert(config.items, "x"..q:ToString())
+    end
+
+    if #AUCTIPUS_SEARCH_HISTORY > 0 then
+        table.insert(config.items, "-")
+        table.insert(config.items, "!Recent Searches")
+        for _, q in ipairs(AUCTIPUS_SEARCH_HISTORY) do
+            table.insert(config.items, "x"..q:ToString())
         end
-        if q.minLevel > 0 and q.maxLevel > 0 then
-            table.insert(sections, "["..q.minLevel.." - "..q.maxLevel.."]")
-        elseif q.minLevel > 0 then
-            table.insert(sections, "["..q.minLevel.." - ]")
-        elseif q.maxLevel > 0 then
-            table.insert(sections, "[ - "..q.maxLevel.."]")
-        end
-        if q.rarity >= 0 then
-            table.insert(sections,
-                         "[".._G["ITEM_QUALITY"..q.rarity.."_DESC"].."]")
-        end
-        if q.usable then
-            table.insert(sections, "[Usable]")
-        end
-        if #q.filters > 0 then
-            local names = {}
-            for _, f in ipairs(q.filters) do
-                local _, p = self:GetFilterIndexPath(f)
-                if p then
-                    table.insert(names, p.name)
-                end
-            end
-            table.insert(sections, "["..table.concat(names, ", ").."]")
-        end
-        if #sections >= colorStart then
-            sections[colorStart] = "|cFFFFD100"..sections[colorStart]
-        end
-        table.insert(config.items, table.concat(sections, " "))
     end
 
     self.SearchHistoryDropDown:ReInit(config)
 end
 
 function AuctipusBrowseFrame:OnSearchHistoryDropDownClick(index)
-    local q = AUCTIPUS_SEARCH_HISTORY[index]
+    local q
+    if index == 2 then
+        StaticPopup_Show("AUCTIPUS_ADD_FAVORITE")
+        self:HideDropDowns()
+        return
+    elseif index <= #AUCTIPUS_FAVORITES + 2 then
+        q = AUCTIPUS_FAVORITES[index - 2]
+    else
+        q = AUCTIPUS_SEARCH_HISTORY[index - #AUCTIPUS_FAVORITES - 4]
+    end
+
     self.SearchBox:SetText(q.text)
     if q.minLevel > 0 then
         self.MinLvlBox:SetText(q.minLevel)
@@ -511,12 +550,32 @@ function AuctipusBrowseFrame:OnSearchHistoryDropDownClick(index)
     self.CanUseCheckButton:SetChecked(q.usable)
     self.CategoryDropDown:ClearSelection()
     for _, f in ipairs(q.filters) do
-        local i = self:GetFilterIndexPath(f)
+        local i = q:GetFilterIndexPath(f)
         if i then
             self.CategoryDropDown:OnItemClick(i)
         end
     end
+
     self:DoSearch()
+end
+
+function AuctipusBrowseFrame:OnSearchHistoryAddFavorite(userTitle)
+    local query = self:ParseQuery()
+    if userTitle ~= "" then
+        query.userTitle = userTitle
+    end
+    table.insert(AUCTIPUS_FAVORITES, query)
+    self:UpdateSearchHistoryMenu()
+end
+
+function AuctipusBrowseFrame:OnSearchHistoryDropDownX(index)
+    if index <= #AUCTIPUS_FAVORITES + 2 then
+        table.remove(AUCTIPUS_FAVORITES, index - 2)
+    else
+        table.remove(AUCTIPUS_SEARCH_HISTORY, index - #AUCTIPUS_FAVORITES - 4)
+    end
+    self:UpdateSearchHistoryMenu()
+    self.SearchHistoryDropDown:Show()
 end
 
 function AuctipusBrowseFrame:ScanProgress(scan, page, totalPages)
@@ -539,9 +598,7 @@ function AuctipusBrowseFrame:ScanComplete(scan)
     if #scan.auctions > 0 then
         self:RecordSearchHistory(scan.query)
     end
-    if #AUCTIPUS_SEARCH_HISTORY > 0 then
-        self.PastSearchesButton:Enable()
-    end
+    self.PastSearchesButton:Enable()
  
     for i, ag in ipairs(scan.auctionGroups) do
         ag:SortByBuyout()

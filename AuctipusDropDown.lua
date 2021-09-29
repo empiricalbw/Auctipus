@@ -19,21 +19,6 @@ local ADD_BUTTON_POOL = {}
 local TEMPLATE_BUTTON = CreateFrame("Button", nil, UIParent,
                                     "AuctipusDropDownItemTemplate")
 
-local function AllocButton(parent)
-    if #ADD_BUTTON_POOL > 0 then
-        local f = table.remove(ADD_BUTTON_POOL)
-        f:SetParent(parent)
-        return f
-    end
-
-    return CreateFrame("Button", nil, parent, "AuctipusDropDownItemTemplate")
-end
-
-local function FreeButton(b)
-    b:ClearAllPoints()
-    table.insert(ADD_BUTTON_POOL, b)
-end
-
 function ADropDown:_New()
     local dd = {}
     setmetatable(dd, self)
@@ -44,6 +29,30 @@ function ADropDown:New(config)
     local dd = self:_New()
     dd:Init(config)
     return dd
+end
+
+function ADropDown:AllocButton()
+    local f
+    if #ADD_BUTTON_POOL > 0 then
+        f = table.remove(ADD_BUTTON_POOL)
+        f:SetParent(self.frame)
+        f:Show()
+        return f
+    end
+
+    f = CreateFrame("Button", nil, self.frame, "AuctipusDropDownItemTemplate")
+    local b = f.XButton
+    b.Texture:SetAlpha(0.5)
+    b:SetScript("OnEnter", function() b.Texture:SetAlpha(1) end)
+    b:SetScript("OnLeave", function() b.Texture:SetAlpha(0.5) end)
+    return f
+end
+
+function ADropDown:FreeButton(b)
+    b:ClearAllPoints()
+    b:Hide()
+    b:SetParent(UIParent)
+    table.insert(ADD_BUTTON_POOL, b)
 end
 
 function ADropDown:Init(config)
@@ -60,7 +69,7 @@ end
 
 function ADropDown:ReInit(config)
     while #self.items > 0 do
-        FreeButton(table.remove(self.items))
+        self:FreeButton(table.remove(self.items))
     end
 
     self.frame:Hide()
@@ -80,54 +89,68 @@ function ADropDown:ReInit(config)
     local fwidth = config.width or 32
     if fwidth <= 32 then
         for _, s in ipairs(config.items) do
-            TEMPLATE_BUTTON.LabelEnabled:SetText(s)
+            TEMPLATE_BUTTON.LabelEnabled:SetText(s:sub(2))
             fwidth = max(fwidth,
                 TEMPLATE_BUTTON.LabelEnabled:GetUnboundedStringWidth() + 32)
         end
     end
 
-    local y       = -10
-    local x       = 12
-    local remRows = config.rows
+    local x         = 12
+    local remRows   = config.rows
+    local rowHeight = self.frame:GetHeight()
+    local maxHeight = rowHeight
     for i, item in ipairs(config.items) do
-        local f = AllocButton(self.frame)
+        local f = self:AllocButton()
+        f.XButton:SetScript("OnClick", function() self:OnXClick(i) end)
         table.insert(self.items, f)
 
         f:SetWidth(fwidth)
         if i == 1 then
-            f:SetPoint("TOPLEFT", x, y)
+            f:SetPoint("TOPLEFT", x, -10)
         elseif (i % config.rows) == 1 then
             f:SetPoint("TOPLEFT", self.items[i - config.rows], "TOPRIGHT")
         else
             f:SetPoint("TOPLEFT", self.items[i - 1], "BOTTOMLEFT")
         end
-        self:SetItemText(i, item)
-        f.LabelDisabled:Hide()
+        self:SetItemText(i, item:sub(2))
         f:SetScript("OnClick", function() self:OnItemClick(i) end)
-        y = y - f:GetHeight()
+
+        f.selected = false
+
+        local c = item:sub(1, 1)
+        self:SetItemEnabled(i, c ~= "-")
+        f.Separator:SetShown(item == "-")
+        f.XButton:SetShown(c == "x")
+        f.RadioOff:SetShown(c == "o")
+        if item == "-" then
+            f:SetHeight(8)
+        else
+            f:SetHeight(13)
+        end
+        rowHeight = rowHeight + f:GetHeight()
+        if c == "!" then
+            self:SetItemTitle(i)
+        end
 
         remRows = remRows - 1
         if remRows == 0 then
-            x = x + fwidth
-            y = -10
-            remRows = config.rows
+            x         = x + fwidth
+            remRows   = config.rows
+            maxHeight = max(rowHeight, maxHeight)
+            rowHeight = self.frame:GetHeight()
         end
-
-        f.selected = false
     end
 
-    local nrows = min(#config.items, config.rows)
-    if nrows > 0 then
-        self.frame:SetHeight(self.frame:GetHeight() +
-                             self.items[1]:GetHeight()*nrows)
-    end
+    maxHeight = max(rowHeight, maxHeight)
+    self.frame:SetHeight(maxHeight)
 
     local ncols = ceil(#config.items / config.rows)
     if ncols > 0 then
         self.frame:SetWidth(self.frame:GetWidth() + fwidth*ncols)
     end
 
-    self.handler = config.handler
+    self.handler  = config.handler
+    self.xhandler = config.xhandler
 end
 
 function ADropDown:Show(anchor)
@@ -155,6 +178,11 @@ function ADropDown:OnItemClick(index)
     if self.handler then
         self.handler(index, f.selected)
     end
+end
+
+function ADropDown:OnXClick(index)
+    assert(self.xhandler)
+    self.xhandler(index)
 end
 
 function ADropDown:SetItemTitle(index)
@@ -186,12 +214,14 @@ function ADropDown:DisableItem(index)
     self.items[index]:Disable()
     self.items[index].LabelEnabled:Hide()
     self.items[index].LabelDisabled:Show()
+    self.items[index].XButton:Hide()
 end
 
 function ADropDown:EnableItem(index)
     self.items[index]:Enable()
     self.items[index].LabelEnabled:Show()
     self.items[index].LabelDisabled:Hide()
+    self.items[index].XButton:SetShown(self.xhandler ~= nil)
 end
 
 function ADropDown:CheckOneItem(index)

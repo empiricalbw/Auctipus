@@ -50,7 +50,7 @@
         </Frames>
     </Frame>
 
-    <Frame name="AuctipusDropDownListTemplate" frameStrata="TOOLTIP" toplevel="true" virtual="true" inherits="BackdropTemplate">
+    <Frame name="AuctipusDropDownListTemplate" frameStrata="TOOLTIP" toplevel="true" virtual="true" inherits="BackdropTemplate" enableMouse="true">
         <KeyValues>
             <KeyValue key="backdropInfo" value="AUCTIPUS_DROPDOWN_BACKDROP_INFO" type="global"/>
         </KeyValues>
@@ -58,6 +58,19 @@
 
     <Button name="AuctipusDropDownItemTemplate" virtual="true">
         <Size x="100" y="13"/>
+        <Frames>
+            <Button parentKey="XButton" hidden="true">
+                <Size x="16" y="16"/>
+                <Anchors>
+                    <Anchor point="LEFT" x="0" y="1"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <Texture parentKey="Texture" file="Interface\FriendsFrame\ClearBroadcastIcon" setAllPoints="true"/>
+                    </Layer>
+                </Layers>
+            </Button>
+        </Frames>
         <Layers>
             <Layer level="ARTWORK">
                 <Texture parentKey="RadioOn" file="Interface\Common\UI-DropDownRadioChecks" hidden="true">
@@ -78,6 +91,13 @@
                     <Size x="16" y="16"/>
                     <Anchors>
                         <Anchor point="LEFT" y="1"/>
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="Separator" file="Interface\Common\UI-TooltipDivider-Transparent" hidden="true">
+                    <Size y="8"/>
+                    <Anchors>
+                        <Anchor point="LEFT" y="-1"/>
+                        <Anchor point="RIGHT" x="-11" y="-1"/>
                     </Anchors>
                 </Texture>
                 <FontString parentKey="LabelEnabled" font="GameFontWhiteSmall" justifyH="LEFT">
