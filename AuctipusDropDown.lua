@@ -19,30 +19,6 @@ local ADD_BUTTON_POOL = {}
 local TEMPLATE_BUTTON = CreateFrame("Button", nil, UIParent,
                                     "AuctipusDropDownItemTemplate")
 
-local function AllocButton(parent)
-    local f
-    if #ADD_BUTTON_POOL > 0 then
-        f = table.remove(ADD_BUTTON_POOL)
-        f:SetParent(parent)
-        f:Show()
-        return f
-    end
-
-    f = CreateFrame("Button", nil, parent, "AuctipusDropDownItemTemplate")
-    local b = f.XButton
-    b.Texture:SetAlpha(0.5)
-    b:SetScript("OnEnter", function() b.Texture:SetAlpha(1) end)
-    b:SetScript("OnLeave", function() b.Texture:SetAlpha(0.5) end)
-    return f
-end
-
-local function FreeButton(b)
-    b:ClearAllPoints()
-    b:Hide()
-    b:SetParent(UIParent)
-    table.insert(ADD_BUTTON_POOL, b)
-end
-
 function ADropDown:_New()
     local dd = {}
     setmetatable(dd, self)
@@ -53,6 +29,30 @@ function ADropDown:New(config)
     local dd = self:_New()
     dd:Init(config)
     return dd
+end
+
+function ADropDown:AllocButton()
+    local f
+    if #ADD_BUTTON_POOL > 0 then
+        f = table.remove(ADD_BUTTON_POOL)
+        f:SetParent(self.frame)
+        f:Show()
+        return f
+    end
+
+    f = CreateFrame("Button", nil, self.frame, "AuctipusDropDownItemTemplate")
+    local b = f.XButton
+    b.Texture:SetAlpha(0.5)
+    b:SetScript("OnEnter", function() b.Texture:SetAlpha(1) end)
+    b:SetScript("OnLeave", function() b.Texture:SetAlpha(0.5) end)
+    return f
+end
+
+function ADropDown:FreeButton(b)
+    b:ClearAllPoints()
+    b:Hide()
+    b:SetParent(UIParent)
+    table.insert(ADD_BUTTON_POOL, b)
 end
 
 function ADropDown:Init(config)
@@ -69,7 +69,7 @@ end
 
 function ADropDown:ReInit(config)
     while #self.items > 0 do
-        FreeButton(table.remove(self.items))
+        self:FreeButton(table.remove(self.items))
     end
 
     self.frame:Hide()
@@ -99,7 +99,7 @@ function ADropDown:ReInit(config)
     local x       = 12
     local remRows = config.rows
     for i, item in ipairs(config.items) do
-        local f = AllocButton(self.frame)
+        local f = self:AllocButton()
         f.XButton:SetScript("OnClick", function() self:OnXClick(i) end)
         table.insert(self.items, f)
 
