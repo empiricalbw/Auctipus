@@ -95,9 +95,10 @@ function ADropDown:ReInit(config)
         end
     end
 
-    local y       = -10
-    local x       = 12
-    local remRows = config.rows
+    local x         = 12
+    local remRows   = config.rows
+    local rowHeight = self.frame:GetHeight()
+    local maxHeight = rowHeight
     for i, item in ipairs(config.items) do
         local f = self:AllocButton()
         f.XButton:SetScript("OnClick", function() self:OnXClick(i) end)
@@ -105,45 +106,43 @@ function ADropDown:ReInit(config)
 
         f:SetWidth(fwidth)
         if i == 1 then
-            f:SetPoint("TOPLEFT", x, y)
+            f:SetPoint("TOPLEFT", x, -10)
         elseif (i % config.rows) == 1 then
             f:SetPoint("TOPLEFT", self.items[i - config.rows], "TOPRIGHT")
         else
             f:SetPoint("TOPLEFT", self.items[i - 1], "BOTTOMLEFT")
         end
         self:SetItemText(i, item:sub(2))
-        f.LabelDisabled:Hide()
         f:SetScript("OnClick", function() self:OnItemClick(i) end)
-        y = y - f:GetHeight()
-
-        remRows = remRows - 1
-        if remRows == 0 then
-            x = x + fwidth
-            y = -10
-            remRows = config.rows
-        end
 
         f.selected = false
 
         local c = item:sub(1, 1)
-        if c == "-" then
-            self:DisableItem(i)
-        elseif c == "!" then
-            self:SetItemTitle(i)
-        elseif c == "x" then
-            f.XButton:Show()
-        elseif c == "o" then
-            f.RadioOff:Show()
+        self:SetItemEnabled(i, c ~= "-")
+        f.Separator:SetShown(item == "-")
+        f.XButton:SetShown(c == "x")
+        f.RadioOff:SetShown(c == "o")
+        if item == "-" then
+            f:SetHeight(8)
         else
-            assert(c == " ")
+            f:SetHeight(13)
+        end
+        rowHeight = rowHeight + f:GetHeight()
+        if c == "!" then
+            self:SetItemTitle(i)
+        end
+
+        remRows = remRows - 1
+        if remRows == 0 then
+            x         = x + fwidth
+            remRows   = config.rows
+            maxHeight = max(rowHeight, maxHeight)
+            rowHeight = self.frame:GetHeight()
         end
     end
 
-    local nrows = min(#config.items, config.rows)
-    if nrows > 0 then
-        self.frame:SetHeight(self.frame:GetHeight() +
-                             self.items[1]:GetHeight()*nrows)
-    end
+    maxHeight = max(rowHeight, maxHeight)
+    self.frame:SetHeight(maxHeight)
 
     local ncols = ceil(#config.items / config.rows)
     if ncols > 0 then

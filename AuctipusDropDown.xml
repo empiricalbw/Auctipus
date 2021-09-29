@@ -93,6 +93,13 @@
                         <Anchor point="LEFT" y="1"/>
                     </Anchors>
                 </Texture>
+                <Texture parentKey="Separator" file="Interface\Common\UI-TooltipDivider-Transparent" hidden="true">
+                    <Size y="8"/>
+                    <Anchors>
+                        <Anchor point="LEFT" y="-1"/>
+                        <Anchor point="RIGHT" x="-11" y="-1"/>
+                    </Anchors>
+                </Texture>
                 <FontString parentKey="LabelEnabled" font="GameFontWhiteSmall" justifyH="LEFT">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="16"/>
