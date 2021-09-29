@@ -5,6 +5,9 @@ local MAX_SEARCH_HISTORY = 20
 
 function AuctipusBrowseFrame:ProcessSavedVars()
     self.PastSearchesButton:SetEnabled(#AUCTIPUS_SEARCH_HISTORY > 0)
+    for i, q in ipairs(AUCTIPUS_SEARCH_HISTORY) do
+        AUCTIPUS_SEARCH_HISTORY[i] = Auctipus.Query:New(q)
+    end
     self:UpdateSearchHistoryMenu()
 end
 
@@ -343,12 +346,8 @@ function AuctipusBrowseFrame:ClearSearch()
     self:UpdateAuctions()
 end
 
-function AuctipusBrowseFrame:DoSearch()
-    if not self.SearchButton:IsEnabled() then
-        return
-    end
-
-    local query = {
+function AuctipusBrowseFrame:ParseQuery()
+    local query = Auctipus.Query:New({
         text       = self.SearchBox:GetText(),
         minLevel   = self.MinLvlBox:GetNumber(),
         maxLevel   = self.MaxLvlBox:GetNumber(),
@@ -356,18 +355,22 @@ function AuctipusBrowseFrame:DoSearch()
         exactMatch = false,
         usable     = self.CanUseCheckButton:GetChecked(),
         filters    = {},
-    }
+        })
 
     local selection = self.CategoryDropDown:GetSelection()
     for _, index in ipairs(selection) do
-        local classID, subClassID, invType = unpack(self.paths[index].path)
-        local filter = {
-            classID       = classID,
-            subClassID    = subClassID,
-            inventoryType = invType,
-        }
-        table.insert(query.filters, filter)
+        query:AddFilter(unpack(self.paths[index].path))
     end
+
+    return query
+end
+
+function AuctipusBrowseFrame:DoSearch()
+    if not self.SearchButton:IsEnabled() then
+        return
+    end
+
+    local query = self:ParseQuery()
 
     self:ClearScan()
 
@@ -386,7 +389,7 @@ end
 function AuctipusBrowseFrame:RecordSearchHistory(query)
     local foundIndex = nil
     for i, q in ipairs(AUCTIPUS_SEARCH_HISTORY) do
-        if Auctipus.Page.IsSameQuery(query, q) then
+        if query:IsSame(q) then
             foundIndex = i
             break
         end
@@ -402,18 +405,6 @@ function AuctipusBrowseFrame:RecordSearchHistory(query)
     table.insert(AUCTIPUS_SEARCH_HISTORY, 1, query)
 
     self:UpdateSearchHistoryMenu()
-end
-
-function AuctipusBrowseFrame:GetFilterIndexPath(f)
-    for i, p in ipairs(self.paths) do
-        local classID, subClassID, invType = unpack(p.path)
-        if (f.classID    == classID and
-            f.subClassID == subClassID and
-            f.invType    == invType)
-        then
-            return i, p
-        end
-    end
 end
 
 function AuctipusBrowseFrame:UpdateSearchHistoryMenu()
@@ -434,42 +425,10 @@ function AuctipusBrowseFrame:UpdateSearchHistoryMenu()
         items    = {"!Recent Searches"},
     }
 
-    for _, q in ipairs(AUCTIPUS_SEARCH_HISTORY) do
-        local sections = {}
-        local colorStart = 2
-        if q.text ~= "" then
-            table.insert(sections, q.text)
-        else
-            colorStart = 1
+    if #AUCTIPUS_SEARCH_HISTORY > 0 then
+        for _, q in ipairs(AUCTIPUS_SEARCH_HISTORY) do
+            table.insert(config.items, "x"..q:ToString())
         end
-        if q.minLevel > 0 and q.maxLevel > 0 then
-            table.insert(sections, "["..q.minLevel.." - "..q.maxLevel.."]")
-        elseif q.minLevel > 0 then
-            table.insert(sections, "["..q.minLevel.." - ]")
-        elseif q.maxLevel > 0 then
-            table.insert(sections, "[ - "..q.maxLevel.."]")
-        end
-        if q.rarity >= 0 then
-            table.insert(sections,
-                         "[".._G["ITEM_QUALITY"..q.rarity.."_DESC"].."]")
-        end
-        if q.usable then
-            table.insert(sections, "[Usable]")
-        end
-        if #q.filters > 0 then
-            local names = {}
-            for _, f in ipairs(q.filters) do
-                local _, p = self:GetFilterIndexPath(f)
-                if p then
-                    table.insert(names, p.name)
-                end
-            end
-            table.insert(sections, "["..table.concat(names, ", ").."]")
-        end
-        if #sections >= colorStart then
-            sections[colorStart] = "|cFFFFD100"..sections[colorStart]
-        end
-        table.insert(config.items, "x"..table.concat(sections, " "))
     end
 
     self.SearchHistoryDropDown:ReInit(config)
@@ -493,7 +452,7 @@ function AuctipusBrowseFrame:OnSearchHistoryDropDownClick(index)
     self.CanUseCheckButton:SetChecked(q.usable)
     self.CategoryDropDown:ClearSelection()
     for _, f in ipairs(q.filters) do
-        local i = self:GetFilterIndexPath(f)
+        local i = q:GetFilterIndexPath(f)
         if i then
             self.CategoryDropDown:OnItemClick(i)
         end

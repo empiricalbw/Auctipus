@@ -50,31 +50,6 @@ local STATE_WAIT_PROCESS_PAGE = "STATE_WAIT_PROCESS_PAGE"
 local STATE_WAIT_PROCESS_NIL  = "STATE_WAIT_PROCESS_NIL"
 local STATE_CLOSED            = "STATE_CLOSED"
 
-function APage.IsSameQuery(q1, q2)
-    if (q1.text:upper() ~= q2.text:upper() or
-        q1.minLevel     ~= q2.minLevel or
-        q1.maxLevel     ~= q2.maxLevel or
-        q1.rarity       ~= q2.rarity or
-        q1.usable       ~= q2.usable or
-        #q1.filters     ~= #q2.filters)
-    then
-        return false
-    end
-
-    for i=1, #q1.filters do
-        local f1 = q1.filters[i]
-        local f2 = q2.filters[i]
-        if (f1.classID       ~= f2.classID or
-            f1.subClassID    ~= f2.subClassID or
-            f1.inventoryType ~= f2.inventoryType)
-        then
-            return false
-        end
-    end
-
-    return true
-end
-
 function APage.OpenListPage(q, page, order, handler)
     local ap = {category      = "list",
                 state         = STATE_INITIAL,

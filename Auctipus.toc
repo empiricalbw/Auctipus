@@ -33,6 +33,7 @@ AuctipusCommonUI.lua
 AuctipusLink.lua
 AuctipusHistory.lua
 AuctipusSortButton.lua
+AuctipusQuery.lua
 AuctipusPaths.lua
 AuctipusSet.lua
 AuctipusAuction.lua
