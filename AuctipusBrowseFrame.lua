@@ -1,10 +1,91 @@
 AuctipusBrowseFrame = {}
 
-AUCTIPUS_SEARCH_HISTORY = {}
+AUCTIPUS_DEFAULT_FAVORITES = {
+    {userTitle  = "Red Gems",
+     maxLevel   = 0,
+     minLevel   = 0,
+     exactMatch = false,
+     usable     = false,
+     text       = "",
+     rarity     = -1,
+     filters    = {{subClassID=0, classID=3},
+                   {subClassID=3, classID=3},
+                   {subClassID=5, classID=3}},
+    },
+    {userTitle  = "Blue Gems",
+     maxLevel   = 0,
+     minLevel   = 0,
+     exactMatch = false,
+     usable     = false,
+     text       = "",
+     rarity     = -1,
+     filters    = {{subClassID=3, classID= 3},
+                   {subClassID=1, classID= 3},
+                   {subClassID=4, classID= 3}},
+     },
+    {userTitle  = "Yellow Gems",
+     maxLevel   = 0,
+     minLevel   = 0,
+     exactMatch = false,
+     usable     = false,
+     text       = "",
+     rarity     = -1,
+     filters    = {{subClassID=4, classID=3},
+                   {subClassID=2, classID=3},
+                   {subClassID=5, classID=3}},
+    },
+    -- Usable weapons
+    {maxLevel   = 0,
+     minLevel   = 0,
+     exactMatch = false,
+     usable     = true,
+     text       = "",
+     rarity     = -1,
+     filters    = {{classID=2}},
+    },
+    -- Usable armor
+    {maxLevel   = 0,
+     minLevel   = 0,
+     exactMatch = false,
+     usable     = true,
+     text       = "",
+     rarity     = -1,
+     filters    = {{classID=4}},
+    },
+}
+
+AUCTIPUS_FAVORITES       = AUCTIPUS_DEFAULT_FAVORITES
+AUCTIPUS_SEARCH_HISTORY  = {}
 local MAX_SEARCH_HISTORY = 20
 
+
+StaticPopupDialogs["AUCTIPUS_ADD_FAVORITE"] = {
+    text = "Name this search or leave blank for default format:",
+    button1 = "OK",
+    button2 = "Cancel",
+    OnShow = function(self)
+        self.editBox:SetFocus()
+    end,
+    OnAccept = function(self, data)
+        AuctipusFrame.BrowseFrame:OnSearchHistoryAddFavorite(
+            self.editBox:GetText())
+    end,
+    EditBoxOnEnterPressed = function(self)
+        AuctipusFrame.BrowseFrame:OnSearchHistoryAddFavorite(self:GetText())
+        self:GetParent():Hide()
+    end,
+    timeout = 0,
+    hideOnEscape = true,
+    preferredIndex = 3,
+    hasEditBox = true,
+    enterClicksFirstButton = true,
+    exclusive = true,
+}
+
 function AuctipusBrowseFrame:ProcessSavedVars()
-    self.PastSearchesButton:SetEnabled(#AUCTIPUS_SEARCH_HISTORY > 0)
+    for i, q in ipairs(AUCTIPUS_FAVORITES) do
+        AUCTIPUS_FAVORITES[i] = Auctipus.Query:New(q)
+    end
     for i, q in ipairs(AUCTIPUS_SEARCH_HISTORY) do
         AUCTIPUS_SEARCH_HISTORY[i] = Auctipus.Query:New(q)
     end
@@ -415,17 +496,25 @@ function AuctipusBrowseFrame:UpdateSearchHistoryMenu()
         xhandler = function(index)
                      self:OnSearchHistoryDropDownX(index)
                    end,
-        rows     = #AUCTIPUS_SEARCH_HISTORY + 1,
+        rows     = #AUCTIPUS_SEARCH_HISTORY + #AUCTIPUS_FAVORITES + 4,
         anchor   = {point="TOPLEFT",
                     relativeTo=self.SearchBox,
                     relativePoint="BOTTOMLEFT",
                     dx=0,
                     dy=0,
                     },
-        items    = {"!Recent Searches"},
+        items    = {"!Favorites",
+                    " Add current search",
+                   },
     }
 
+    for _, q in ipairs(AUCTIPUS_FAVORITES) do
+        table.insert(config.items, "x"..q:ToString())
+    end
+
     if #AUCTIPUS_SEARCH_HISTORY > 0 then
+        table.insert(config.items, "-")
+        table.insert(config.items, "!Recent Searches")
         for _, q in ipairs(AUCTIPUS_SEARCH_HISTORY) do
             table.insert(config.items, "x"..q:ToString())
         end
@@ -435,7 +524,17 @@ function AuctipusBrowseFrame:UpdateSearchHistoryMenu()
 end
 
 function AuctipusBrowseFrame:OnSearchHistoryDropDownClick(index)
-    local q = AUCTIPUS_SEARCH_HISTORY[index - 1]
+    local q
+    if index == 2 then
+        StaticPopup_Show("AUCTIPUS_ADD_FAVORITE")
+        self:HideDropDowns()
+        return
+    elseif index <= #AUCTIPUS_FAVORITES + 2 then
+        q = AUCTIPUS_FAVORITES[index - 2]
+    else
+        q = AUCTIPUS_SEARCH_HISTORY[index - #AUCTIPUS_FAVORITES - 4]
+    end
+
     self.SearchBox:SetText(q.text)
     if q.minLevel > 0 then
         self.MinLvlBox:SetText(q.minLevel)
@@ -456,16 +555,27 @@ function AuctipusBrowseFrame:OnSearchHistoryDropDownClick(index)
             self.CategoryDropDown:OnItemClick(i)
         end
     end
+
     self:DoSearch()
 end
 
-function AuctipusBrowseFrame:OnSearchHistoryDropDownX(index)
-    table.remove(AUCTIPUS_SEARCH_HISTORY, index - 1)
-    self.PastSearchesButton:SetEnabled(#AUCTIPUS_SEARCH_HISTORY > 0)
-    self:UpdateSearchHistoryMenu()
-    if #AUCTIPUS_SEARCH_HISTORY > 0 then
-        self.SearchHistoryDropDown:Show()
+function AuctipusBrowseFrame:OnSearchHistoryAddFavorite(userTitle)
+    local query = self:ParseQuery()
+    if userTitle ~= "" then
+        query.userTitle = userTitle
     end
+    table.insert(AUCTIPUS_FAVORITES, query)
+    self:UpdateSearchHistoryMenu()
+end
+
+function AuctipusBrowseFrame:OnSearchHistoryDropDownX(index)
+    if index <= #AUCTIPUS_FAVORITES + 2 then
+        table.remove(AUCTIPUS_FAVORITES, index - 2)
+    else
+        table.remove(AUCTIPUS_SEARCH_HISTORY, index - #AUCTIPUS_FAVORITES - 4)
+    end
+    self:UpdateSearchHistoryMenu()
+    self.SearchHistoryDropDown:Show()
 end
 
 function AuctipusBrowseFrame:ScanProgress(scan, page, totalPages)
@@ -488,9 +598,7 @@ function AuctipusBrowseFrame:ScanComplete(scan)
     if #scan.auctions > 0 then
         self:RecordSearchHistory(scan.query)
     end
-    if #AUCTIPUS_SEARCH_HISTORY > 0 then
-        self.PastSearchesButton:Enable()
-    end
+    self.PastSearchesButton:Enable()
  
     for i, ag in ipairs(scan.auctionGroups) do
         ag:SortByBuyout()
