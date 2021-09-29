@@ -1,4 +1,4 @@
-Auctipus.Paths = {}
+Auctipus.Paths = {paths = nil}
 
 Auctipus.PATHS = {
     {Enum.ItemClass.Weapon},
@@ -120,8 +120,10 @@ function Auctipus.Paths.Generate()
     return paths
 end
 
+Auctipus.Paths.paths = Auctipus.Paths.Generate()
+
 function Auctipus.Paths.Dump()
-    for i, path in ipairs(Auctipus.Paths.Generate()) do
+    for i, path in ipairs(Auctipus.Paths.paths) do
         print(path.name)
     end
 end
