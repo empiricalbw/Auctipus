@@ -98,8 +98,7 @@ function AuctipusBrowseFrame:OnLoad()
                    },
         items   = {},
     }
-    self.paths = Auctipus.Paths.Generate()
-    for i, p in ipairs(self.paths) do
+    for i, p in ipairs(Auctipus.Paths.paths) do
         table.insert(config.items, "o"..p.name)
     end
     self.CategoryDropDown = Auctipus.CategoryMenu:New(config)
@@ -260,11 +259,12 @@ function AuctipusBrowseFrame:OnRarityDropDownClick(index, selected)
 end
 
 function AuctipusBrowseFrame:OnCategoryDropDownClick(index, selected)
-    local classID, subClassID, invType = unpack(self.paths[index].path)
+    local classID, subClassID, invType =
+        unpack(Auctipus.Paths.paths[index].path)
     if subClassID then
         -- If a subclass is selected, then we can only allow selections that
         -- are peers of the subclass or in parent nodes.
-        for i, path in ipairs(self.paths) do
+        for i, path in ipairs(Auctipus.Paths.paths) do
             if path.path[1] ~= classID then
                 self.CategoryDropDown:SetItemEnabled(i, not selected)
             end
@@ -272,7 +272,7 @@ function AuctipusBrowseFrame:OnCategoryDropDownClick(index, selected)
     else
         -- If no subclass is selected, then we can allow any child node or any
         -- peer class.
-        for i, path in ipairs(self.paths) do
+        for i, path in ipairs(Auctipus.Paths.paths) do
             if path.path[1] ~= classID and path.path[2] ~= nil then
                 self.CategoryDropDown:SetItemEnabled(i, not selected)
             end
@@ -359,7 +359,7 @@ function AuctipusBrowseFrame:ParseQuery()
 
     local selection = self.CategoryDropDown:GetSelection()
     for _, index in ipairs(selection) do
-        query:AddFilter(unpack(self.paths[index].path))
+        query:AddFilter(unpack(Auctipus.Paths.paths[index].path))
     end
 
     return query
