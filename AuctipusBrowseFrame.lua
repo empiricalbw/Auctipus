@@ -504,7 +504,7 @@ function AuctipusBrowseFrame:UpdateSearchHistoryMenu()
                     dy=0,
                     },
         items    = {"!Favorites",
-                    " Add current search",
+                    " Add Current Search",
                    },
     }
 
