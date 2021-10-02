@@ -587,11 +587,11 @@ function AuctipusBrowseFrame:ScanComplete(scan)
     Auctipus.History:ScanComplete(scan)
 
     local auctionsPerSecond = #scan.auctions / scan.elapsedTime
-    Auctipus.info("Scan complete.  Found "..#scan.auctions..
-                  " total in "..string.format("%.2f", scan.elapsedTime)..
-                  " seconds ("..string.format("%.2f", auctionsPerSecond)..
-                  " auctions/second)")
-    Auctipus.info("Found "..#scan.auctionGroups.." unique groups.")
+    Auctipus.dbg("Scan complete.  Found "..#scan.auctions..
+                 " total in "..string.format("%.2f", scan.elapsedTime)..
+                 " seconds ("..string.format("%.2f", auctionsPerSecond)..
+                 " auctions/second)")
+    Auctipus.dbg("Found "..#scan.auctionGroups.." unique groups.")
 
     self.SearchButton:Enable()
 
@@ -834,7 +834,7 @@ function AuctipusBrowseFrame:SearchAborted(search)
 end
 
 function AuctipusBrowseFrame:SearchFailed(search)
-    Auctipus.info("-------- Auction not found. --------")
+    Auctipus.info("Auction not found.")
 
     assert(search.targetAuction == self.selectedAuctions:First())
     search.targetAuction.missing = true
@@ -854,7 +854,7 @@ function AuctipusBrowseFrame:DoBuy()
     local auction  = self.selectedAuctions:First()
     local searcher = auction.auctionGroup.searcher
     assert(auction:Matches(searcher.targetAuction))
-    Auctipus.info("Buying: "..auction:ToString())
+    Auctipus.dbg("Buying: "..auction:ToString())
     self.BuyButton:Disable()
 
     auction.missing = true
