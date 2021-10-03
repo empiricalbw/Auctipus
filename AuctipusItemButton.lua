@@ -125,9 +125,3 @@ function AuctipusItemButtonMixin:OnEvent()
     end
 end
 
--- Support for VendorPrice.
-GameTooltip:HookScript("OnTooltipSetItem", function(tt)
-    if VendorPrice and tt:GetOwner()._is_auctipus then
-        VendorPrice:SetPrice(tt)
-    end
-end)
