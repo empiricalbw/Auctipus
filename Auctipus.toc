@@ -53,6 +53,7 @@ AuctipusListingsFrame.lua
 AuctipusHistoryFrame.lua
 AuctipusDropDown.lua
 AuctipusCategoryMenu.lua
+AuctipusTooltips.lua
 Auctipus.lua
 API.lua
 
