@@ -51,4 +51,10 @@
             <KeyValue key="style" value="fixed"/>
         </KeyValues>
     </Frame>
+
+    <Frame name="BetterMoneyFrameFixedCollapsedTemplate" virtual="true" inherits="BetterMoneyFrameTemplate">
+        <KeyValues>
+            <KeyValue key="style" value="fixed_collapsed"/>
+        </KeyValues>
+    </Frame>
 </Ui>
