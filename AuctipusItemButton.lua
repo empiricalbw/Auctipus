@@ -8,6 +8,7 @@ function AuctipusItemButtonMixin:OnLoad()
     self.auctionGroup = nil
     self.link         = nil
     self.sellInfo     = nil
+    self.count        = nil
     self._is_auctipus = true
 end
 
@@ -80,6 +81,7 @@ function AuctipusItemButtonMixin:Clear()
     self.auctionGroup = nil
     self.link         = nil
     self.sellInfo     = nil
+    self.count        = nil
     self:SetNormalTexture(nil)
     self.Count:Hide()
     self.Name:Hide()
@@ -92,6 +94,7 @@ function AuctipusItemButtonMixin:SetCount(count)
     else
         self.Count:Hide()
     end
+    self.count = count
 end
 
 function AuctipusItemButtonMixin:OnEnter()
