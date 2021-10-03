@@ -125,3 +125,6 @@ function AuctipusItemButtonMixin:OnEvent()
     end
 end
 
+function AuctipusItemButtonMixin:UpdateTooltip()
+    self:OnEnter()
+end
