@@ -9,9 +9,41 @@ UIPanelWindows["AuctipusFrame"] = {
     width               = 840,
 }
 
+local AUCTIPUS_INCOMPATIBLE = {
+    ["VendorPrice"] =
+        "VendorPrice and Auctipus prices do not align on tooltips so it is "..
+        "recommended to disable VendorPrice (Auctionator provides "..
+        "equivalent functionality).",
+    ["Auctionator"] = 
+        "Auctionator and Auctipus are incompatible and can cause LUA errors "..
+        "and other unexpected behavior.  It is required to use only one.",
+    ["Auctioneer"] = 
+        "Auctioneer and Auctipus are incompatible and can cause LUA errors "..
+        "and other unexpected behavior.  It is required to use only one.",
+    ["TradeSkillMaster"] = 
+        "TradeSkillMaster and Auctipus are incompatible and can cause LUA "..
+        "errors and other unexpected behavior.  It is required to use only "..
+        "one.",
+}
+
 function Auctipus.AddOn.ADDON_LOADED(addOnName)
+    if AUCTIPUS_INCOMPATIBLE[addOnName] ~= nil then
+        Auctipus.info(AUCTIPUS_INCOMPATIBLE[addOnName])
+        AUCTIPUS_INCOMPATIBLE[addOnName] = nil
+    end
     if addOnName ~= "Auctipus" then
         return
+    end
+
+    local foundAddons = {}
+    for k, v in pairs(AUCTIPUS_INCOMPATIBLE) do
+        if IsAddOnLoaded(k) then
+            Auctipus.info(v)
+            table.insert(foundAddons, k)
+        end
+    end
+    for _, k in ipairs(foundAddons) do
+        AUCTIPUS_INCOMPATIBLE[k] = nil
     end
 
     -- Saved variables.
