@@ -5,13 +5,22 @@ local BMF_STYLES = {
         copperMinDigits = 1,
         silverMinDigits = 1,
         hideZeroes      = true,
+        collapse        = false,
     },
 
     ["fixed"] = {
         copperMinDigits = 2,
         silverMinDigits = 2,
         hideZeroes      = false,
-    }
+        collapse        = false,
+    },
+
+    ["fixed_collapsed"] = {
+        copperMinDigits = 2,
+        silverMinDigits = 2,
+        hideZeroes      = false,
+        collapse        = true,
+    },
 }
 
 function BetterMoneyFrameMixin:OnLoad()
@@ -47,36 +56,51 @@ function BetterMoneyFrameMixin:SetMoney(money)
         end
     end
 
+    local copperWidth
     if copper == 0 and self.money > 0 and self.style.hideZeroes then
         self:CollapseCopper()
+        copperWidth = 0
     else
         self:ExpandCopper()
         self.CopperText:SetText(copperText)
+        copperWidth = 29
     end
 
+    local silverWidth
     if silver == 0 then
         if self.money > 100 then
             if self.style.hideZeroes then
                 self:CollapseSilver()
+                silverWidth = 0
             else
                 self:ExpandSilver()
                 self.SilverText:SetText(silverText)
+                silverWidth = 29
             end
         else
             self:HideSilver()
+            silverWidth = 0
         end
     else
         self:ExpandSilver()
         self.SilverText:SetText(silverText)
+        silverWidth = 29
     end
 
+    local goldWidth
     if gold > 0 then
         self.GoldText:SetText(gold)
         self.GoldText:Show()
         self.GoldIcon:Show()
+        goldWidth = 12 + self.GoldText:GetUnboundedStringWidth()
     else
         self.GoldText:Hide()
         self.GoldIcon:Hide()
+        goldWidth = 0
+    end
+
+    if self.style.collapse then
+        self:SetWidth(copperWidth + silverWidth + goldWidth)
     end
 end
 
