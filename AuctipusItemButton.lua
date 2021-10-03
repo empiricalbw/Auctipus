@@ -3,8 +3,6 @@ AuctipusItemButtonMixin = {}
 function AuctipusItemButtonMixin:OnLoad()
     self:SetScript("OnEnter", function() self:OnEnter() end)
     self:SetScript("OnLeave", function() self:OnLeave() end)
-    self:SetScript("OnEvent", function() self:OnEvent() end)
-    self:RegisterEvent("MODIFIER_STATE_CHANGED")
     self.auctionGroup = nil
     self.link         = nil
     self.sellInfo     = nil
@@ -97,7 +95,7 @@ function AuctipusItemButtonMixin:SetCount(count)
     self.count = count
 end
 
-function AuctipusItemButtonMixin:OnEnter()
+function AuctipusItemButtonMixin:UpdateTooltip()
     if self.link then
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
         GameTooltip:SetHyperlink(self.link)
@@ -115,16 +113,10 @@ function AuctipusItemButtonMixin:OnEnter()
     end
 end
 
+function AuctipusItemButtonMixin:OnEnter()
+    self:UpdateTooltip()
+end
+
 function AuctipusItemButtonMixin:OnLeave()
     GameTooltip_Hide()
-end
-
-function AuctipusItemButtonMixin:OnEvent()
-    if GameTooltip:GetOwner() == self then
-        self:OnEnter()
-    end
-end
-
-function AuctipusItemButtonMixin:UpdateTooltip()
-    self:OnEnter()
 end
