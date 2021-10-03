@@ -3,7 +3,7 @@ Auctipus.Link.__index = Auctipus.Link
 local ALink = Auctipus.Link
 
 local function LinkDecode(l)
-    local _, _, a, r, g, b, itemId = l:find("|c(..)(..)(..)(..)|Hitem:(%d+):")
+    local a, r, g, b, itemId = l:match("|c(..)(..)(..)(..)|Hitem:(%d+):")
     a = tonumber(a, 16)
     r = tonumber(r, 16)
     g = tonumber(g, 16)
@@ -26,8 +26,7 @@ function ALink:New(l)
 end
 
 function ALink.GetLinkName(l)
-    local _, _, name = l:find("|h%[(.*)%]|h")
-    return name
+    return l:match("|h%[(.*)%]|h")
 end
 
 function ALink.SaneLink(l)
