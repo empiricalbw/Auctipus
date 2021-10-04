@@ -207,9 +207,11 @@ local HookMethods = {
 
     -- Items in our target's side of the trade window.
     ["SetTradeTargetItem"] = function(tt, i)
-        local _, _, n = GetTradeTargetItemInfo(i)
-        local link    = GetTradeTargetItemLink(i)
-        AuctipusAddPrice(tt, Auctipus.Link.GetItemID(link), n)
+        local link = GetTradeTargetItemLink(i)
+        if link then
+            local _, _, n = GetTradeTargetItemInfo(i)
+            AuctipusAddPrice(tt, Auctipus.Link.GetItemID(link), n)
+        end
     end,
 
     -- Items in a quest window when talking to a quest giver.
