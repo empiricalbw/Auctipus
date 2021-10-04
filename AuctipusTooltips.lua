@@ -43,7 +43,7 @@ local function AuctipusAddPrice(tt, itemID, n, onlyVendor)
     end
 
     if not onlyVendor then
-        local low, high, elapsed = Auctipus.API.GetAuctionBuyoutRange(itemID)
+        local low, elapsed = Auctipus.API.GetAuctionCurrentBuyout(itemID)
         if low then
             if elapsed == 0 then
                 elapsed = "today"
@@ -86,7 +86,11 @@ local HookMethods = {
     ["SetInventoryItem"] = function(tt, unit, i)
         local itemID = GetInventoryItemID(unit, i)
         if itemID then
-            AuctipusAddPrice(tt, itemID, 1)
+            local n = 1
+            if i == INVSLOT_AMMO then
+                n = max(GetInventoryItemCount(unit, i), 1)
+            end
+            AuctipusAddPrice(tt, itemID, n)
         end
     end,
 
@@ -207,9 +211,11 @@ local HookMethods = {
 
     -- Items in our target's side of the trade window.
     ["SetTradeTargetItem"] = function(tt, i)
-        local _, _, n = GetTradeTargetItemInfo(i)
-        local link    = GetTradeTargetItemLink(i)
-        AuctipusAddPrice(tt, Auctipus.Link.GetItemID(link), n)
+        local link = GetTradeTargetItemLink(i)
+        if link then
+            local _, _, n = GetTradeTargetItemInfo(i)
+            AuctipusAddPrice(tt, Auctipus.Link.GetItemID(link), n)
+        end
     end,
 
     -- Items in a quest window when talking to a quest giver.

@@ -1,6 +1,6 @@
 ## Interface: 20502
 ## Title: Auctipus
-## Version: 2.5.2-v6a2
+## Version: 2.5.2-v6a3
 ## Author: Empirical
 ## DefaultState: enabled
 ## Dependencies:
