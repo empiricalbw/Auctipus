@@ -51,3 +51,27 @@ function Auctipus.API.GetAuctionBuyoutRange(itemID)
     local today = Auctipus.History:GetServerDay()
     return floor(minBuyout + 0.5), floor(maxBuyout + 0.5), today - matchDate
 end
+
+function Auctipus.API.GetAuctionCurrentBuyout(itemID)
+    local matches = Auctipus.History:MatchByItemID(itemID)
+    if #matches == 0 then
+        return nil
+    end
+
+    local match     = matches[1]
+    local matchDate = match.history[#match.history][1]
+    local minBuyout = match.history[-1]
+    for i, m in pairs(matches) do
+        local mDate = m.history[#m.history][1]
+        if mDate > matchDate then
+            match     = m
+            matchDate = mDate
+            minBuyout = match.history[-1]
+        elseif mDate == matchDate then
+            minBuyout = min(minBuyout, m.history[-1])
+        end
+    end
+
+    local today = Auctipus.History:GetServerDay()
+    return floor(minBuyout + 0.5), today - matchDate
+end
