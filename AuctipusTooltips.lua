@@ -86,7 +86,11 @@ local HookMethods = {
     ["SetInventoryItem"] = function(tt, unit, i)
         local itemID = GetInventoryItemID(unit, i)
         if itemID then
-            AuctipusAddPrice(tt, itemID, 1)
+            local n = 1
+            if i == INVSLOT_AMMO then
+                n = max(GetInventoryItemCount(unit, i), 1)
+            end
+            AuctipusAddPrice(tt, itemID, n)
         end
     end,
 
