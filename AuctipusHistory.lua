@@ -3,7 +3,7 @@ Auctipus.History.__index = Auctipus.History
 local AHistory = Auctipus.History
 
 -- Saved variables.
-AUCTIPUS_ITEM_HISTORY_DB = {}
+AUCTIPUS_ITEM_HISTORY_DB = {revision = 1}
 AUCTIPUS_ITEM_HISTORY_DB_VERSION = 0
 AUCTIPUS_IGNORED_SELLERS_DB = {}
 AUCTIPUS_IGNORED_SELLERS = nil
@@ -59,6 +59,7 @@ function AHistory:ScanComplete(scan)
             else
                 table.insert(hg, {serverDay, minUnitBuyout, minUnitBuyout})
             end
+            hg[-1] = minUnitBuyout
             AUCTIPUS_ITEM_HISTORY[ag.link] = hg
         end
     end
@@ -75,10 +76,50 @@ function AHistory:ScanAborted(scan)
 end
 
 function AHistory:UpdateDB()
+    --[[
+    --  AUCTIPUS_ITEM_HISTORY_DB structure:
+    --
+    --      {
+    --          revision = 1,
+    --          ["Realm1:Faction1"] = {
+    --              ["itemLink1"] = {
+    --                  [-1] = lastScanPrice,
+    --                  [1] = {serverDay1, lowest minBuyout, highest minBuyout},
+    --                  [2] = {serverDay2, lowest minBuyout, highest minBuyout},
+    --                  ...
+    --              },
+    --              ["itemLink2"] = {
+    --                  [-1] = lastScanPrice,
+    --                  [1] = {serverDay1, lowest minBuyout, highest minBuyout},
+    --                  [2] = {serverDay2, lowest minBuyout, highest minBuyout},
+    --                  ...
+    --              },
+    --              ...
+    --          },
+    --          ["RealmX:FactionY"] = {
+    --              ...
+    --          },
+    --      }
+    --
+    --  Where:
+    --      serverDayX is the AHistory:GetServerDay() value when the scan was
+    --      taken.  Lowest and highest minBuyout is the range of minimum
+    --      buyouts observed on that day.  Index -1 gives the price recorded
+    --      in the most recent scan (whose serverDay is the same as the last
+    --      entry in the array and whose price will be bounded by the lowest
+    --      and highest prices in the last entry but may not be equal to either
+    --      of them).
+    --]]
     local versionStr, buildStr, dateStr, tocVersion = GetBuildInfo()
 
     if AUCTIPUS_ITEM_HISTORY_DB_VERSION < 20502 and tocVersion >= 20502 then
         AHistory:Update0To20502()
+    end
+
+    if (AUCTIPUS_ITEM_HISTORY_DB_VERSION == 20502 and
+        AUCTIPUS_ITEM_HISTORY_DB.revision == nil)
+    then
+        AHistory:Update20502To20502_1()
     end
 end
 
@@ -119,6 +160,20 @@ function AHistory:Update0To20502()
 
     AUCTIPUS_ITEM_HISTORY_DB_VERSION = 20502
     Auctipus.info("Updated database to 2.5.2.")
+end
+
+function AHistory:Update20502To20502_1()
+    -- We want to store the most recent scan's lowest buyout price in the
+    -- history for tooltip use.  We synthesize it here.
+    assert(AUCTIPUS_ITEM_HISTORY_DB_VERSION == 20502)
+    for realm, realmHistory in pairs(AUCTIPUS_ITEM_HISTORY_DB) do
+        for link, history in pairs(realmHistory) do
+            history[-1] = history[#history][2]
+        end
+    end
+
+    AUCTIPUS_ITEM_HISTORY_DB.revision = 1
+    Auctipus.info("Updated database to 2.5.2 revision 1.")
 end
 
 function AHistory:ProcessDB()
