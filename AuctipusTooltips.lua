@@ -1,3 +1,6 @@
+local BANK_MIN_ID = BankButtonIDToInvSlotID(1)
+local BANK_MAX_ID = BankButtonIDToInvSlotID(NUM_BANKGENERIC_SLOTS)
+
 local function ASetTooltipMoney(tt, money, text)
     tt:AddDoubleLine(text, " ", 1, 1, 1)
     local numLines  = tt:NumLines()
@@ -87,7 +90,7 @@ local HookMethods = {
         local itemID = GetInventoryItemID(unit, i)
         if itemID then
             local n = 1
-            if i == INVSLOT_AMMO then
+            if i == INVSLOT_AMMO or (BANK_MIN_ID <= i and i <= BANK_MAX_ID) then
                 n = max(GetInventoryItemCount(unit, i), 1)
             end
             AuctipusAddPrice(tt, itemID, n)
