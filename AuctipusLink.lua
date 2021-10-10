@@ -31,6 +31,9 @@ end
 
 function ALink.GetItemID(l)
     local itemID = l:match("|Hitem:(%d+):")
+    if not itemID then
+        itemID = l:match("item:(%d+)")
+    end
     if itemID then
         return tonumber(itemID)
     end
