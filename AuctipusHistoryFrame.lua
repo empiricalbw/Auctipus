@@ -51,7 +51,12 @@ function AuctipusHistoryFrame:OnLoad()
     -- Plot.
     self.xyData = {top = {}, bottom = {}, dotPos = {}}
     for i, section in ipairs(self.Graph.Sections) do
-        section:SetPoint("TOPLEFT", self.Graph, "TOPLEFT", 5 + ((i - 1)*18), -5)
+        if i == 1 then
+            section:SetPoint("TOPLEFT", self.Graph, "TOPLEFT", 5, -5)
+        else
+            section:SetPoint("TOP", self.Graph, "TOP", 0, -5)
+            section:SetPoint("LEFT", self.Graph.Sections[i - 1], "RIGHT")
+        end
         section:SetPoint("BOTTOM", 0, 5)
         section:SetWidth(18)
         section.TopQuad:SetColorTexture(0, 0.5, 0.1, 0.5)
