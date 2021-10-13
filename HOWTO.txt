@@ -10,3 +10,11 @@ To export Blizzard interface files:
 9. Optionally type "ExportInterfaceFiles art".
 10. Quit.
 11. Uncheck the "Additional command line arguments" box.
+
+
+Prepare for CurseForge:
+git clone git@github.com:empiricalbw/Auctipus.git
+cd Auctipus
+rm -rf .git .gitignore HOWTO.txt Makefile Scripts/
+cd ..
+zip -r Auctipus.2.5.2-v6.zip Auctipus
