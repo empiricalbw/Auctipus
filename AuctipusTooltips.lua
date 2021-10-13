@@ -114,6 +114,11 @@ local HookMethods = {
 
     -- Any hyperlink.
     ["SetHyperlink"] = function(tt, link)
+        local itemID = Auctipus.Link.GetItemID(link)
+        if not itemID then
+            return
+        end
+
         local owner      = tt:GetOwner()
         local onlyVendor = false
         local n          = 1
@@ -125,7 +130,7 @@ local HookMethods = {
             end
         end
 
-        AuctipusAddPrice(tt, Auctipus.Link.GetItemID(link), n, onlyVendor)
+        AuctipusAddPrice(tt, itemID, n, onlyVendor)
     end,
 
     -- Items in the vendor buyback tab as well as in the bottom of the main
