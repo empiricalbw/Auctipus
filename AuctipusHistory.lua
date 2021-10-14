@@ -26,7 +26,7 @@ function AHistory.ProcessSavedVars()
 end
 
 function AHistory:GetServerDay()
-    local serverTime = GetServerTime()
+    local serverTime = C_DateAndTime.GetServerTimeLocal()
     return floor(serverTime / (60*60*24))
 end
 
@@ -52,7 +52,7 @@ function AHistory:ScanComplete(scan)
             ag:SortByBuyout()
             local hg = AUCTIPUS_ITEM_HISTORY[ag.link] or {}
             local minUnitBuyout = ag.unitPriceAuctions[1].unitPrice
-            if #hg > 0 and hg[#hg][1] == serverDay then
+            if #hg > 0 and hg[#hg][1] >= serverDay then
                 local elem = hg[#hg]
                 elem[2] = min(elem[2], minUnitBuyout)
                 elem[3] = max(elem[3], minUnitBuyout)
