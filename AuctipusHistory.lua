@@ -3,8 +3,8 @@ Auctipus.History.__index = Auctipus.History
 local AHistory = Auctipus.History
 
 -- Saved variables.
-AUCTIPUS_ITEM_HISTORY_DB = {revision = 1}
-AUCTIPUS_ITEM_HISTORY_DB_VERSION = 0
+AUCTIPUS_ITEM_HISTORY_DB = {revision = 1, realms = {}}
+AUCTIPUS_ITEM_HISTORY_DB_VERSION = 0    -- TOC version we are following
 AUCTIPUS_IGNORED_SELLERS_DB = {}
 AUCTIPUS_IGNORED_SELLERS = nil
 
@@ -15,10 +15,10 @@ function AHistory.ProcessSavedVars()
     Auctipus.info("Processing saved variables...")
     AHistory:UpdateDB()
     local rf = GetRealmName()..":"..UnitFactionGroup("player")
-    local ih = AUCTIPUS_ITEM_HISTORY_DB[rf] or {}
+    local ih = AUCTIPUS_ITEM_HISTORY_DB.realms[rf] or {}
     local is = AUCTIPUS_IGNORED_SELLERS_DB[rf] or {}
     AUCTIPUS_ITEM_HISTORY = ih
-    AUCTIPUS_ITEM_HISTORY_DB[rf] = ih
+    AUCTIPUS_ITEM_HISTORY_DB.realms[rf] = ih
     AUCTIPUS_IGNORED_SELLERS = is
     AUCTIPUS_IGNORED_SELLERS_DB[rf] = is
     AHistory:ProcessDB()
@@ -81,23 +81,29 @@ function AHistory:UpdateDB()
     --
     --      {
     --          revision = 1,
-    --          ["Realm1:Faction1"] = {
-    --              ["itemLink1"] = {
-    --                  [-1] = lastScanPrice,
-    --                  [1] = {serverDay1, lowest minBuyout, highest minBuyout},
-    --                  [2] = {serverDay2, lowest minBuyout, highest minBuyout},
+    --          realms = {
+    --              ["Realm1:Faction1"] = {
+    --                  ["itemLink1"] = {
+    --                      [-1] = lastScanPrice,
+    --                      [1] = {serverDay1,
+    --                             lowest minBuyout, highest minBuyout},
+    --                      [2] = {serverDay2,
+    --                             lowest minBuyout, highest minBuyout},
+    --                      ...
+    --                  },
+    --                  ["itemLink2"] = {
+    --                      [-1] = lastScanPrice,
+    --                      [1] = {serverDay1,
+    --                             lowest minBuyout, highest minBuyout},
+    --                      [2] = {serverDay2,
+    --                             lowest minBuyout, highest minBuyout},
+    --                      ...
+    --                  },
     --                  ...
     --              },
-    --              ["itemLink2"] = {
-    --                  [-1] = lastScanPrice,
-    --                  [1] = {serverDay1, lowest minBuyout, highest minBuyout},
-    --                  [2] = {serverDay2, lowest minBuyout, highest minBuyout},
+    --              ["RealmX:FactionY"] = {
     --                  ...
     --              },
-    --              ...
-    --          },
-    --          ["RealmX:FactionY"] = {
-    --              ...
     --          },
     --      }
     --
@@ -112,10 +118,27 @@ function AHistory:UpdateDB()
     --]]
     local versionStr, buildStr, dateStr, tocVersion = GetBuildInfo()
 
+    -- Migrate old realm data to realms sub-table.
+    if AUCTIPUS_ITEM_HISTORY_DB.realms == nil then
+        local realms = {}
+        for k, v in pairs(AUCTIPUS_ITEM_HISTORY_DB) do
+            if k ~= "revision" then
+                realms[k] = v
+            end
+        end
+        for k, _ in pairs(realms) do
+            AUCTIPUS_ITEM_HISTORY_DB[k] = nil
+        end
+        AUCTIPUS_ITEM_HISTORY_DB.realms = realms
+        Auctipus.info("Migrated database to realms sub-table.")
+    end
+
+    -- Migrate from first version to 2.5.2.
     if AUCTIPUS_ITEM_HISTORY_DB_VERSION < 20502 and tocVersion >= 20502 then
         AHistory:Update0To20502()
     end
 
+    -- Migrate from 2.5.2 to 2.5.2r1.
     if (AUCTIPUS_ITEM_HISTORY_DB_VERSION == 20502 and
         AUCTIPUS_ITEM_HISTORY_DB.revision == nil)
     then
@@ -128,7 +151,7 @@ function AHistory:Update0To20502()
     -- 2.5.2 there would be 17 attributes in an item link.  Scan for old link
     -- formats in the database.
     assert(AUCTIPUS_ITEM_HISTORY_DB_VERSION < 20502)
-    for realm, realmHistory in pairs(AUCTIPUS_ITEM_HISTORY_DB) do
+    for realm, realmHistory in pairs(AUCTIPUS_ITEM_HISTORY_DB.realms) do
         local oldLinks = {}
         for link, history in pairs(realmHistory) do
             if Auctipus.Link.CountAttrs(link) == 17 then
@@ -166,7 +189,7 @@ function AHistory:Update20502To20502_1()
     -- We want to store the most recent scan's lowest buyout price in the
     -- history for tooltip use.  We synthesize it here.
     assert(AUCTIPUS_ITEM_HISTORY_DB_VERSION == 20502)
-    for realm, realmHistory in pairs(AUCTIPUS_ITEM_HISTORY_DB) do
+    for realm, realmHistory in pairs(AUCTIPUS_ITEM_HISTORY_DB.realms) do
         for link, history in pairs(realmHistory) do
             history[-1] = history[#history][2]
         end
