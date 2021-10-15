@@ -184,7 +184,9 @@ local HookMethods = {
     -- Items in the inbox.
     ["SetInboxItem"] = function(tt, i, ai)
         local _, itemID, _, n = GetInboxItem(i, ai or 1)
-        AuctipusAddPrice(tt, itemID, n)
+        if itemID then
+            AuctipusAddPrice(tt, itemID, n)
+        end
     end,
 
     -- Items attached to a message being composed.
