@@ -120,16 +120,11 @@ function AHistory:UpdateDB()
 
     -- Migrate old realm data to realms sub-table.
     if AUCTIPUS_ITEM_HISTORY_DB.realms == nil then
-        local realms = {}
-        for k, v in pairs(AUCTIPUS_ITEM_HISTORY_DB) do
-            if k ~= "revision" then
-                realms[k] = v
-            end
-        end
-        for k, _ in pairs(realms) do
-            AUCTIPUS_ITEM_HISTORY_DB[k] = nil
-        end
-        AUCTIPUS_ITEM_HISTORY_DB.realms = realms
+        AUCTIPUS_ITEM_HISTORY_DB = {
+            revision = AUCTIPUS_ITEM_HISTORY_DB.revision,
+            realms   = AUCTIPUS_ITEM_HISTORY_DB,
+        }
+        AUCTIPUS_ITEM_HISTORY_DB.realms.revision = nil
         Auctipus.info("Migrated database to realms sub-table.")
     end
 
