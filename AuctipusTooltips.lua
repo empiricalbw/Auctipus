@@ -109,7 +109,9 @@ local HookMethods = {
     -- For when a vendor is open.
     ["SetMerchantItem"] = function(tt, i)
         local _, _, _, n = GetMerchantItemInfo(i)
-        AuctipusAddPrice(tt, GetMerchantItemID(i), n)
+        if n then
+            AuctipusAddPrice(tt, GetMerchantItemID(i), n)
+        end
     end,
 
     -- Any hyperlink.
@@ -163,7 +165,9 @@ local HookMethods = {
             n    = GetTradeSkillNumMade(skill)
         end
 
-        AuctipusAddPrice(tt, Auctipus.Link.GetItemID(link), n)
+        if link then
+            AuctipusAddPrice(tt, Auctipus.Link.GetItemID(link), n)
+        end
     end,
 
     -- Items in the quest log.
@@ -178,7 +182,9 @@ local HookMethods = {
             -- Mandatory quest rewards.
             _, _, n, _, _, itemID = GetQuestLogRewardInfo(i)
         end
-        AuctipusAddPrice(tt, itemID, n)
+        if itemID then
+            AuctipusAddPrice(tt, itemID, n)
+        end
     end,
 
     -- Items in the inbox.
@@ -192,7 +198,9 @@ local HookMethods = {
     -- Items attached to a message being composed.
     ["SetSendMailItem"] = function(tt, i)
         local _, itemID, _, n = GetSendMailItem(i)
-        AuctipusAddPrice(tt, itemID, n)
+        if itemID then
+            AuctipusAddPrice(tt, itemID, n)
+        end
     end,
 
     -- Action bar items.
@@ -205,9 +213,11 @@ local HookMethods = {
 
     -- When rolling on an item in a party.
     ["SetLootRollItem"] = function(tt, i)
-        local link    = GetLootRollItemLink(i)
-        local _, _, n = GetLootRollItemInfo(i)
-        AuctipusAddPrice(tt, Auctipus.Link.GetItemID(link), n)
+        local link = GetLootRollItemLink(i)
+        if link then
+            local _, _, n = GetLootRollItemInfo(i)
+            AuctipusAddPrice(tt, Auctipus.Link.GetItemID(link), n)
+        end
     end,
 
     -- Items in our side of the trade window.
@@ -230,16 +240,20 @@ local HookMethods = {
 
     -- Items in a quest window when talking to a quest giver.
     ["SetQuestItem"] = function(tt, typ, i)
-        local _, _, n = GetQuestItemInfo(typ, i)
-        local link    = GetQuestItemLink(typ, i)
-        AuctipusAddPrice(tt, Auctipus.Link.GetItemID(link), n)
+        local link = GetQuestItemLink(typ, i)
+        if link then
+            local _, _, n = GetQuestItemInfo(typ, i)
+            AuctipusAddPrice(tt, Auctipus.Link.GetItemID(link), n)
+        end
     end,
 
     -- For reagents used in things like enchanting.
     ["SetCraftItem"] = function(tt, i, ri)
-        local _, _, n = GetCraftReagentInfo(i, ri)
-        local link    = GetCraftReagentItemLink(i, ri)
-        AuctipusAddPrice(tt, Auctipus.Link.GetItemID(link), n)
+        local link = GetCraftReagentItemLink(i, ri)
+        if link then
+            local _, _, n = GetCraftReagentInfo(i, ri)
+            AuctipusAddPrice(tt, Auctipus.Link.GetItemID(link), n)
+        end
     end,
 }
 
