@@ -60,15 +60,17 @@ local function AuctipusAddPrice(tt, itemID, n, onlyVendor)
         end
     end
 
-    local _, _, _, _, _, _, _, _, _, _, vendorPrice = GetItemInfo(itemID)
-    if vendorPrice then
-        if vendorPrice > 0 then
-            --print("Vendor price", vendorPrice)
-            ASetTooltipMoney(tt, vendorPrice * n,
-                             "Vendor sell price for "..n..":")
+    if AUCTIPUS_OPTIONS.showVendorPrice then
+        local _, _, _, _, _, _, _, _, _, _, vendorPrice = GetItemInfo(itemID)
+        if vendorPrice then
+            if vendorPrice > 0 then
+                --print("Vendor price", vendorPrice)
+                ASetTooltipMoney(tt, vendorPrice * n,
+                                 "Vendor sell price for "..n..":")
+            end
+        else
+            --print("Vendor price not known for", itemID)
         end
-    else
-        --print("Vendor price not known for", itemID)
     end
 
     tt:Show()

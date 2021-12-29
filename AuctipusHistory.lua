@@ -12,7 +12,7 @@ local AUCTIPUS_ITEM_HISTORY = nil
 local LOCAL_DB = {}
 
 function AHistory.ProcessSavedVars()
-    Auctipus.info("Processing saved variables...")
+    --Auctipus.info("Processing saved variables...")
     AHistory:UpdateDB()
     local rf = GetRealmName()..":"..UnitFactionGroup("player")
     local ih = AUCTIPUS_ITEM_HISTORY_DB.realms[rf] or {}
@@ -22,7 +22,7 @@ function AHistory.ProcessSavedVars()
     AUCTIPUS_IGNORED_SELLERS = is
     AUCTIPUS_IGNORED_SELLERS_DB[rf] = is
     AHistory:ProcessDB()
-    Auctipus.info("Saved variables processed.")
+    --Auctipus.info("Saved variables processed.")
 end
 
 function AHistory:GetServerDay()
