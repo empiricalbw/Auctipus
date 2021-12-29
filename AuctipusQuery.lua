@@ -7,9 +7,17 @@ function Auctipus.Query:New(q)
 end
 
 function Auctipus.Query:AddFilter(classID, subClassID, invType)
-    table.insert(self.filters, {classID       = classID,
-                                subClassID    = subClassID,
-                                inventoryType = invType})
+    if type(invType) == "table" then
+        for i=1, #invType do
+            table.insert(self.filters, {classID       = classID,
+                                        subClassID    = subClassID,
+                                        inventoryType = invType[i]})
+        end
+    else
+        table.insert(self.filters, {classID       = classID,
+                                    subClassID    = subClassID,
+                                    inventoryType = invType})
+    end
 end
 
 function Auctipus.Query:GetFilterIndexPath(f)

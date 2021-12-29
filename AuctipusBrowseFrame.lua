@@ -170,7 +170,7 @@ function AuctipusBrowseFrame:OnLoad()
                     self:OnCategoryDropDownClick(index, selected)
                   end,
         width   = 250,
-        rows    = 45,
+        rows    = 31,
         anchor  = {point="TOPLEFT",
                    relativeTo=self.CategoriesFrame,
                    relativePoint="BOTTOMLEFT",
