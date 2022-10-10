@@ -12,8 +12,8 @@ Auctipus.PATHS = {
     {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Sword1H},
     {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Sword2H},
     {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Staff},
-    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Unarmed},
-    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Generic},
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Unarmed},   -- Fist Weapons
+    {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Generic},   -- Miscellaneous
     {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Dagger},
     {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Thrown},
     {Enum.ItemClass.Weapon, Enum.ItemWeaponSubclass.Crossbow},
