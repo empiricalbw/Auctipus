@@ -89,6 +89,7 @@ end
 
 GenerateAuctionPaths(Enum.ItemClass.Container)
 GenerateAuctionPaths(Enum.ItemClass.Consumable)
+GenerateAuctionPaths(Enum.ItemClass.Glyph)
 GenerateAuctionPaths(Enum.ItemClass.Tradegoods)
 GenerateAuctionPaths(Enum.ItemClass.Projectile)
 GenerateAuctionPaths(Enum.ItemClass.Quiver)
