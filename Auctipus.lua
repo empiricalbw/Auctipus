@@ -47,6 +47,7 @@ function Auctipus.AddOn.ADDON_LOADED(addOnName)
     end
 
     -- Saved variables.
+    AuctipusOptionsFrame:ProcessSavedVars()
     AuctipusFrame.BrowseFrame:ProcessSavedVars()
     AuctipusFrame.AuctionsFrame:ProcessSavedVars()
     Auctipus.History.ProcessSavedVars()
