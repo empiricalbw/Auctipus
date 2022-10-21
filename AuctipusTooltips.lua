@@ -1,8 +1,11 @@
 local BANK_MIN_ID = BankButtonIDToInvSlotID(1)
 local BANK_MAX_ID = BankButtonIDToInvSlotID(NUM_BANKGENERIC_SLOTS)
 
-local function ASetTooltipMoney(tt, money, text)
-    tt:AddDoubleLine(text, " ", 1, 1, 1)
+local function ASetTooltipMoney(tt, money, text, text2, dx)
+    text2 = text2 or " "
+    dx    = dx or 0
+
+    tt:AddDoubleLine(text, text2, 1, 1, 1, 1, 1, 1)
     local numLines  = tt:NumLines()
     local textRight = _G[tt:GetName().."TextRight"..numLines]
     local textLeft  = _G[tt:GetName().."TextLeft"..numLines]
@@ -21,10 +24,10 @@ local function ASetTooltipMoney(tt, money, text)
     end
     table.insert(tt._auctipusUsedBMFFrames, bmf)
     bmf:SetMoney(money)
-    bmf:SetPoint("RIGHT", textRight)
+    bmf:SetPoint("RIGHT", textRight, "RIGHT", dx, 0)
     bmf:Show()
     
-    local minWidth = textLeft:GetWidth() + bmf:GetWidth() + 10
+    local minWidth = textLeft:GetWidth() + bmf:GetWidth() + 10 - dx
     tt:SetMinimumWidth(max(tt:GetMinimumWidth(), minWidth))
 end
 
@@ -70,6 +73,35 @@ local function AuctipusAddPrice(tt, itemID, n, onlyVendor)
             end
         else
             --print("Vendor price not known for", itemID)
+        end
+    end
+
+    if AUCTIPUS_OPTIONS.showDisenchantInfo then
+        local ilvl, deInfo = AuctipusGetDEInfo(itemID)
+        if ilvl ~= nil then
+            tt:AddLine(" ")
+            tt:AddLine("Disenchanting ("..tostring(ilvl).."):")
+            if deInfo ~= nil then
+                local percentLen = 40
+                for _, deEntry in ipairs(deInfo.results) do
+                    if tostring(deEntry.percent):sub(-2) == ".5" then
+                        percentLen = 50
+                    end
+                end
+
+                for _, deEntry in ipairs(deInfo.results) do
+                    local deID = Auctipus.Link.GetItemID(deEntry.link)
+                    local low, _ = Auctipus.API.GetAuctionCurrentBuyout(deID)
+                    local percent = tostring(deEntry.percent)
+                    low = low or 0
+                    ASetTooltipMoney(tt, low, 
+                                     " "..tostring(deEntry.min).."-"..tostring(deEntry.max).." "..deEntry.link,
+                                     tostring(deEntry.percent).."%",
+                                     -percentLen)
+                end
+            else
+                tt:AddLine("No DE info.")
+            end
         end
     end
 
