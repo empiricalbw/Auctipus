@@ -43,6 +43,20 @@ function ALink.GetItemID(l)
     end
 end
 
+function ALink.GetItemAndSuffixIDs(l)
+    local itemID, suffixID = l:match("|Hitem:(%d+):%d*:%d*:%d*:%d*:%d*:(%-?%d*):")
+    if not itemID then
+        itemId, suffixID = l:match("item:(%d+):%d*:%d*:%d*:%d*:%d*:(%-?%d*):")
+    end
+    if itemID then
+        itemID = tonumber(itemID)
+    end
+    if suffixID then
+        suffixID = tonumber(suffixID)
+    end
+    return itemID, suffixID
+end
+
 function ALink.SaneLink(l)
     -- Remove the uniqueID, linkLevel and specializationID fields from the link
     -- since they contain no information usable by the client but can vary for
