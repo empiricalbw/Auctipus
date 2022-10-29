@@ -220,13 +220,15 @@ function AHistory:Match(substring)
     return matches
 end
 
-function AHistory:MatchByItemID(itemID)
+function AHistory:MatchByItemID(itemID, suffixID)
     local matches = {}
 
     for i = 1, #LOCAL_DB do
         local elem = LOCAL_DB[i]
         if elem.itemId == itemID then
-            table.insert(matches, elem)
+            if suffixID == nil or suffixID == elem.suffixID then
+                table.insert(matches, elem)
+            end
         end
     end
 
