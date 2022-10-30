@@ -25,6 +25,7 @@ function AHistory.ProcessSavedVars()
     AUCTIPUS_ITEM_HISTORY_DB.realms[rf] = ih
     AUCTIPUS_IGNORED_SELLERS = is
     AUCTIPUS_IGNORED_SELLERS_DB[rf] = is
+    AHistory:PruneDB()
     AHistory:ProcessDB()
     --Auctipus.info("Saved variables processed.")
 end
@@ -196,6 +197,18 @@ function AHistory:Update20502To20502_1()
 
     AUCTIPUS_ITEM_HISTORY_DB.revision = 1
     Auctipus.info("Updated database to 2.5.2 revision 1.")
+end
+
+function AHistory:PruneDB()
+    -- We want to prune all entries that are more than 30 days old.
+    local cutoffDay = self:GetServerDay() - 30
+    Auctipus.dbg("Cutoff day: "..tostring(cutoffDay))
+    for link, history in pairs(AUCTIPUS_ITEM_HISTORY) do
+        while #history > 1 and history[1][1] < cutoffDay do
+            Auctipus.dbg("Removing expired history for "..link..".")
+            table.remove(history, 1)
+        end
+    end
 end
 
 function AHistory:ProcessDB()
