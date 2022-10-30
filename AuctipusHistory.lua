@@ -8,7 +8,11 @@ AUCTIPUS_ITEM_HISTORY_DB_VERSION = 0    -- TOC version we are following
 AUCTIPUS_IGNORED_SELLERS_DB = {}
 AUCTIPUS_IGNORED_SELLERS = nil
 
+-- Points at the saved variable for the current realm and faction.
 local AUCTIPUS_ITEM_HISTORY = nil
+
+-- A copy of AUCTIPUS_ITEM_HISTORY converted into Auctipus.Link objects during
+-- ProcessDB().
 local LOCAL_DB = {}
 
 function AHistory.ProcessSavedVars()
