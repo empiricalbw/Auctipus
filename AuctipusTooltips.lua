@@ -146,9 +146,9 @@ local HookMethods = {
 
     -- For when a vendor is open.
     ["SetMerchantItem"] = function(tt, i)
-        local _, _, _, n = GetMerchantItemInfo(i)
-        if n then
-            local link = GetMerchantItemLink(i)
+        local link = GetMerchantItemLink(i)
+        if link then
+            local _, _, _, n = GetMerchantItemInfo(i)
             local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
             AuctipusAddPrice(tt, itemID, suffixID, n)
         end
