@@ -1,6 +1,6 @@
-## Interface: 30400
+## Interface: 30401
 ## Title: Auctipus
-## Version: 3.4.0-v2
+## Version: 3.4.1-v1
 ## Author: Empirical
 ## DefaultState: enabled
 ## Dependencies:
