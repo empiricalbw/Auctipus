@@ -51,7 +51,7 @@ local function AuctipusAddPrice(tt, itemID, suffixID, n, onlyVendor)
     if not onlyVendor then
         local low, elapsed = Auctipus.API.GetAuctionCurrentBuyout(itemID,
                                                                   suffixID,
-                                                                  true)
+                                                                  false)
         if low then
             if elapsed == 0 then
                 elapsed = "today"
