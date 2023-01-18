@@ -12,8 +12,8 @@ UIPanelWindows["AuctipusFrame"] = {
 local AUCTIPUS_INCOMPATIBLE = {
     ["VendorPrice"] =
         "VendorPrice and Auctipus prices do not align on tooltips so it is "..
-        "recommended to disable VendorPrice (Auctionator provides "..
-        "equivalent functionality).",
+        "recommended to disable VendorPrice (Auctipus provides equivalent "..
+        "functionality).",
     ["Auctionator"] = 
         "Auctionator and Auctipus are incompatible and can cause LUA errors "..
         "and other unexpected behavior.  It is required to use only one.",
