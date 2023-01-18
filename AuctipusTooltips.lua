@@ -114,10 +114,10 @@ end
 local HookMethods = {
     -- For items in your bags.
     ["SetBagItem"] = function(tt, bag, slot)
-        local _, n, _, _, _, _, link = GetContainerItemInfo(bag, slot)
-        if link then
-            local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
-            AuctipusAddPrice(tt, itemID, suffixID, n)
+        local ci = C_Container.GetContainerItemInfo(bag, slot)
+        if ci then
+            local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(ci.hyperlink)
+            AuctipusAddPrice(tt, itemID, suffixID, ci.stackCount)
         end
     end,
 
