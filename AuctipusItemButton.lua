@@ -80,7 +80,7 @@ function AuctipusItemButtonMixin:Clear()
     self.link         = nil
     self.sellInfo     = nil
     self.count        = nil
-    self:SetNormalTexture(nil)
+    self:ClearNormalTexture()
     self.Count:Hide()
     self.Name:Hide()
 end

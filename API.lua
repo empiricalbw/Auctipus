@@ -1,9 +1,9 @@
 Auctipus.API = {}
 
 --[[
--- Auctipus.API.GetAuctionBuyoutRange(itemID)
+-- Auctipus.API.GetAuctionBuyoutRange(itemID, suffixID)
 --
--- Takes a numeric itemID and returns a tuple:
+-- Takes a numeric itemID, an optional suffixID and returns a tuple:
 --
 --      minBuyout, maxBuyout, daysElapsed
 --
@@ -25,9 +25,9 @@ Auctipus.API = {}
 -- indicates that the item was seen today while a value of 1 indicates an item
 -- was seen yesterday, etc.
 --]]
-function Auctipus.API.GetAuctionBuyoutRange(itemID)
-    local matches = Auctipus.History:MatchByItemID(itemID)
-    if #matches == 0 then
+function Auctipus.API.GetAuctionBuyoutRange(itemID, suffixID, failMultiple)
+    local matches = Auctipus.History:MatchByItemID(itemID, suffixID)
+    if #matches == 0 or (failMultiple and #matches > 1) then
         return nil
     end
 
@@ -52,9 +52,9 @@ function Auctipus.API.GetAuctionBuyoutRange(itemID)
     return floor(minBuyout + 0.5), floor(maxBuyout + 0.5), today - matchDate
 end
 
-function Auctipus.API.GetAuctionCurrentBuyout(itemID)
-    local matches = Auctipus.History:MatchByItemID(itemID)
-    if #matches == 0 then
+function Auctipus.API.GetAuctionCurrentBuyout(itemID, suffixID, failMultiple)
+    local matches = Auctipus.History:MatchByItemID(itemID, suffixID)
+    if #matches == 0 or (failMultiple and #matches > 1) then
         return nil
     end
 

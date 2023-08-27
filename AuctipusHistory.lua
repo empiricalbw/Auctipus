@@ -8,7 +8,11 @@ AUCTIPUS_ITEM_HISTORY_DB_VERSION = 0    -- TOC version we are following
 AUCTIPUS_IGNORED_SELLERS_DB = {}
 AUCTIPUS_IGNORED_SELLERS = nil
 
+-- Points at the saved variable for the current realm and faction.
 local AUCTIPUS_ITEM_HISTORY = nil
+
+-- A copy of AUCTIPUS_ITEM_HISTORY converted into Auctipus.Link objects during
+-- ProcessDB().
 local LOCAL_DB = {}
 
 function AHistory.ProcessSavedVars()
@@ -21,6 +25,7 @@ function AHistory.ProcessSavedVars()
     AUCTIPUS_ITEM_HISTORY_DB.realms[rf] = ih
     AUCTIPUS_IGNORED_SELLERS = is
     AUCTIPUS_IGNORED_SELLERS_DB[rf] = is
+    AHistory:PruneDB()
     AHistory:ProcessDB()
     --Auctipus.info("Saved variables processed.")
 end
@@ -194,6 +199,18 @@ function AHistory:Update20502To20502_1()
     Auctipus.info("Updated database to 2.5.2 revision 1.")
 end
 
+function AHistory:PruneDB()
+    -- We want to prune all entries that are more than 30 days old.
+    local cutoffDay = self:GetServerDay() - 30
+    Auctipus.dbg("Cutoff day: "..tostring(cutoffDay))
+    for link, history in pairs(AUCTIPUS_ITEM_HISTORY) do
+        while #history > 1 and history[1][1] < cutoffDay do
+            Auctipus.dbg("Removing expired history for "..link..".")
+            table.remove(history, 1)
+        end
+    end
+end
+
 function AHistory:ProcessDB()
     local newDB = {}
     for link, history in pairs(AUCTIPUS_ITEM_HISTORY) do
@@ -220,13 +237,15 @@ function AHistory:Match(substring)
     return matches
 end
 
-function AHistory:MatchByItemID(itemID)
+function AHistory:MatchByItemID(itemID, suffixID)
     local matches = {}
 
     for i = 1, #LOCAL_DB do
         local elem = LOCAL_DB[i]
         if elem.itemId == itemID then
-            table.insert(matches, elem)
+            if suffixID == nil or suffixID == elem.suffixID then
+                table.insert(matches, elem)
+            end
         end
     end
 

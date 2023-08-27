@@ -56,6 +56,10 @@ AuctipusCategoryMenu.lua
 AuctipusTooltips.lua
 Auctipus.lua
 API.lua
+DETables.lua
+
+AuctipusOptionsFrame.lua
+AuctipusOptionsFrame.xml
 
 AuctipusOptionsFrame.lua
 AuctipusOptionsFrame.xml
