@@ -63,7 +63,7 @@ local GREEN_ARMOR = {
     {ilvl=50,  results={{link=DREAM_DUST,              percent=75, min=1, max=2},
                         {link=GREATER_NETHER_ESSENCE,  percent=20, min=1, max=2},
                         {link=LARGE_RADIANT_SHARD,     percent=5,  min=1, max=1}}},
-    {ilvl=55,  results={{link=DREAM_DUST,              percent=75, min=1, max=2},
+    {ilvl=55,  results={{link=DREAM_DUST,              percent=75, min=2, max=5},
                         {link=LESSER_ETERNAL_ESSENCE,  percent=20, min=1, max=2},
                         {link=SMALL_BRILLIANT_SHARD,   percent=5,  min=1, max=1}}},
     {ilvl=60,  results={{link=ILLUSION_DUST,           percent=75, min=1, max=2},
@@ -96,10 +96,10 @@ local GREEN_WEAPON = {
     {ilvl=20,  results={{link=GREATER_MAGIC_ESSENCE,   percent=75, min=1, max=2},
                         {link=STRANGE_DUST,            percent=20, min=2, max=3},
                         {link=SMALL_GLIMMERING_SHARD,  percent=5,  min=1, max=1}}},
-    {ilvl=25,  results={{link=LESSER_ASTRAL_ESSENCE,   percent=75, min=1, max=2},
+    {ilvl=25,  results={{link=GREATER_MAGIC_ESSENCE,   percent=75, min=1, max=2},
                         {link=STRANGE_DUST,            percent=15, min=4, max=6},
                         {link=SMALL_GLIMMERING_SHARD,  percent=10, min=1, max=1}}},
-    {ilvl=30,  results={{link=GREATER_ASTRAL_ESSENCE,  percent=75, min=1, max=2},
+    {ilvl=30,  results={{link=GREATER_MAGIC_ESSENCE,   percent=75, min=1, max=2},
                         {link=SOUL_DUST,               percent=20, min=1, max=2},
                         {link=LARGE_GLIMMERING_SHARD,  percent=5,  min=1, max=1}}},
     {ilvl=35,  results={{link=LESSER_MYSTIC_ESSENCE,   percent=75, min=1, max=2},
@@ -115,7 +115,7 @@ local GREEN_WEAPON = {
                         {link=DREAM_DUST,              percent=20, min=1, max=2},
                         {link=LARGE_RADIANT_SHARD,     percent=5,  min=1, max=1}}},
     {ilvl=55,  results={{link=LESSER_ETERNAL_ESSENCE,  percent=75, min=1, max=2},
-                        {link=DREAM_DUST,              percent=20, min=1, max=2},
+                        {link=DREAM_DUST,              percent=20, min=2, max=5},
                         {link=SMALL_BRILLIANT_SHARD,   percent=5,  min=1, max=1}}},
     {ilvl=60,  results={{link=GREATER_ETERNAL_ESSENCE, percent=75, min=1, max=2},
                         {link=ILLUSION_DUST,           percent=20, min=1, max=2},
@@ -205,7 +205,16 @@ local DE_TABLE = {
     },
 }
 
+local NON_DISENCHANTABLE_IDS = {
+    [11287] = 1,        -- Lesser Magic Wand
+    [11288] = 1,        -- Greater Magic Wand
+}
+
 function AuctipusGetDEInfo(itemID)
+    if NON_DISENCHANTABLE_IDS[itemID] then
+        return nil, nil
+    end
+
     local _, _, itemQuality, _, _, _, _, _, _, _, _, classID, _, _, _, _, _ = GetItemInfo(itemID)
 
     local classTable = DE_TABLE[classID]
