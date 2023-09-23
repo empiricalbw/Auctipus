@@ -269,6 +269,13 @@ function AuctipusBrowseFrame:OnLoad()
     self:SetScript("OnHide", function() self:OnHide() end)
 end
 
+function AuctipusBrowseFrame:OnCraftUILoad()
+    for i=1, 8 do
+        _G["CraftReagent"..i]:HookScript("OnClick",
+            function(f) self:OnCraftItemTemplateClick(f, i) end)
+    end
+end
+
 function AuctipusBrowseFrame:ToggleDropDown(dd)
     local dds = {self.RarityDropDownMenu,
                  self.CategoryDropDown,
@@ -330,6 +337,15 @@ function AuctipusBrowseFrame:OnContainerModifiedClick(f)
     if self:IsVisible() then
         StackSplitFrame:Hide()
     end
+end
+
+function AuctipusBrowseFrame:OnCraftItemTemplateClick(f, index)
+    if not self:IsVisible() or not IsShiftKeyDown() then
+        return
+    end
+
+    local link = GetCraftReagentItemLink(GetCraftSelectionIndex(), index)
+    self:OnChatEdit_InsertLink(link)
 end
 
 function AuctipusBrowseFrame:OnRarityDropDownClick(index, selected)

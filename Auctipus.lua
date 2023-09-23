@@ -32,6 +32,9 @@ function Auctipus.AddOn.ADDON_LOADED(addOnName)
         AUCTIPUS_INCOMPATIBLE[addOnName] = nil
     end
     if addOnName ~= "Auctipus" then
+        if addOnName == "Blizzard_CraftUI" then
+            AuctipusFrame.BrowseFrame:OnCraftUILoad()
+        end
         return
     end
 
@@ -77,6 +80,11 @@ function Auctipus.AddOn.ADDON_LOADED(addOnName)
 
     -- Make it so that the frame will close when we hit Escape.
     table.insert(UISpecialFrames, AuctipusFrame:GetName())
+
+    -- And fix the stupid craft frame.
+    if IsAddOnLoaded("Blizzard_CraftUI") then
+        AuctipusFrame.BrowseFrame:OnCraftUILoad()
+    end
 end
 
 function Auctipus.AddOn.AUCTION_HOUSE_SHOW()
