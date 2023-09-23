@@ -311,6 +311,15 @@ local HookMethods = {
             AuctipusAddPrice(tt, itemID, suffixID, n)
         end
     end,
+
+    -- For items produced by a skill we are viewing from a profession trainer.
+    ["SetTrainerService"] = function(tt, s)
+        local name, link = tt:GetItem()
+        if link then
+            local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
+            AuctipusAddPrice(tt, itemID, suffixID, 1)
+        end
+    end
 }
 
 -- Hook methods.
