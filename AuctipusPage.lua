@@ -174,6 +174,7 @@ function APage:ProcessPage()
         table.insert(self.auctions, auction)
     end
 
+    Auctipus.dbg(#self.nilAuctions.." / "..numAuctions.." nil auctions.")
     if #self.nilAuctions > 0 then
         self:_TRANSITION(STATE_WAIT_PROCESS_NIL)
     else
@@ -207,6 +208,8 @@ function APage:ProcessNilAuctions()
         end
     end
 
+    local numAuctions, _ = GetNumAuctionItems(self.category)
+    Auctipus.dbg(#self.nilAuctions.." / "..numAuctions.." nil auctions.")
     if #self.nilAuctions == 0 then
         self:_TRANSITION(STATE_WAIT_PAGE_UPDATE)
     end
@@ -249,18 +252,14 @@ end
 function APage.AUCTION_ITEM_LIST_UPDATE()
     Auctipus.dbg("AUCTION_ITEM_LIST_UPDATE")
     local self = APage.activePage["list"]
-    if self and (self.state == STATE_WAIT_PAGE_UPDATE or
-                 self.state == STATE_WAIT_PROCESS_NIL)
-    then
+    if self and self.state == STATE_WAIT_PAGE_UPDATE then
         self:_TRANSITION(STATE_WAIT_PROCESS_PAGE)
     end
 end
 
 function APage.AUCTION_OWNED_LIST_UPDATE()
     local self = APage.activePage["owner"]
-    if self and (self.state == STATE_WAIT_PAGE_UPDATE or
-                 self.state == STATE_WAIT_PROCESS_NIL)
-    then
+    if self and self.state == STATE_WAIT_PAGE_UPDATE then
         self:_TRANSITION(STATE_WAIT_PROCESS_PAGE)
     end
 end
