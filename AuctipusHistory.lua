@@ -73,6 +73,14 @@ function AHistory:ScanComplete(scan)
 
     if scan.query.getAll then
         Auctipus.info("Full scan complete.")
+        Auctipus.dbg("Total auctions: "..#scan.auctions)
+        local numNil = 0
+        for _, a in ipairs(scan.auctions) do
+            if not a.link or not a.hasAllInfo then
+                numNil = numNil + 1
+            end
+        end
+        Auctipus.dbg("Nil auctions: "..numNil)
     end
 end
 

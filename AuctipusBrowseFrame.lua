@@ -631,6 +631,7 @@ function AuctipusBrowseFrame:ScanAborted(scan)
     assert(self.scan == scan)
     self.scan = nil
     self.SearchButton:Enable()
+    self.PastSearchesButton:Enable()
 end
 
 function AuctipusBrowseFrame:DressupAuctionGroup(auctionGroup)
