@@ -47,15 +47,21 @@ end
 
 function AuctipusItemButtonMixin:SetAuction(auction)
     self.link = auction.link
-    self:SetNormalTexture(auction.texture)
-    self:SetCount(auction.count)
-
-    local color = ITEM_QUALITY_COLORS[auction.quality]
-    self.Name:SetText(auction.name)
-    if color then
-        self.Name:SetVertexColor(color.r, color.g, color.b)
+    if auction.texture ~= nil then
+        self:SetNormalTexture(auction.texture)
+        self:SetCount(auction.count)
     end
-    self.Name:Show()
+
+    if auction.name ~= nil then
+        local color = ITEM_QUALITY_COLORS[auction.quality]
+        self.Name:SetText(auction.name)
+        if color then
+            self.Name:SetVertexColor(color.r, color.g, color.b)
+        end
+        self.Name:Show()
+    else
+        self.Name:Hide()
+    end
 end
 
 function AuctipusItemButtonMixin:SetHistoryGroup(historyGroup)
