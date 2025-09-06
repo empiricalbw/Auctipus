@@ -6,6 +6,8 @@ AUCTIPUS_OPTIONS = {
     showDisenchantInfo  = true,
 }
 
+local category, layout
+
 function AuctipusOptionsFrame:ProcessSavedVars()
     if AUCTIPUS_OPTIONS.version == 1 then
         AUCTIPUS_OPTIONS.showDisenchantInfo = true
@@ -19,7 +21,10 @@ function AuctipusOptionsFrame:OnLoad()
     self.default = AuctipusOptionsFrame.OnDefault
     self.okay    = AuctipusOptionsFrame.OnClickOkay
     self.cancel  = AuctipusOptionsFrame.OnClickCanel
-    InterfaceOptions_AddCategory(self)
+    -- InterfaceOptions_AddCategory(self)
+    category, layout = Settings.RegisterCanvasLayoutCategory(self, self.name, self.name)
+    category.ID = self.name
+    Settings.RegisterAddOnCategory(category)
 end
 
 function AuctipusOptionsFrame:OnRefresh()
