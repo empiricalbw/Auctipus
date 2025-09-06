@@ -163,6 +163,9 @@ function AuctipusAuctionsFrame:ResetVars()
     self.stackCount        = 0
     self.maxStackSize      = 0
     self.invCount          = 0
+    self.itemID            = nil
+    self.suffixID          = nil
+    self.itemLink          = nil
     self.waitForNilAuction = false
 end
 
@@ -209,8 +212,11 @@ function AuctipusAuctionsFrame.NEW_AUCTION_UPDATE()
     local self = AuctipusFrame.AuctionsFrame
     self.ItemButton:SetAuctionSellItem()
 
+    -- GetAuctionSellItemInfo() does not return an item link.  This means that
+    -- we can't decode it to find an item suffixID.  Kind of problematic if we
+    -- want to compare the item we are selling with other auctions.
     local name, _, count, quality, _, _, vendorUnitPrice, maxStackSize,
-        invCount, _ = GetAuctionSellItemInfo()
+        invCount, itemID = GetAuctionSellItemInfo()
     Auctipus.dbg("NEW_AUCTION_UPDATE: "..tostring(name).." "..count.." "..
                  maxStackSize.." "..invCount)
     self.name            = name
@@ -220,8 +226,26 @@ function AuctipusAuctionsFrame.NEW_AUCTION_UPDATE()
     self.stackCount      = 1
     self.maxStackSize    = maxStackSize
     self.invCount        = invCount
+    self.itemID          = itemID
     MoneyInputFrame_ResetMoney(self.BidPrice)
     MoneyInputFrame_ResetMoney(self.BuyoutPrice)
+
+    -- Try to get a hyperlink from the locked inventory item.
+    self.suffixID = nil
+    self.itemLink = nil
+    local itemInfos = AuctipusAuctionsFrame.GetLockedItemInfo()
+    if #itemInfos == 1 then
+        local itemInfo = itemInfos[1]
+        local saneLink = Auctipus.Link.SaneLink(itemInfo.hyperlink)
+        local lockedItemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(
+            saneLink)
+        if lockedItemID == self.itemID then
+            self.suffixID = suffixID
+            self.itemLink = saneLink
+        else
+            print("Locked item ID doesn't match auction item ID!")
+        end
+    end
 
     if self.waitForNilAuction and self.name == nil then
         self.waitForNilAuction = false
@@ -445,7 +469,7 @@ function AuctipusAuctionsFrame:PostAuction()
 
     self.waitForNilAuction = true
     PostAuction(bidPrice, buyoutPrice, AUCTIPUS_CREATE_DEFAULTS.duration,
-                self.count, self.stackCount)
+                self.count, self.stackCount, true)
 end
 
 function AuctipusAuctionsFrame:PageUpdated(page)
@@ -496,34 +520,104 @@ function AuctipusAuctionsFrame:TogglePerUnitCheck()
     end
 end
 
+function AuctipusAuctionsFrame.GetLockedItemInfo()
+    -- Note: The loot may have "partially" appeared in our inventory at this
+    -- point and causes C_Item.GetItemGUID() to freak out if we query that
+    -- bag location.  C_Container.GetContainerItemID() will still return nil
+    -- for the partially-populated slot so we use that as a pre-filter.  The
+    -- easiest way to observe this is to have a free bag slot early on, then
+    -- disenchant something that is in a later slot.  The free bag slot will
+    -- get "partially" filled with the disencant result and cause
+    -- C_Item.GetItemGUID() to blow up since we will hit that slot before our
+    -- target slot of the item we are disenchanting.
+    local matches = {}
+    for bagIndex=0, NUM_BAG_SLOTS do
+        local numSlots = C_Container.GetContainerNumSlots(bagIndex)
+        for i=1, numSlots do
+            local itemInfo = C_Container.GetContainerItemInfo(bagIndex, i)
+            if itemInfo ~= nil then
+                if itemInfo.isLocked then
+                    table.insert(matches, itemInfo)
+                end
+            end
+        end
+    end
+    return matches
+end
+
 function AuctipusAuctionsFrame:UpdateComparables()
     local nauctions
     if self.aopage then
         if self.aopage.auctions then
             nauctions = #self.aopage.auctions
+            local minUnitBid = nil
+            local unitPrice = nil
+            local delta = 0
             if nauctions > 0 then
                 local lowAuction = self.aopage.auctions[1]
-                local perUnit    = self.PerUnitCheck:GetChecked()
+                local lowIsMine  = false
+                for _, auction in ipairs(self.aopage.auctions) do
+                    if auction.minUnitBid > lowAuction.minUnitBid then
+                        break
+                    end
+                    if auction:IsMine() then
+                        lowIsMine = true
+                        break
+                    end
+                end
+                minUnitBid = lowAuction.minUnitBid
+                unitPrice = lowAuction.unitPrice
+                if not lowIsMine then
+                    delta = -1
+                end
+                
+                self.StatusText:Hide()
+            else
+                minUnitBid, elapsed, badSuffix =
+                    Auctipus.API.GetAuctionCurrentBuyout(self.itemID,
+                                                         self.suffixID, false)
+                unitPrice = minUnitBid
+                if minUnitBid ~= nil then
+                    if elapsed == 0 then
+                        elapsed = "today"
+                    elseif elapsed == 1 then
+                        elapsed = "yesterday"
+                    else
+                        elapsed = ""..elapsed.." days ago"
+                    end
+                    if badSuffix then
+                        self.StatusText:SetText(
+                            "No auctions found, using history "..
+                            "("..elapsed..").  Historical items have "..
+                            "\"of the\" suffixes so the estimated price may "..
+                            "not be accurate.")
+                    else
+                        self.StatusText:SetText(
+                            "No auctions found, using history ("..elapsed..").")
+                    end
+                else
+                    self.StatusText:SetText("No auctions or history found.")
+                end
+                self.StatusText:Show()
+            end
+
+            if minUnitBid ~= nil then
+                local perUnit = self.PerUnitCheck:GetChecked()
                 if MoneyInputFrame_GetCopper(self.BidPrice) == 0 then
                     if perUnit then
-                        self:SetBidPrice(floor(lowAuction.minUnitBid) - 1)
+                        self:SetBidPrice(floor(minUnitBid) + delta)
                     else
-                        self:SetBidPrice(
-                            floor(lowAuction.minUnitBid * self.count) - 1)
+                        self:SetBidPrice(floor(minUnitBid * self.count) + delta)
                     end
                 end
                 if MoneyInputFrame_GetCopper(self.BuyoutPrice) == 0 then
                     if perUnit then
-                        self:SetBuyoutPrice(floor(lowAuction.unitPrice) - 1)
+                        self:SetBuyoutPrice(floor(unitPrice) + delta)
                     else
                         self:SetBuyoutPrice(
-                            floor(lowAuction.unitPrice * self.count) - 1)
+                            floor(unitPrice * self.count) + delta)
                     end
                 end
-                self.StatusText:Hide()
-            else
-                self.StatusText:SetText("No auctions found.")
-                self.StatusText:Show()
             end
         else
             nauctions = 0

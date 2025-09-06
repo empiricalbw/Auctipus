@@ -31,6 +31,7 @@ function Auctipus.API.GetAuctionBuyoutRange(itemID, suffixID, failMultiple)
         return nil
     end
 
+    local badSuffix = false
     local match     = matches[1]
     local matchDate = match.history[#match.history][1]
     local minBuyout = match.history[#match.history][2]
@@ -46,10 +47,14 @@ function Auctipus.API.GetAuctionBuyoutRange(itemID, suffixID, failMultiple)
             minBuyout = min(minBuyout, m.history[#m.history][2])
             maxBuyout = max(maxBuyout, m.history[#m.history][3])
         end
+        if m.suffixID ~= nil and suffixID == nil then
+            badSuffix = true
+        end
     end
 
     local today = Auctipus.History:GetServerDay()
-    return floor(minBuyout + 0.5), floor(maxBuyout + 0.5), today - matchDate
+    return floor(minBuyout + 0.5), floor(maxBuyout + 0.5), today - matchDate,
+        badSuffix
 end
 
 function Auctipus.API.GetAuctionCurrentBuyout(itemID, suffixID, failMultiple)
@@ -58,6 +63,7 @@ function Auctipus.API.GetAuctionCurrentBuyout(itemID, suffixID, failMultiple)
         return nil
     end
 
+    local badSuffix = false
     local match     = matches[1]
     local matchDate = match.history[#match.history][1]
     local minBuyout = match.history[-1]
@@ -70,8 +76,11 @@ function Auctipus.API.GetAuctionCurrentBuyout(itemID, suffixID, failMultiple)
         elseif mDate == matchDate then
             minBuyout = min(minBuyout, m.history[-1])
         end
+        if m.suffixID ~= nil and suffixID == nil then
+            badSuffix = true
+        end
     end
 
     local today = Auctipus.History:GetServerDay()
-    return floor(minBuyout + 0.5), today - matchDate
+    return floor(minBuyout + 0.5), today - matchDate, badSuffix
 end
