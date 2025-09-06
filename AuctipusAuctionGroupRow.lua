@@ -72,15 +72,17 @@ function AuctipusAuctionGroupRowMixin:OnEvent()
 end
 
 function AuctipusAuctionGroupRowMixin:OnEnterItem()
-    self:LockHighlight()
+    --self:LockHighlight()
     self.ItemButton:OnEnter()
 end
 
 function AuctipusAuctionGroupRowMixin:OnLeaveItem()
     self.ItemButton:OnLeave()
+    --[[
     if (not self.auctionGroup or
         AuctipusFrame.BrowseFrame.selectedAuctionGroup ~= self.auctionGroup)
     then
         self:UnlockHighlight()
     end
+    ]]
 end

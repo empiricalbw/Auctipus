@@ -44,6 +44,10 @@ function AHistory:ScanComplete(scan)
     local serverDay = self:GetServerDay()
 
     for _, ag in ipairs(scan.auctionGroups) do
+        if ThuggBug ~= nil then
+            ThuggBug.DB.ObservedItem(ag.link)
+        end
+
         --[[
         for _, a in ipairs(ag.auctions) do
             if not a.owner then

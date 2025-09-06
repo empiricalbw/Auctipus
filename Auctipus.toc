@@ -1,9 +1,10 @@
-## Interface: 11500
+## Interface: 11507
 ## Title: Auctipus |cFF00FF001.15.0-v02|r
 ## Version: 1.15.0-v02
 ## Author: Empirical
 ## DefaultState: enabled
 ## Dependencies:
+## OptionalDeps: ThuggBug
 ## SavedVariables: AUCTIPUS_ITEM_HISTORY_DB, AUCTIPUS_ITEM_HISTORY_DB_VERSION, AUCTIPUS_IGNORED_SELLERS_DB, AUCTIPUS_CREATE_DEFAULTS, AUCTIPUS_SEARCH_HISTORY, AUCTIPUS_FAVORITES, AUCTIPUS_OPTIONS
 
 BetterMoneyFrame.xml
@@ -57,9 +58,6 @@ AuctipusTooltips.lua
 Auctipus.lua
 API.lua
 DETables.lua
-
-AuctipusOptionsFrame.lua
-AuctipusOptionsFrame.xml
 
 AuctipusOptionsFrame.lua
 AuctipusOptionsFrame.xml

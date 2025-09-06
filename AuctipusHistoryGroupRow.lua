@@ -20,15 +20,17 @@ function AuctipusHistoryGroupRowMixin:OnClick()
 end
 
 function AuctipusHistoryGroupRowMixin:OnEnterItem()
-    self:LockHighlight()
+    --self:LockHighlight()
     self.ItemButton:OnEnter()
 end
 
 function AuctipusHistoryGroupRowMixin:OnLeaveItem()
     self.ItemButton:OnLeave()
+    --[[
     if (not self.historyGroup or
         AuctipusFrame.HistoryFrame.selectedHistoryGroup ~= self.historyGroup)
     then
         self:UnlockHighlight()
     end
+    ]]
 end
