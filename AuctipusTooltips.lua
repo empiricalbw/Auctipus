@@ -43,7 +43,7 @@ local function ATooltipClearMoney(tt)
     end
 end
 
-local function AuctipusAddPrice(tt, itemID, suffixID, n, onlyVendor)
+local function AuctipusAddPrice(tt, itemID, suffixID, enchantID, n, onlyVendor)
     if IsShiftKeyDown() then
         n = 1
     end
@@ -51,6 +51,7 @@ local function AuctipusAddPrice(tt, itemID, suffixID, n, onlyVendor)
     if not onlyVendor then
         local low, elapsed = Auctipus.API.GetAuctionCurrentBuyout(itemID,
                                                                   suffixID,
+                                                                  enchantID,
                                                                   false)
         if low then
             if elapsed == 0 then
@@ -116,8 +117,8 @@ local HookMethods = {
     ["SetBagItem"] = function(tt, bag, slot)
         local ci = C_Container.GetContainerItemInfo(bag, slot)
         if ci then
-            local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(ci.hyperlink)
-            AuctipusAddPrice(tt, itemID, suffixID, ci.stackCount)
+            local itemID, suffixID, enchantID = Auctipus.Link.GetItemAndSuffixIDs(ci.hyperlink)
+            AuctipusAddPrice(tt, itemID, suffixID, enchantID, ci.stackCount)
         end
     end,
 
@@ -129,8 +130,8 @@ local HookMethods = {
             if i == INVSLOT_AMMO or (BANK_MIN_ID <= i and i <= BANK_MAX_ID) then
                 n = max(GetInventoryItemCount(unit, i), 1)
             end
-            local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
-            AuctipusAddPrice(tt, itemID, suffixID, n)
+            local itemID, suffixI, enchantIDD = Auctipus.Link.GetItemAndSuffixIDs(link)
+            AuctipusAddPrice(tt, itemID, suffixID, enchantID, n)
         end
     end,
 
@@ -139,8 +140,8 @@ local HookMethods = {
         local link = GetGuildBankItemLink(tab, i)
         if link then
             local _, n = GetGuildBankItemInfo(tab, i)
-            local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
-            AuctipusAddPrice(tt, itemID, suffixID, n)
+            local itemID, suffixID, enchantID = Auctipus.Link.GetItemAndSuffixIDs(link)
+            AuctipusAddPrice(tt, itemID, suffixID, enchantID, n)
         end
     end,
 
@@ -149,14 +150,14 @@ local HookMethods = {
         local link = GetMerchantItemLink(i)
         if link then
             local _, _, _, n = GetMerchantItemInfo(i)
-            local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
-            AuctipusAddPrice(tt, itemID, suffixID, n)
+            local itemID, suffixID, enchantID = Auctipus.Link.GetItemAndSuffixIDs(link)
+            AuctipusAddPrice(tt, itemID, suffixID, enchantID, n)
         end
     end,
 
     -- Any hyperlink.
     ["SetHyperlink"] = function(tt, link)
-        local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
+        local itemID, suffixID, enchantID = Auctipus.Link.GetItemAndSuffixIDs(link)
         if not itemID then
             return
         end
@@ -172,7 +173,7 @@ local HookMethods = {
             end
         end
 
-        AuctipusAddPrice(tt, itemID, suffixID, n, onlyVendor)
+        AuctipusAddPrice(tt, itemID, suffixID, enchantID, n, onlyVendor)
     end,
 
     -- Items in the vendor buyback tab as well as in the bottom of the main
@@ -182,8 +183,8 @@ local HookMethods = {
         if itemID then
             local _, _, _, n = GetBuybackItemInfo(i)
             local link = GetBuybackItemLink(i)
-            local _, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
-            AuctipusAddPrice(tt, itemID, suffixID, n)
+            local _, suffixID, enchantID = Auctipus.Link.GetItemAndSuffixIDs(link)
+            AuctipusAddPrice(tt, itemID, suffixID, enchantID, n)
         end
     end,
 
@@ -192,8 +193,8 @@ local HookMethods = {
         if LootSlotHasItem(i) then
             local link    = GetLootSlotLink(i)
             local _, _, n = GetLootSlotInfo(i)
-            local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
-            AuctipusAddPrice(tt, itemID, suffixID, n)
+            local itemID, suffixID, enchantID = Auctipus.Link.GetItemAndSuffixIDs(link)
+            AuctipusAddPrice(tt, itemID, suffixID, enchantID, n)
         end
     end,
 
@@ -209,8 +210,8 @@ local HookMethods = {
         end
 
         if link then
-            local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
-            AuctipusAddPrice(tt, itemID, suffixID, n)
+            local itemID, suffixID, enchantID = Auctipus.Link.GetItemAndSuffixIDs(link)
+            AuctipusAddPrice(tt, itemID, suffixID, enchantID, n)
         end
     end,
 
@@ -226,8 +227,8 @@ local HookMethods = {
                 -- Mandatory quest rewards.
                 _, _, n = GetQuestLogRewardInfo(i)
             end
-            local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
-            AuctipusAddPrice(tt, itemID, suffixID, n)
+            local itemID, suffixID, enchantID = Auctipus.Link.GetItemAndSuffixIDs(link)
+            AuctipusAddPrice(tt, itemID, suffixID, enchantID, n)
         end
     end,
 
@@ -236,8 +237,8 @@ local HookMethods = {
         local link = GetInboxItemLink(i, ai or 1)
         if link then
             local _, _, _, n = GetInboxItem(i, ai or 1)
-            local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
-            AuctipusAddPrice(tt, itemID, suffixID, n)
+            local itemID, suffixID, enchantID = Auctipus.Link.GetItemAndSuffixIDs(link)
+            AuctipusAddPrice(tt, itemID, suffixID, enchantID, n)
         end
     end,
 
@@ -246,8 +247,8 @@ local HookMethods = {
         local link = GetSendMailItemLink(i)
         if link then
             local _, _, _, n = GetSendMailItem(i)
-            local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
-            AuctipusAddPrice(tt, itemID, suffixID, n)
+            local itemID, suffixID, enchantID = Auctipus.Link.GetItemAndSuffixIDs(link)
+            AuctipusAddPrice(tt, itemID, suffixID, enchantID, n)
         end
     end,
 
@@ -267,8 +268,8 @@ local HookMethods = {
         local link = GetLootRollItemLink(i)
         if link then
             local _, _, n = GetLootRollItemInfo(i)
-            local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
-            AuctipusAddPrice(tt, itemID, suffixID, n)
+            local itemID, suffixID, enchantID = Auctipus.Link.GetItemAndSuffixIDs(link)
+            AuctipusAddPrice(tt, itemID, suffixID, enchantID, n)
         end
     end,
 
@@ -277,8 +278,8 @@ local HookMethods = {
         local link = GetTradePlayerItemLink(i)
         if link then
             local _, _, n = GetTradePlayerItemInfo(i)
-            local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
-            AuctipusAddPrice(tt, itemID, suffixID, n)
+            local itemID, suffixID, enchantID = Auctipus.Link.GetItemAndSuffixIDs(link)
+            AuctipusAddPrice(tt, itemID, suffixID, enchantID, n)
         end
     end,
 
@@ -287,8 +288,8 @@ local HookMethods = {
         local link = GetTradeTargetItemLink(i)
         if link then
             local _, _, n = GetTradeTargetItemInfo(i)
-            local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
-            AuctipusAddPrice(tt, itemID, suffixID, n)
+            local itemID, suffixID, enchantID = Auctipus.Link.GetItemAndSuffixIDs(link)
+            AuctipusAddPrice(tt, itemID, suffixID, enchantID, n)
         end
     end,
 
@@ -297,8 +298,8 @@ local HookMethods = {
         local link = GetQuestItemLink(typ, i)
         if link then
             local _, _, n = GetQuestItemInfo(typ, i)
-            local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
-            AuctipusAddPrice(tt, itemID, suffixID, n)
+            local itemID, suffixID, enchantID = Auctipus.Link.GetItemAndSuffixIDs(link)
+            AuctipusAddPrice(tt, itemID, suffixID, enchantID, n)
         end
     end,
 
@@ -307,8 +308,8 @@ local HookMethods = {
         local link = GetCraftReagentItemLink(i, ri)
         if link then
             local _, _, n = GetCraftReagentInfo(i, ri)
-            local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
-            AuctipusAddPrice(tt, itemID, suffixID, n)
+            local itemID, suffixID, enchantID = Auctipus.Link.GetItemAndSuffixIDs(link)
+            AuctipusAddPrice(tt, itemID, suffixID, enchantID, n)
         end
     end,
 
@@ -316,8 +317,8 @@ local HookMethods = {
     ["SetTrainerService"] = function(tt, s)
         local name, link = tt:GetItem()
         if link then
-            local itemID, suffixID = Auctipus.Link.GetItemAndSuffixIDs(link)
-            AuctipusAddPrice(tt, itemID, suffixID, 1)
+            local itemID, suffixID, enchantID = Auctipus.Link.GetItemAndSuffixIDs(link)
+            AuctipusAddPrice(tt, itemID, suffixID, enchantID, 1)
         end
     end
 }
