@@ -249,13 +249,36 @@ function AHistory:Match(substring)
     return matches
 end
 
-function AHistory:MatchByItemID(itemID, suffixID)
+function AHistory:MatchByItemID(itemID, suffixID, enchantID)
     local matches = {}
+    local foundEnchanted = false
+    local foundUnenchanted = false
 
     for i = 1, #LOCAL_DB do
         local elem = LOCAL_DB[i]
         if elem.itemId == itemID then
-            if suffixID == nil or suffixID == elem.suffixID then
+            if elem.enchantID ~= nil then
+                foundEnchanted = true
+            else
+                foundUnenchanted = true
+            end
+            if (suffixID == nil or suffixID == elem.suffixID) and
+                (enchantID == nil or enchantID == elem.enchantID)
+            then
+                table.insert(matches, elem)
+            end
+        end
+    end
+
+    -- If no enchant was specified, but we found both enchanted and unenchanted,
+    -- filter down to just the unenchanted ones.  Otherwise, no unenchanted was
+    -- ever observed in the AH so we return all the different enchants.  It's
+    -- kind of ambiguous what to do here.
+    if enchantID == nil and foundUnenchanted and foundEnchanted then
+        local prevMatches = matches
+        matches = {}
+        for _, elem in ipairs(prevMatches) do
+            if elem.enchantID == nil then
                 table.insert(matches, elem)
             end
         end
