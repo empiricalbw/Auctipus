@@ -259,7 +259,7 @@ local HookMethods = {
     ["SetAction"] = function(tt, i)
         local typ, itemID, _ = GetActionInfo(i)
         if typ == "item" then
-            AuctipusAddPrice(tt, itemID, nil, max(GetActionCount(i), 1))
+            AuctipusAddPrice(tt, itemID, nil, nil, max(GetActionCount(i), 1))
         end
     end,
 
