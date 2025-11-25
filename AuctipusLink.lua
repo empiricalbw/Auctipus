@@ -83,9 +83,10 @@ end
 function ALink.UpdateLink(l)
     -- In 2.5.2, an extra field was added to item links.  Unknown what is in
     -- this field, but we need to update old links to support it.
-    if ALink.CountAttrs(l) >= 18 then
-        return l
+    -- In 1.15.8, another extra field was added.
+    while ALink.CountAttrs(l) < 19 do
+        l = l:gsub("|Hitem:(.*)|h(.*)|h|r", "|Hitem:%1:|h%2|h|r")
     end
 
-    return l:gsub("|Hitem:(.*)|h(.*)|h|r", "|Hitem:%1:|h%2|h|r")
+    return l
 end
