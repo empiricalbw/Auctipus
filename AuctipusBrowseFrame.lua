@@ -64,11 +64,11 @@ StaticPopupDialogs["AUCTIPUS_ADD_FAVORITE"] = {
     button1 = "OK",
     button2 = "Cancel",
     OnShow = function(self)
-        self.editBox:SetFocus()
+        self.EditBox:SetFocus()
     end,
     OnAccept = function(self, data)
         AuctipusFrame.BrowseFrame:OnSearchHistoryAddFavorite(
-            self.editBox:GetText())
+            self.EditBox:GetText())
     end,
     EditBoxOnEnterPressed = function(self)
         AuctipusFrame.BrowseFrame:OnSearchHistoryAddFavorite(self:GetText())

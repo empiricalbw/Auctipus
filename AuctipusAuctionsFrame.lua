@@ -575,7 +575,8 @@ function AuctipusAuctionsFrame:UpdateComparables()
             else
                 minUnitBid, elapsed, badSuffix =
                     Auctipus.API.GetAuctionCurrentBuyout(self.itemID,
-                                                         self.suffixID, false)
+                                                         self.suffixID,
+                                                         nil, false)
                 unitPrice = minUnitBid
                 if minUnitBid ~= nil then
                     if elapsed == 0 then

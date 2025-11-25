@@ -1,7 +1,8 @@
 Auctipus.API = {}
 
 --[[
--- Auctipus.API.GetAuctionBuyoutRange(itemID, suffixID)
+-- Auctipus.API.GetAuctionBuyoutRange(itemID, suffixID, [enchantID,
+--                                    [failMultiple] ])
 --
 -- Takes a numeric itemID, an optional suffixID and returns a tuple:
 --
@@ -25,8 +26,9 @@ Auctipus.API = {}
 -- indicates that the item was seen today while a value of 1 indicates an item
 -- was seen yesterday, etc.
 --]]
-function Auctipus.API.GetAuctionBuyoutRange(itemID, suffixID, failMultiple)
-    local matches = Auctipus.History:MatchByItemID(itemID, suffixID)
+function Auctipus.API.GetAuctionBuyoutRange(itemID, suffixID, enchantID,
+                                            failMultiple)
+    local matches = Auctipus.History:MatchByItemID(itemID, suffixID, enchantID)
     if #matches == 0 or (failMultiple and #matches > 1) then
         return nil
     end
@@ -57,8 +59,20 @@ function Auctipus.API.GetAuctionBuyoutRange(itemID, suffixID, failMultiple)
         badSuffix
 end
 
-function Auctipus.API.GetAuctionCurrentBuyout(itemID, suffixID, failMultiple)
-    local matches = Auctipus.History:MatchByItemID(itemID, suffixID)
+--[[
+-- Auctipus.API.GetAuctionCurrentBuyout(itemID, suffixID, [enchantID,
+--                                      [failMultiple] ])
+--
+-- This works the same as GetAuctionBuyoutRange(), except that it returns only
+-- the minimum buyout of the most recent auction house scan.  Scans only have
+-- single-day resolution, so if you did 5 scans in one day, returning values of,
+-- say, 1g, 3g, 2g, 2.5g and 1.5g, then GetAuctionBuyoutRange() would return a
+-- range of [1g, 3g].  However, GetAuctionCurrentBuyout() returns the most-
+-- recent value which is 1.5g.
+--]]
+function Auctipus.API.GetAuctionCurrentBuyout(itemID, suffixID, enchantID,
+                                              failMultiple)
+    local matches = Auctipus.History:MatchByItemID(itemID, suffixID, enchantID)
     if #matches == 0 or (failMultiple and #matches > 1) then
         return nil
     end

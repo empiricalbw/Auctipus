@@ -3,7 +3,7 @@ Auctipus.Link.__index = Auctipus.Link
 local ALink = Auctipus.Link
 
 local function LinkDecode(l)
-    local a, r, g, b, itemId, enchantId, gemId1, gemId2, gemId3, gemId4,
+    local a, r, g, b, itemId, enchantID, gemId1, gemId2, gemId3, gemId4,
           suffixID = l:match(
           "|c(..)(..)(..)(..)|Hitem:(%d+):(%d*):(%d*):(%d*):(%d*):(%d*):(%-?%d*)")
     a = tonumber(a, 16)
@@ -12,8 +12,9 @@ local function LinkDecode(l)
     b = tonumber(b, 16)
     itemId = tonumber(itemId, 10)
     suffixID = tonumber(suffixID, 10)
+    enchantID = tonumber(enchantID, 10)
     local _, _, _, _, texture = GetItemInfoInstant(itemId)
-    return itemId, suffixID, texture,
+    return itemId, suffixID, enchantID, texture,
            CreateColor(r / 255, g / 255, b / 255, a / 255)
 end
 
@@ -22,7 +23,7 @@ function ALink:New(l)
         link = ALink.SaneLink(l),
         name = ALink.GetLinkName(l),
     }
-    al.itemId, al.suffixID, al.texture, al.color = LinkDecode(l)
+    al.itemId, al.suffixID, al.enchantID, al.texture, al.color = LinkDecode(l)
     al.uname = al.name:upper()
     setmetatable(al, self)
 
@@ -44,17 +45,20 @@ function ALink.GetItemID(l)
 end
 
 function ALink.GetItemAndSuffixIDs(l)
-    local itemID, suffixID = l:match("|Hitem:(%d+):%d*:%d*:%d*:%d*:%d*:(%-?%d*):")
+    local itemID, enchantID, suffixID = l:match("|Hitem:(%d+):(%d*):%d*:%d*:%d*:%d*:(%-?%d*):")
     if not itemID then
-        itemId, suffixID = l:match("item:(%d+):%d*:%d*:%d*:%d*:%d*:(%-?%d*):")
+        itemId, enchantID, suffixID = l:match("item:(%d+):(%d*):%d*:%d*:%d*:%d*:(%-?%d*):")
     end
     if itemID then
         itemID = tonumber(itemID)
     end
+    if enchantID then
+        enchantID = tonumber(enchantID)
+    end
     if suffixID then
         suffixID = tonumber(suffixID)
     end
-    return itemID, suffixID
+    return itemID, suffixID, enchantID
 end
 
 function ALink.SaneLink(l)
@@ -79,9 +83,10 @@ end
 function ALink.UpdateLink(l)
     -- In 2.5.2, an extra field was added to item links.  Unknown what is in
     -- this field, but we need to update old links to support it.
-    if ALink.CountAttrs(l) >= 18 then
-        return l
+    -- In 1.15.8, another extra field was added.
+    while ALink.CountAttrs(l) < 19 do
+        l = l:gsub("|Hitem:(.*)|h(.*)|h|r", "|Hitem:%1:|h%2|h|r")
     end
 
-    return l:gsub("|Hitem:(.*)|h(.*)|h|r", "|Hitem:%1:|h%2|h|r")
+    return l
 end

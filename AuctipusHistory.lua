@@ -133,7 +133,6 @@ function AHistory:UpdateDB()
     --      and highest prices in the last entry but may not be equal to either
     --      of them).
     --]]
-    local versionStr, buildStr, dateStr, tocVersion = GetBuildInfo()
 
     -- Migrate old realm data to realms sub-table.
     if AUCTIPUS_ITEM_HISTORY_DB.realms == nil then
@@ -145,28 +144,21 @@ function AHistory:UpdateDB()
         Auctipus.info("Migrated database to realms sub-table.")
     end
 
-    -- Migrate from first version to 2.5.2.
-    if AUCTIPUS_ITEM_HISTORY_DB_VERSION < 20502 and tocVersion >= 20502 then
-        AHistory:Update0To20502()
-    end
-
-    -- Migrate from 2.5.2 to 2.5.2r1.
-    if (AUCTIPUS_ITEM_HISTORY_DB_VERSION == 20502 and
-        AUCTIPUS_ITEM_HISTORY_DB.revision == nil)
-    then
-        AHistory:Update20502To20502_1()
+    -- Migrate to fake 100.0.0.
+    if AUCTIPUS_ITEM_HISTORY_DB_VERSION < 1000000 then
+        AHistory:UpdateTo1000000()
+        AUCTIPUS_ITEM_HISTORY_DB.revision = 1
     end
 end
 
-function AHistory:Update0To20502()
-    -- In 2.5.2, an extra field was added to the end of item links.  Prior to
-    -- 2.5.2 there would be 17 attributes in an item link.  Scan for old link
-    -- formats in the database.
-    assert(AUCTIPUS_ITEM_HISTORY_DB_VERSION < 20502)
+function AHistory:UpdateTo1000000()
+    -- As of 1.15.8, there are now 19 attributes in an item link.  Scan for old
+    -- link formats in the database and update them.
+    assert(AUCTIPUS_ITEM_HISTORY_DB_VERSION < 1000000)
     for realm, realmHistory in pairs(AUCTIPUS_ITEM_HISTORY_DB.realms) do
         local oldLinks = {}
         for link, history in pairs(realmHistory) do
-            if Auctipus.Link.CountAttrs(link) == 17 then
+            if Auctipus.Link.CountAttrs(link) < 19 then
                 table.insert(oldLinks, link)
             end
         end
@@ -175,7 +167,7 @@ function AHistory:Update0To20502()
         -- database.
         for _, link in ipairs(oldLinks) do
             local newLink = Auctipus.Link.UpdateLink(link)
-            assert(Auctipus.Link.CountAttrs(newLink) == 18)
+            assert(Auctipus.Link.CountAttrs(newLink) == 19)
 
             local oldData = realmHistory[link]
             local newData = realmHistory[newLink] or {}
@@ -185,7 +177,7 @@ function AHistory:Update0To20502()
             end
 
             for i=1, #newData do
-                oldData[#oldData] = newData[i]
+                oldData[#oldData + 1] = newData[i]
             end
 
             realmHistory[newLink] = oldData
@@ -193,22 +185,8 @@ function AHistory:Update0To20502()
         end
     end
 
-    AUCTIPUS_ITEM_HISTORY_DB_VERSION = 20502
-    Auctipus.info("Updated database to 2.5.2.")
-end
-
-function AHistory:Update20502To20502_1()
-    -- We want to store the most recent scan's lowest buyout price in the
-    -- history for tooltip use.  We synthesize it here.
-    assert(AUCTIPUS_ITEM_HISTORY_DB_VERSION == 20502)
-    for realm, realmHistory in pairs(AUCTIPUS_ITEM_HISTORY_DB.realms) do
-        for link, history in pairs(realmHistory) do
-            history[-1] = history[#history][2]
-        end
-    end
-
-    AUCTIPUS_ITEM_HISTORY_DB.revision = 1
-    Auctipus.info("Updated database to 2.5.2 revision 1.")
+    AUCTIPUS_ITEM_HISTORY_DB_VERSION = 1000000
+    Auctipus.info("Updated database to 100.0.0")
 end
 
 function AHistory:PruneDB()
@@ -249,13 +227,36 @@ function AHistory:Match(substring)
     return matches
 end
 
-function AHistory:MatchByItemID(itemID, suffixID)
+function AHistory:MatchByItemID(itemID, suffixID, enchantID)
     local matches = {}
+    local foundEnchanted = false
+    local foundUnenchanted = false
 
     for i = 1, #LOCAL_DB do
         local elem = LOCAL_DB[i]
         if elem.itemId == itemID then
-            if suffixID == nil or suffixID == elem.suffixID then
+            if elem.enchantID ~= nil then
+                foundEnchanted = true
+            else
+                foundUnenchanted = true
+            end
+            if (suffixID == nil or suffixID == elem.suffixID) and
+                (enchantID == nil or enchantID == elem.enchantID)
+            then
+                table.insert(matches, elem)
+            end
+        end
+    end
+
+    -- If no enchant was specified, but we found both enchanted and unenchanted,
+    -- filter down to just the unenchanted ones.  Otherwise, no unenchanted was
+    -- ever observed in the AH so we return all the different enchants.  It's
+    -- kind of ambiguous what to do here.
+    if enchantID == nil and foundUnenchanted and foundEnchanted then
+        local prevMatches = matches
+        matches = {}
+        for _, elem in ipairs(prevMatches) do
+            if elem.enchantID == nil then
                 table.insert(matches, elem)
             end
         end
