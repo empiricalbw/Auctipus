@@ -1,6 +1,6 @@
-## Interface: 11507
-## Title: Auctipus |cFF00FF001.15.7-v01|r
-## Version: 1.15.7-v01
+## Interface: 11508
+## Title: Auctipus |cFF00FF001.15.8-v01|r
+## Version: 1.15.8-v01
 ## Author: Empirical
 ## DefaultState: enabled
 ## Dependencies:
